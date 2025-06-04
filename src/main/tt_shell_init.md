@@ -1,16 +1,15 @@
 #include "minishell.h"
+#include <stddef.h>
+#include <stdlib.h>
 
-int init_shell(t_shell *shell, char **envp)
+int init_shell_test(t_shell *shell, char **envp)
 {
-    // Zerar estrutura
     memset(shell, 0, sizeof(t_shell));
     
-    // Copiar ambiente
     shell->env = copy_env(envp);
     if (!shell->env)
         return (-1);
     
-    // Inicializar status
     shell->exit_status = 0;
     shell->should_exit = 0;
     
@@ -29,17 +28,14 @@ char **copy_env(char **envp)
     int     count;
     char    **new_env;
     
-    // Contar variáveis
     count = 0;
     while (envp[count])
         count++;
     
-    // Alocar array
     new_env = malloc(sizeof(char *) * (count + 1));
     if (!new_env)
         return (NULL);
-    
-    // Copiar cada variável
+
     i = 0;
     while (i < count)
     {
