@@ -19,6 +19,7 @@
 # include "signals.h"
 # include "redirections.h"
 # include "utils.h"
+# include "context.h"
 
 typedef struct s_shell
 {

@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/03 22:54:35 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/06/09 00:09:37 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,20 @@
 #include <readline/history.h>
 #include <stdlib.h>
 
-int main(int argc, char **argv, char **envp)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	char *input;
-	t_token *tokens;
-	t_command *command;
 
+void init_miniloop(t_context *ctx)
+{
+	ctx->tokens = NULL;
+	ctx->commands = NULL;
+}
+
+static void shell_loop(t_context *ctx)
+{
+	char		*input;
 
 	while (1)
 	{
+		init_miniloop(ctx); // reseta variáveis temporárias 
 		input = readline("minishell$ ");
 		if (!input)
 			break;
@@ -34,13 +36,39 @@ int main(int argc, char **argv, char **envp)
 		if (*input)
 			add_history(input);
 		
-		tokens = lexer_tokenize(input);
-		command = parse_tokens(tokens);
-		execute_command(command);
+		ctx->tokens = lexer_tokenize(input);
+		ctx->commands = parse_tokens(ctx->tokens);
+
+		if (ctx->commands)
+			execute_command(ctx->commands);
 
 		//dar free em tokens - command - input
-		//free()
+	// 	free_tokens(tokens);
+	// 	free_command(cmd);
+	// 	free(input);
+	// }
 	}
+
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	t_context ctx;
+	(void)argc;
+	(void)argv;
+
+	ctx.envp = envp;
+	ctx.tokens = NULL;
+	ctx.commands = NULL;
+	
+
+	
+
+	//init_minishell(envp);
+	shell_loop(&ctx);
+
+	//cleanup_minishell();
+	//return (g_data.exit_code); //aqui vem o codido que foi finalizado ou o return normal
 	return (0);
 }
 
