@@ -1,16 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-// #include <stdio.h>
-// #include <stdlib.h>
-
-// # include <string.h>
-// # include <unistd.h>
-// # include <sys/wait.h>
-// # include <signal.h>
-//# include <readline/readline.h>
-//# include <readline/history.h>
-
 # include "lexer.h"
 # include "parser.h"
 # include "executor.h"
@@ -19,21 +9,21 @@
 # include "signals.h"
 # include "redirections.h"
 # include "utils.h"
-# include "context.h"
 
-typedef struct s_shell
+
+//contexto temporário do loop - tokens, cmd ...
+typedef struct s_context
 {
-	char	**env;
-	int		exit_status;
-	int		should_exit;
-} t_shell;
+	char		**envp;
+	int			exit_status;
+	int			should_exit;
+	t_token		*tokens;
+	t_command	*commands;
+} t_context;
 
 
-int tt_read_var(char **env);
-void cleanup_shell(t_shell *shell);
-
-//funções de ambiente
-char **copy_env(char **envp);
-void free_env(char **env);
+void shell_loop(t_context *ctx);
+void cleanup_context(t_context *ctx);
+void init_context(t_context *ctx, char **envp);
 
 #endif

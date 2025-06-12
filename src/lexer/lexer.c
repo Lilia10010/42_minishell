@@ -3,14 +3,92 @@
 #include <stdlib.h>
 #include <string.h>
 
+t_token *create_token(t_token_type type, char *value)
+{
+    t_token *token = malloc(sizeof(t_token));
+    if (!token)
+        return (NULL);
+    
+    token->type = type;
+    token->value = value ? strdup(value) : NULL;
+    token->next = NULL;
+    return (token);
+}
+
+void add_token(t_token **head, t_token *new_token)
+{
+    if (!*head)
+    {
+        *head = new_token;
+        return;
+    }
+    
+    t_token *current = *head;
+    while (current->next)
+        current = current->next;
+    current->next = new_token;
+}
 
 t_token	*lexer_tokenize(char *input)
 {
-	t_token *token;
+	t_token *tokens;
+	char *current;
+	char *word_start;
+	char *word;
+	int len;
+
+	tokens = NULL;
+	current = input;
 	
-	token = malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->command = strdup(input);
-	return (token);
+	while (*current)
+	{
+		while (*current == ' ' || *current == '\t')
+			current++;
+		if (*current == '\0')
+			break ;
+		//TODO
+		//[] criar handle pipes
+		// [] handle redirections QUOTE [> >> , < <<]
+		// [] handle words
+		//ex: (mas no lugar dos ifs criar as handles)
+		if (*current == '|')
+		{
+			//chama a função add_token e add o pipe
+			printf("pipe detectado");
+			current++;
+		}
+		else
+		{
+			word_start = current;
+			
+			len = 0;
+			//encontrar o limit da string
+			while (*current && *current != ' ' && *current != '\t' && *current != '|' && *current != '>' && *current != '<')
+			{
+				current++;
+				len++;
+			}
+			word = malloc(len + 1);
+			strncpy(word, word_start, len);
+			add_token(&tokens, create_token(TOKEN_WORD, word));
+			free(word);
+		}
+	}
+	return (tokens);
+}
+
+void free_tokens(t_token *tokens)
+{
+	t_token *current;
+	t_token *next;
+
+	current = tokens;
+
+	while (current)
+	{
+		next = current->next;
+		free(current->value);
+		free(current);
+		current = next;
+	}
 }
