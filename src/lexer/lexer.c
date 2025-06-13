@@ -70,10 +70,21 @@ t_token	*lexer_tokenize(char *input)
 			}
 			word = malloc(len + 1);
 			strncpy(word, word_start, len);
+			word[len] = '\0';
+			printf("DEBUGZIM in lexer.c word [%s] size: [%d]\n", word, len);
 			add_token(&tokens, create_token(TOKEN_WORD, word));
 			free(word);
 		}
 	}
+	 // debugzim dos token
+    printf("DEBUG: Tokens criados:\n");
+    t_token *debug_token = tokens;
+    int token_count = 0;
+    while (debug_token)
+    {
+        printf(" DEBUGZIM Token %d: tipo= %d, valor= '%s'\n", token_count++, debug_token->type, debug_token->value ? debug_token->value : "NULL");
+        debug_token = debug_token->next;
+    }
 	return (tokens);
 }
 

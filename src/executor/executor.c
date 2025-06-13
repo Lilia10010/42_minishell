@@ -19,7 +19,7 @@ int is_builtin(char *cmd)
     if (strcmp(cmd, "echo") == 0)
         return (1);
     
-    // Aqui você pode adicionar outros builtins futuramente:
+    //  adicionar outros builtins futuramente:
     // if (strcmp(cmd, "cd") == 0)
     //     return (1);
     // if (strcmp(cmd, "pwd") == 0)

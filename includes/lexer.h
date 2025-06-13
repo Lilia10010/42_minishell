@@ -16,10 +16,10 @@ typedef struct s_token
 	struct s_token	*next;
 } t_token;
 
-t_token	*lexer_tokenize(char *input);
-void free_tokens(t_token *tokens);
-t_token *create_token(t_token_type type, char *value);
-void add_token(t_token **head, t_token *new_token);
+t_token		*lexer_tokenize(char *input);
+void		free_tokens(t_token *tokens);
+t_token		*create_token(t_token_type type, char *value);
+void		add_token(t_token **head, t_token *new_token);
 
 
 
