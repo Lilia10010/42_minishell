@@ -3,14 +3,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+# include "lib_ft.h"
+
 t_token *create_token(t_token_type type, char *value)
 {
-    t_token *token = malloc(sizeof(t_token));
+    t_token *token;
+
+	token = malloc(sizeof(t_token));
     if (!token)
         return (NULL);
     
     token->type = type;
-    token->value = value ? strdup(value) : NULL;
+   // token->value = value ? strdup(value) : NULL;
+	if (value)
+		token->value = ft_strdup(value);
+	else
+		token->value = NULL;
+
     token->next = NULL;
     return (token);
 }
@@ -71,7 +80,7 @@ t_token	*lexer_tokenize(char *input)
 			word = malloc(len + 1);
 			strncpy(word, word_start, len);
 			word[len] = '\0';
-			printf("DEBUGZIM in lexer.c word [%s] size: [%d]\n", word, len);
+			//printf("DEBUGZIM in lexer.c word [%s] size: [%d]\n", word, len);
 			add_token(&tokens, create_token(TOKEN_WORD, word));
 			free(word);
 		}
@@ -80,9 +89,10 @@ t_token	*lexer_tokenize(char *input)
     printf("DEBUG: Tokens criados:\n");
     t_token *debug_token = tokens;
     int token_count = 0;
+	
     while (debug_token)
     {
-        printf(" DEBUGZIM Token %d: tipo= %d, valor= '%s'\n", token_count++, debug_token->type, debug_token->value ? debug_token->value : "NULL");
+        printf(" DEBUGZIM Token %d: tipo= %d, valor= '%s'\n", token_count++, debug_token->type, debug_token->value);
         debug_token = debug_token->next;
     }
 	return (tokens);

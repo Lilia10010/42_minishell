@@ -10,6 +10,8 @@
 # include "redirections.h"
 # include "utils.h"
 
+#include "../lib/lib_ft.h"
+
 
 //contexto temporário do loop - tokens, cmd ...
 typedef struct s_context
