@@ -36,7 +36,7 @@ int execute_builtin(t_command *cmd, t_context *ctx)
     if (strcmp(cmd->args[0], "echo") == 0)
         return (builtin_echo(cmd->args, ctx));
     
-    // Aqui você pode adicionar outros builtins futuramente:
+    //demais builtins
     // if (strcmp(cmd->args[0], "cd") == 0)
     //     return (builtin_cd(cmd->args, ctx));
     

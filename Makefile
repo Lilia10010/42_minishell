@@ -12,12 +12,14 @@ RM		:= rm -f
 #Dir
 SRC_DIR	:= src
 OBJ_DIR	:= obj
+LIBFT_DIR	:= ./lib
 
 #SRCS	:= $(SRC_DIR)/minishell.c
 SRCS	:= $(shell find $(SRC_DIR) -name '*.c')
 OBJ		:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-HEADER	:= -I ./includes
+HEADER	:= -I ./includes -I$(LIBFT_DIR)
+LIBFT 	:= $(LIBFT_DIR)/libft.a
 
 YELLOW	:= \033[1;33m
 GREEN	:= \033[1;32m
@@ -28,8 +30,8 @@ NL		:= \n
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -lreadline -o $(NAME)
+$(NAME): $(LIBFT) $(OBJ)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 	@echo "$(NL)$(GREEN)Build completed successfully: $(NAME)$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -37,12 +39,17 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS)  -c $< $(HEADER) -o $@
 	@echo  "$(YELLOW)Compiling source file:$(RESET) $(notdir $<)"
 
+$(LIBFT):
+	@$(MAKE) -s -C $(LIBFT_DIR)
+
 clean:
 	@echo "$(NL)$(RED)Cleaning objects...$(RESET)"
 	@rm -rf $(OBJ_DIR)
+	@$(MAKE) -s -C $(LIBFT_DIR) clean
 
 fclean: clean
 	@echo "$(RED)Removing binary:$(RESET) $(NAME)"
+	@$(MAKE) -s -C $(LIBFT_DIR) fclean
 	@$(RM) $(NAME)
 
 re: fclean all
