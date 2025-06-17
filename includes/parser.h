@@ -10,7 +10,7 @@ typedef struct s_command
 	char				*output_file;
 	int					append_output;
 	char				*heredoc_delimiter;
-	struct s_command	*next;
+	struct s_command	*next; //vamos usar principalmente para implementar o pipes
 } t_command;
 
 t_command *parse_tokens(t_token *tokens);
