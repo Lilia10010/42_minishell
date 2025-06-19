@@ -14,7 +14,6 @@ t_token *create_token(t_token_type type, char *value)
         return (NULL);
     
     token->type = type;
-   // token->value = value ? strdup(value) : NULL;
 	if (value)
 		token->value = ft_strdup(value);
 	else
