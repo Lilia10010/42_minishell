@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/14 23:33:51 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/06/18 23:16:43 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void shell_loop(t_context *ctx)
 		if (!input) //algum comando de scape
 		{
 			printf("exit\n"); // não pode ter o \n aqui
+			ctx->should_exit = 1;
 			break ;
 		}
 
