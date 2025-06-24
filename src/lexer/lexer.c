@@ -1,114 +1,108 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/06/23 23:09:31 by lpaula-n         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "lib_ft.h"
 #include "lexer.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
-# include "lib_ft.h"
-
-t_token *create_token(t_token_type type, char *value)
+static void	skip_spaces(char **input)
 {
-    t_token *token;
-
-	token = malloc(sizeof(t_token));
-    if (!token)
-        return (NULL);
-    
-    token->type = type;
-	if (value)
-		token->value = ft_strdup(value);
-	else
-		token->value = NULL;
-
-    token->next = NULL;
-    return (token);
+	while (**input == ' ' || **input == '\t')
+		(*input)++;
 }
 
-void add_token(t_token **head, t_token *new_token)
+static int	is_operator(char c)
 {
-    if (!*head)
-    {
-        *head = new_token;
-        return;
-    }
-    
-    t_token *current = *head;
-    while (current->next)
-        current = current->next;
-    current->next = new_token;
+	return (c == '|' || c == '<' || c == '>');
+}
+
+static void	handle_operator(t_token **tokens, char **current)
+{
+	if (**current == '|' )
+	{
+		add_token(tokens, create_token(TOKEN_PIPE, ft_strdup("|")));
+		(*current)++;
+	}
+	else if (**current == '>' && *(*current + 1) == '>')
+	{
+		add_token(tokens, create_token(TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")));
+		(*current) += 2;
+	}
+	else if (**current == '>')
+	{
+		add_token(tokens, create_token(TOKEN_REDIRECT_OUT, ft_strdup(">")));
+		(*current)++;
+	}
+	else if (**current == '<' && *(*current + 1) == '<')
+	{
+		add_token(tokens, create_token(TOKEN_HEREDOC, ft_strdup("<<")));
+		(*current) += 2;
+	}
+	else if (**current == '<')
+	{
+		add_token(tokens, create_token(TOKEN_REDIRECT_IN, ft_strdup("<")));
+		(*current)++;
+	}
+}
+
+static void	handle_word(t_token **tokens, char **current)
+{
+	char	*start;
+	int		len;
+	char	*word;
+
+	start = *current;
+	len = 0;
+	while (**current && !is_operator(**current) && **current != ' ' && **current != '\t')
+	{
+		(*current)++;
+		len++;
+	}
+	word = malloc(len + 1);
+	if (!word)
+		return ;
+	strncpy(word, start, len);
+	word[len] = '\0';
+	add_token(tokens, create_token(TOKEN_WORD, word));
+	free(word);
 }
 
 t_token	*lexer_tokenize(char *input)
 {
-	t_token *tokens;
-	char *current;
-	char *word_start;
-	char *word;
-	int len;
+	t_token	*tokens;
+	char	*current;
 
 	tokens = NULL;
 	current = input;
-	
 	while (*current)
 	{
-		while (*current == ' ' || *current == '\t')
-			current++;
-		if (*current == '\0')
+		skip_spaces(&current);
+		if (!*current)
 			break ;
-		//TODO
-		//[] criar handle pipes
-		// [] handle redirections QUOTE [> >> , < <<]
-		// [] handle words
-		//ex: (mas no lugar dos ifs criar as handles)
-		if (*current == '|')
-		{
-			//chama a função add_token e add o pipe
-			printf("pipe detectado");
-			current++;
-		}
+		if (is_operator(*current))
+			handle_operator(&tokens, &current);
 		else
-		{
-			word_start = current;
-			
-			len = 0;
-			//encontrar o limit da string
-			while (*current && *current != ' ' && *current != '\t' && *current != '|' && *current != '>' && *current != '<')
-			{
-				current++;
-				len++;
-			}
-			word = malloc(len + 1);
-			strncpy(word, word_start, len);
-			word[len] = '\0';
-			//printf("DEBUGZIM in lexer.c word [%s] size: [%d]\n", word, len);
-			add_token(&tokens, create_token(TOKEN_WORD, word));
-			free(word);
-		}
+			handle_word(&tokens, &current);
 	}
-	 // debugzim dos token
-    printf("DEBUG: Tokens criados:\n");
-    t_token *debug_token = tokens;
-    int token_count = 0;
-	
-    while (debug_token)
-    {
-        printf(" DEBUGZIM Token %d: tipo= %d, valor= '%s'\n", token_count++, debug_token->type, debug_token->value);
-        debug_token = debug_token->next;
-    }
-	return (tokens);
-}
-
-void free_tokens(t_token *tokens)
-{
-	t_token *current;
-	t_token *next;
-
-	current = tokens;
-
-	while (current)
+	// Debug
+	t_token *tmp = tokens;
+	int i = 0;
+	while (tmp)
 	{
-		next = current->next;
-		free(current->value);
-		free(current);
-		current = next;
+		printf(" DEBUGZIM Token %d: tipo= %d, valor= '%s'\n",
+			i++, tmp->type, tmp->value);
+		tmp = tmp->next;
 	}
+	return (tokens);
 }
