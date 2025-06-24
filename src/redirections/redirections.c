@@ -1,7 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirections.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/23 21:23:33 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/06/23 22:02:44 by lpaula-n         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "redirections.h"
 #include <stdio.h>
+# include "parser.h"
 
-void handle_redirections(void)
-{
-	printf("[REDIR] lidar com redirecionamentos\n");
-}
