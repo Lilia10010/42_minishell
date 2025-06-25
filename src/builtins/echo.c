@@ -9,6 +9,7 @@ int builtin_echo(char **args, t_context *ctx)
     int newline = 1; // Por padrão, echo adiciona newline
     
     // Verifica se tem a flag -n (sem newline)
+	//criar a ft_strcmp na lib
     if (args[1] && strcmp(args[1], "-n") == 0)
     {
         newline = 0;

@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:52:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/18 22:54:20 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:55:15 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,16 @@
 
 # include "../lib/lib_ft.h"
 
-//contexto temporário do loop - tokens, cmd ...
+#define GREEN "\033[1;32m"
+#define RESET_COLOR "\033[0m"
+#define GREEN_BG     "\033[42m"
+#define ROSA "\033[48;5;206m"
+//#define MATRIX_PROMPT "\033[1;32m\033[40m minishell$ " RESET_COLOR
+//#define MATRIX_PROMPT "\033[1;32m\033[40m minishell$ " RESET_COLOR
+//#define MATRIX_PROMPT "\033[30m" GREEN_BG " minishell$ " RESET_COLOR
+#define MATRIX_PROMPT GREEN_BG ROSA " minishell$ " RESET_COLOR
+
+
 typedef struct s_context
 {
 	char		**envp;
