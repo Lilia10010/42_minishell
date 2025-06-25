@@ -6,11 +6,11 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/23 23:09:31 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:02:25 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lib_ft.h"
+#include "minishell.h"
 #include "lexer.h"
 #include <stdlib.h>
 #include <string.h>
@@ -25,6 +25,69 @@ static void	skip_spaces(char **input)
 static int	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
+}
+
+static char	*extract_quoted_string(char **input, char quote_char)
+{
+	char	*start;
+	char	*result;
+	int		len;
+
+	start = *input + 1;
+	len = 0;
+
+	while (**input && **input != quote_char)
+	{
+		(*input)++;
+		len++;
+	}
+
+	if (**input == quote_char)
+	{
+		result = malloc(len + 1);
+		if (!result)
+			return (NULL);
+		ft_strncpy(result, start, len);
+		result[len] = '\0';
+		if (quote_char == quote_char)
+			(*input)++;
+		return (result);
+	}
+	else
+	{
+		return (NULL);
+	}
+}
+
+
+
+static char *read_next_word_part(char **current)
+{
+	char	*start;
+	char	*word;
+	int		len;
+
+	if (**current == '\'' || **current == '"')
+		return (extract_quoted_string(current, **current));
+	else
+	{
+		start = *current;
+		len = 0;
+
+		while (**current && **current != ' ' && **current != '\t'&&
+		!is_operator(**current) && **current != '\'' && **current != '"')
+		{
+			(*current)++;
+			len++;
+		}
+
+		word = malloc(len + 1);
+		if (!word)
+			return (NULL);
+		ft_strncpy(word, start, len);
+		word[len] = '\0';
+		return (word);
+	}
 }
 
 static void	handle_operator(t_token **tokens, char **current)
@@ -58,24 +121,31 @@ static void	handle_operator(t_token **tokens, char **current)
 
 static void	handle_word(t_token **tokens, char **current)
 {
-	char	*start;
-	int		len;
-	char	*word;
+	char	*value;
+	char 	*partial;
+	char	*temp;
 
-	start = *current;
-	len = 0;
+	value = NULL;
 	while (**current && !is_operator(**current) && **current != ' ' && **current != '\t')
 	{
-		(*current)++;
-		len++;
+		partial = read_next_word_partial(current);
+		if (!partial)
+			break ;
+
+		temp = value;
+		if (value)
+			value = ft_strjoin(&value, partial);
+		else
+			value = ft_strdup(partial);
+		free(partial);
+		free(temp);
+
+		if (value)
+		{
+			add_token(tokens, create_token(TOKEN_WORD, value));
+			free(value);
+		}
 	}
-	word = malloc(len + 1);
-	if (!word)
-		return ;
-	strncpy(word, start, len);
-	word[len] = '\0';
-	add_token(tokens, create_token(TOKEN_WORD, word));
-	free(word);
 }
 
 t_token	*lexer_tokenize(char *input)
