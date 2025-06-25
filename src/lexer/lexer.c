@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/24 23:02:25 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:36:29 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ static char	*extract_quoted_string(char **input, char quote_char)
 		result = malloc(len + 1);
 		if (!result)
 			return (NULL);
-		ft_strncpy(result, start, len);
+		ft_strlcpy(result, start, len + 1);
 		result[len] = '\0';
-		if (quote_char == quote_char)
+		if (**input == quote_char)
 			(*input)++;
 		return (result);
 	}
@@ -61,7 +61,7 @@ static char	*extract_quoted_string(char **input, char quote_char)
 
 
 
-static char *read_next_word_part(char **current)
+static char *read_next_word_partial(char **current)
 {
 	char	*start;
 	char	*word;
@@ -84,8 +84,7 @@ static char *read_next_word_part(char **current)
 		word = malloc(len + 1);
 		if (!word)
 			return (NULL);
-		ft_strncpy(word, start, len);
-		word[len] = '\0';
+		ft_strlcpy(word, start, len + 1);
 		return (word);
 	}
 }
@@ -134,17 +133,24 @@ static void	handle_word(t_token **tokens, char **current)
 
 		temp = value;
 		if (value)
-			value = ft_strjoin(&value, partial);
+			value = ft_strjoin(value, partial);
 		else
 			value = ft_strdup(partial);
 		free(partial);
-		free(temp);
-
-		if (value)
+		
+		if (temp)
+			free(temp);
+		if (!value)
 		{
-			add_token(tokens, create_token(TOKEN_WORD, value));
-			free(value);
+			fprintf(stderr, "Error allocating memory for token value\n");
+			//ver qual o erro que deve ser retornado ou se apenas o break é suficiente
+			break ;
 		}
+	}
+	if (value)
+	{
+		add_token(tokens, create_token(TOKEN_WORD, value));
+		free(value);
 	}
 }
 

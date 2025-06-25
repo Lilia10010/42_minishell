@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/23 22:57:18 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:45:57 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void shell_loop(t_context *ctx)
 	while (!ctx->should_exit)
 	{
 		cleanup_context(ctx);
-		input = readline("minishell$ ");
+		input = readline(MATRIX_PROMPT);
 		if (!input) //algum comando de scape
 		{
 			printf("exit\n"); // não pode ter o \n aqui
