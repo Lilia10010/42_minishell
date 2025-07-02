@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/24 23:45:57 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/06/29 11:08:39 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,22 +84,18 @@ int main(int argc, char **argv, char **envp)
 }
 
 // readline – leitura do input do usuário
-// histórico de comandos – add_history(input)
-// expansão de variáveis – substitui $VAR, $?, etc.
-// lexer – quebra o input em tokens (respeitando aspas, escapes...)
+// lexer – quebra o input em tokens (respeitando aspas, escapes...) Lília
 // parser – converte tokens em comandos (t_command)
+// builtins – echo, cd, pwd, exit, export, unset, env
+// histórico de comandos – add_history(input)
+
+// expansão de variáveis – substitui $VAR, $?, etc.
+
 // heredoc – processa redirecionamentos << antes da execução
-// AST (pode ser linear, mas pode evoluir para árvore)
+// AST 
 // executor – responsável por:
 // pipes (|)
 // redirecionamento (<, >, >>, <<)
-// builtins
-// comandos externos
-// builtins – echo, cd, pwd, exit, export, unset, env
 // comando externo – executa com fork + execve
 // redirecionamento – gerencia dup2, abertura/fechamento de arquivos
 // pipes – conexão entre processos com pipe(), fork(), dup2()
-
-
-
-
