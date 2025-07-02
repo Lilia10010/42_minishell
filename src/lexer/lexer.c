@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/24 23:36:29 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/01 23:59:01 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@ static int	is_operator(char c)
 
 static char	*extract_quoted_string(char **input, char quote_char)
 {
+	printf("input quoted %s\n", *input);
+
 	char	*start;
 	char	*result;
 	int		len;
 
-	start = *input + 1;
+	(*input)++;
+
+	start = *input;
 	len = 0;
 
 	while (**input && **input != quote_char)
@@ -42,21 +46,14 @@ static char	*extract_quoted_string(char **input, char quote_char)
 		len++;
 	}
 
-	if (**input == quote_char)
-	{
-		result = malloc(len + 1);
-		if (!result)
-			return (NULL);
-		ft_strlcpy(result, start, len + 1);
-		result[len] = '\0';
-		if (**input == quote_char)
-			(*input)++;
-		return (result);
-	}
-	else
-	{
+	result = (char *)malloc(len + 1);
+	if (!result)
 		return (NULL);
-	}
+	ft_strlcpy(result, start, len + 1);
+
+	if (**input == quote_char)
+		(*input)++;
+	return (result);
 }
 
 
@@ -69,24 +66,23 @@ static char *read_next_word_partial(char **current)
 
 	if (**current == '\'' || **current == '"')
 		return (extract_quoted_string(current, **current));
-	else
+	
+	start = *current;
+	len = 0;
+
+	while (**current && **current != ' ' && **current != '\t'
+		&& !is_operator(**current) && **current != '\'' && **current != '"')
 	{
-		start = *current;
-		len = 0;
-
-		while (**current && **current != ' ' && **current != '\t'&&
-		!is_operator(**current) && **current != '\'' && **current != '"')
-		{
-			(*current)++;
-			len++;
-		}
-
-		word = malloc(len + 1);
-		if (!word)
-			return (NULL);
-		ft_strlcpy(word, start, len + 1);
-		return (word);
+		(*current)++;
+		len++;
 	}
+
+	word = malloc(len + 1);
+	if (!word)
+		return (NULL);
+	ft_strlcpy(word, start, len + 1);
+	return (word);
+	 
 }
 
 static void	handle_operator(t_token **tokens, char **current)
@@ -147,6 +143,7 @@ static void	handle_word(t_token **tokens, char **current)
 			break ;
 		}
 	}
+	
 	if (value)
 	{
 		add_token(tokens, create_token(TOKEN_WORD, value));
@@ -176,7 +173,7 @@ t_token	*lexer_tokenize(char *input)
 	int i = 0;
 	while (tmp)
 	{
-		printf(" DEBUGZIM Token %d: tipo= %d, valor= '%s'\n",
+		printf(" DEBUGZIM Token %d: tipo= %d, valor=%s\n",
 			i++, tmp->type, tmp->value);
 		tmp = tmp->next;
 	}

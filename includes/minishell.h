@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:52:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/24 23:55:15 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/01 20:31:04 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 //#define MATRIX_PROMPT "\033[1;32m\033[40m minishell$ " RESET_COLOR
 //#define MATRIX_PROMPT "\033[1;32m\033[40m minishell$ " RESET_COLOR
 //#define MATRIX_PROMPT "\033[30m" GREEN_BG " minishell$ " RESET_COLOR
-#define MATRIX_PROMPT GREEN_BG ROSA " minishell$ " RESET_COLOR
+#define MATRIX_PROMPT GREEN_BG ROSA " minishell$ " RESET_COLOR " "
 
 
 typedef struct s_context
