@@ -1,0 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_debug.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/06 19:01:21 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/06 19:01:22 by lpaula-n         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parser.h"
+#include <stdio.h>
+
+void debug_print_commands(t_command *commands)
+{
+    t_command *current;
+    int cmd_num;
+    int i;
+    
+    current = commands;
+    cmd_num = 0;
+    
+    printf("\n=== COMMANDS DEBUG ===\n");
+    while (current)
+    {
+        printf("Command %d:\n", cmd_num++);
+        printf("  Args (%d): ", current->arg_count);
+        if (current->args)
+        {
+            for (i = 0; i < current->arg_count; i++)
+                printf("[%s] ", current->args[i]);
+        }
+        printf("\n");
+        
+        if (current->input_file)
+            printf("  Input: %s\n", current->input_file);
+        if (current->output_file)
+            printf("  Output: %s (%s)\n", current->output_file, 
+                   current->append_mode ? "append" : "overwrite");
+        if (current->heredoc_mode && current->heredoc_delimiter)
+            printf("  Heredoc delimiter: %s\n", current->heredoc_delimiter);
+        
+        current = current->next;
+        if (current)
+            printf("  | (pipe to next command)\n");
+    }
+    printf("======================\n");
+}

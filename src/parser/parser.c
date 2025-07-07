@@ -1,185 +1,123 @@
-#include "parser.h"
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 20:52:16 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/06 19:07:32 by lpaula-n         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-//o parse vai converter os toknes em estruturas de comando
-t_command *create_command(void)
-{
-	t_command *cmd;
+// #include <string.h>
+// #include <stdlib.h>
+// #include <stdio.h>
 
-	cmd = malloc(sizeof(t_command));
-	if (!cmd)
-		return (NULL);
-	cmd->args = NULL;
-	cmd->input_file = NULL;
-	cmd->output_file = NULL;
-	cmd->append_output = 0;
-	cmd->heredoc_delimiter = NULL;
-	cmd->next = NULL;
-	return (cmd);
-}
+# include "parser.h"
+# include "minishell.h"
+#include <stdio.h> //para o printf caso não for usar RETIRAR
 
-int count_word_tokens(t_token *tokens)
-{
-	t_token *current;
-	int count;
-
-	current = tokens;
-	count = 0;
-
-	while (current && current->type != TOKEN_PIPE &&
-		   current->type != TOKEN_REDIRECT_OUT &&
-		   current->type != TOKEN_REDIRECT_OUT_APPEND &&
-		   current->type != TOKEN_REDIRECT_IN &&
-		   current->type != TOKEN_HEREDOC)
-	{
-		if (current->type == TOKEN_WORD)
-			count++;
-		current = current->next;
-	}
-	return (count);
-}
 t_command *parse_tokens(t_token *tokens)
 {
-	t_command *current_cmd;
-	t_command *commands;
-	t_token *token;
-
-	if (!tokens)
-		return (NULL);
-
-	token = tokens;
-	current_cmd = NULL;
-	commands = NULL;
-
-	// if (!validate_syntax(tokens))
-	// 	return (NULL);
-
-	while (token)
-	{
-		if (!current_cmd)
-		{
-			current_cmd = create_command();
-			if (!current_cmd)
-			{
-				free_commands(commands);
-				return (NULL);
-			}
-			if (!commands)
-				commands = current_cmd;
-		}
-		if (token->type == TOKEN_WORD)
-		{
-			token = collect_args(token, &current_cmd->args);
-			continue ;
-		}
-		else if (token->type == TOKEN_REDIRECT_OUT || token->type == TOKEN_REDIRECT_OUT_APPEND)
-		{
-			if (token->next && token->next->type == TOKEN_WORD)
-			{
-				current_cmd->output_file = ft_strdup(token->next->value);
-				current_cmd->append_output = (token->type == TOKEN_REDIRECT_OUT_APPEND);
-				token = token->next->next;
-			}
-			else
-				return (free_commands(commands), NULL);
-		}
-		else if (token->type == TOKEN_REDIRECT_IN)
-		{
-			if (token->next && token->next->type == TOKEN_WORD)
-			{
-				current_cmd->input_file = ft_strdup(token->next->value);
-				token = token->next->next;
-			}
-			else
-				return (free_commands(commands), NULL);
-		}
-		else if (token->type == TOKEN_HEREDOC)
-		{
-			if (token->next && token->next->type == TOKEN_WORD)
-			{
-				current_cmd->heredoc_delimiter = ft_strdup(token->next->value);
-				token = token->next->next;
-			}
-			else
-				return (free_commands(commands), NULL);
-		}
-		else if (token->type == TOKEN_PIPE)
-		{
-			current_cmd->next = create_command();
-			current_cmd = current_cmd->next;
-			token = token->next;
-		}
-		else
-		{
-			// Se for tipo desconhecido, apenas avançamos
-			token = token->next;
-		}
-	}
-	return (commands);
-}
-
-
-void free_commands(t_command *commands)
-{
-	t_command *current;
-	t_command *next;
-	int i;
-
-	current = commands;
-	while (current)
-	{
-		next = current->next;
-		if (current->args)
-		{
-			i = 0;
-			while (current->args[i])
-			{
-				free((current->args[i]));
-				++i;
-			}
-			free(current->args);
-		}
-		free(current->input_file);
-		free(current->output_file);
-		free(current->heredoc_delimiter);
-		free(current);
-		current = next;
-	}
-}
-
-//apagar apenas para debug dos comandos
-void debug_print_commands(t_command *commands)
-{
-	t_command *cmd;
-	int i;
-	int cmd_num;
-
-	cmd = commands;
-	cmd_num = 1;
-	while (cmd)
-	{
-		printf("\n==== Comando %d ====\n", cmd_num++);
-		if (cmd->args)
-		{
-			printf("Args:\n");
-			i = 0;
-			while (cmd->args[i])
-			{
-				printf("  [%d]: %s\n", i, cmd->args[i]);
-				i++;
-			}
-		}
-		else
-			printf("Args: (nenhum)\n");
-
-		printf("Input file: %s\n", cmd->input_file ? cmd->input_file : "(nenhum)");
-		printf("Output file: %s\n", cmd->output_file ? cmd->output_file : "(nenhum)");
-		printf("Append output? %s\n", cmd->append_output ? "Sim" : "Não");
-		printf("Heredoc delimiter: %s\n", cmd->heredoc_delimiter ? cmd->heredoc_delimiter : "(nenhum)");
-
-		cmd = cmd->next;
-	}
+    t_command *commands = NULL;
+    t_command *current_cmd = NULL;
+    t_command *last_cmd = NULL;
+    t_token *current_token = tokens;
+    t_parser_state state = EXPECTING_COMMAND;
+    
+    // Validação sintática inicial
+    if (!validate_syntax(tokens))
+    {
+        printf("Syntax error\n");
+        return (NULL);
+    }
+    
+    // Processar tokens sequencialmente
+    while (current_token)
+    {
+        if (current_token->type == TOKEN_WORD)
+        {
+            if (state == EXPECTING_COMMAND)
+            {
+                // Criar novo comando
+                current_cmd = create_command();
+                if (!current_cmd)
+                {
+                    free_commands(commands);
+                    return (NULL);
+                }
+                
+                // Adicionar à lista de comandos
+                if (!commands)
+                    commands = current_cmd;
+                else
+                    last_cmd->next = current_cmd;
+                last_cmd = current_cmd;
+                
+                add_argument(current_cmd, current_token->value);
+                state = EXPECTING_ARGS;
+            }
+            else if (state == EXPECTING_ARGS)
+            {
+                // Adicionar argumento ao comando atual
+                add_argument(current_cmd, current_token->value);
+            }
+            else if (state == EXPECTING_REDIRECT_TARGET)
+            {
+                // Este caso já é tratado no bloco de redirecionamento
+                // Não deveria chegar aqui se a lógica estiver correta
+                state = EXPECTING_ARGS;
+            }
+            else if (state == EXPECTING_HEREDOC_DELIMITER)
+            {
+                // Configurar heredoc
+                current_cmd->heredoc_delimiter = ft_strdup(current_token->value);
+                current_cmd->heredoc_mode = 1;
+                state = EXPECTING_ARGS;
+            }
+        }
+        else if (is_redirection_token(current_token->type))
+        {
+            if (!current_cmd)
+            {
+                printf("Syntax error: redirection without command\n");
+                free_commands(commands);
+                return (NULL);
+            }
+            
+            // Processar redirecionamento
+            t_token *next_token = current_token->next;
+            if (!next_token || next_token->type != TOKEN_WORD)
+            {
+                printf("Syntax error: redirection without target\n");
+                free_commands(commands);
+                return (NULL);
+            }
+            
+            if (!set_redirection(current_cmd, current_token, next_token->value))
+            {
+                free_commands(commands);
+                return (NULL);
+            }
+            
+            // Pular o próximo token (já processado)
+            current_token = next_token;
+            state = EXPECTING_ARGS; // Voltar ao estado de espera de argumentos
+        }
+        else if (current_token->type == TOKEN_PIPE)
+        {
+            if (!current_cmd)
+            {
+                printf("Syntax error: pipe without command\n");
+                free_commands(commands);
+                return (NULL);
+            }
+            state = EXPECTING_COMMAND;
+        }
+        
+        current_token = current_token->next;
+    }
+    
+    return (commands);
 }

@@ -6,35 +6,60 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:54:56 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/23 21:04:17 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/06 18:59:41 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <stdio.h>
 # include "parser.h"
-#include "minishell.h"
 
-t_token	*collect_args(t_token *start, char ***args_out)
+int is_redirection_token(t_token_type type)
 {
-	t_token *token;
-	char **args;
-	int count;
-	int i;
+    return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT ||
+            type == TOKEN_REDIRECT_OUT_APPEND || type == TOKEN_HEREDOC);
+}
 
-	count = count_word_tokens(start);
-	args = malloc(sizeof(char *) * (count + 1));
-	if (!args)
-		return (NULL);
-
-	i = 0;
-	token = start;
-	while (token && token->type == TOKEN_WORD)
-	{
-		args[i] = ft_strdup(token->value);
-		i++;
-		token = token->next;
-	}
-	args[i] = NULL;
-	*args_out = args;
-	return (token);
+int validate_syntax(t_token *tokens)
+{
+    t_token *current = tokens;
+    
+    if (!current)
+        return (1); // Lista vazia é válida
+    
+    // Verificar se começa com pipe
+    if (current->type == TOKEN_PIPE)
+        return (0);
+    
+    while (current)
+    {
+        if (current->type == TOKEN_PIPE)
+        {
+            // Verificar se próximo token existe e não é pipe
+            if (!current->next || current->next->type == TOKEN_PIPE)
+                return (0);
+        }
+        
+        if (is_redirection_token(current->type))
+        {
+            // Verificar se próximo token é WORD
+            if (!current->next || current->next->type != TOKEN_WORD)
+                return (0);
+        }
+        
+        current = current->next;
+    }
+    
+    // Verificar se termina com redirecionamento
+    if (tokens)
+    {
+        // Encontrar último token
+        current = tokens;
+        while (current->next)
+            current = current->next;
+        
+        if (is_redirection_token(current->type))
+            return (0);
+    }
+    
+    return (1);
 }
