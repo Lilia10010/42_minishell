@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/06 23:30:32 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/08 00:27:32 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,39 +44,47 @@ t_command *create_command(void)
 }
 
 
-void add_argument(t_command *cmd, char *arg)
+int add_argument(t_command *cmd, char *arg)
 {
     char **new_args;
     int new_capacity;
-    
+    char *dup_arg;
+
     if (!cmd || !arg)
-        return;
-    
+        return (0);  // Erro de ponteiro
+
     // Redimensionar array se necessário
-    if (cmd->arg_count >= cmd->arg_capacity - 1) // -1 para NULL final
+    if (cmd->arg_count >= cmd->arg_capacity - 1) // -1 para espaço do NULL final
     {
         new_capacity = cmd->arg_capacity * 2;
         new_args = (char **)malloc(sizeof(char *) * new_capacity);
         if (!new_args)
         {
             printf("Error: memory allocation failed\n");
-            return;
+            return (0);
         }
-        
+
         // Copiar argumentos existentes
         for (int i = 0; i < cmd->arg_count; i++)
             new_args[i] = cmd->args[i];
-        
+
         free(cmd->args);
         cmd->args = new_args;
         cmd->arg_capacity = new_capacity;
     }
-    
-    // Adicionar novo argumento
-    cmd->args[cmd->arg_count] = ft_strdup(arg);
+
+    // Duplicar argumento e verificar falha
+    dup_arg = ft_strdup(arg);
+    if (!dup_arg)
+        return (0);
+
+    cmd->args[cmd->arg_count] = dup_arg;
     cmd->arg_count++;
     cmd->args[cmd->arg_count] = NULL; // Terminador NULL
+
+    return (1);  // Sucesso
 }
+
 
 int set_redirection(t_command *cmd, t_token *token, char *target)
 {

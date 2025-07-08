@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:46:45 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/06 19:04:39 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/08 00:27:52 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int validate_syntax(t_token *tokens);
 void free_command(t_command *cmd);
 void free_commands(t_command *commands);
 t_command *create_command(void);
-void add_argument(t_command *cmd, char *arg);
+int add_argument(t_command *cmd, char *arg);
 int set_redirection(t_command *cmd, t_token *token, char *target);
 
 //debug

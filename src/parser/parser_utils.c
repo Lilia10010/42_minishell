@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:54:56 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/06 18:59:41 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/08 00:30:44 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,14 @@ int is_redirection_token(t_token_type type)
 
 int validate_syntax(t_token *tokens)
 {
-    t_token *current = tokens;
-    
+    t_token *current;
+
+	current = tokens;    
     if (!current)
-        return (1); // Lista vazia é válida
-    
+        return (1);
     // Verificar se começa com pipe
     if (current->type == TOKEN_PIPE)
         return (0);
-    
     while (current)
     {
         if (current->type == TOKEN_PIPE)
@@ -38,17 +37,14 @@ int validate_syntax(t_token *tokens)
             if (!current->next || current->next->type == TOKEN_PIPE)
                 return (0);
         }
-        
         if (is_redirection_token(current->type))
         {
             // Verificar se próximo token é WORD
             if (!current->next || current->next->type != TOKEN_WORD)
                 return (0);
         }
-        
         current = current->next;
     }
-    
     // Verificar se termina com redirecionamento
     if (tokens)
     {
@@ -60,6 +56,5 @@ int validate_syntax(t_token *tokens)
         if (is_redirection_token(current->type))
             return (0);
     }
-    
     return (1);
 }
