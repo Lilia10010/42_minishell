@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:02:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/08 00:30:05 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/10 23:08:30 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,5 @@ t_command *parse_tokens(t_token *tokens)
         printf("Syntax error in tokens\n");
         return (NULL);
     }
-    
     return build_command_list(tokens);
 }

@@ -11,23 +11,25 @@
 #include <stdio.h>
 #include "minishell.h"
 
+
 t_builtin get_builtin_id(char *cmd)
 {
+	
     if (!cmd)
         return (BUILTIN_NONE);
-    if (strcmp(cmd, "echo") == 0)
+    if (strcmp(cmd, BUILTIN_NAME_ECHO) == 0)
 		return (BUILTIN_ECHO);
-	if (strcmp(cmd, "cd") == 0)
+	if (strcmp(cmd, BUILTIN_NAME_CD) == 0)
         return (BUILTIN_CD);
-	if (strcmp(cmd, "pdw") == 0)
+	if (strcmp(cmd, BUILTIN_NAME_PWD) == 0)
         return (BUILTIN_PWD);
-	if (strcmp(cmd, "export") == 0)
+	if (strcmp(cmd, BUILTIN_NAME_EXPORT) == 0)
         return (BUILTIN_EXPORT);
-	if (strcmp(cmd, "unset") == 0)
+	if (strcmp(cmd, BUILTIN_NAME_UNSET) == 0)
         return (BUILTIN_UNSET);
-	if (strcmp(cmd, "env") == 0)
+	if (strcmp(cmd, BUILTIN_NAME_ENV) == 0)
         return (BUILTIN_ENV);
-	if (strcmp(cmd, "exit") == 0)
+	if (strcmp(cmd, BUILTIN_NAME_EXIT) == 0)
         return (BUILTIN_EXIT);
     return (BUILTIN_NONE);
 }
@@ -83,6 +85,10 @@ int execute_single_command(t_command *cmd, t_context *ctx)
 
 int execute_pipeline(t_command *commands, t_context *ctx)
 {
+	 // Debug completo da pipeline
+    DEBUG_FULL(commands, ctx);
+	int i = 0;
+	
 	(void)commands;
 	(void)ctx;
 	//[] implementação do pipe

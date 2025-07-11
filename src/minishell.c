@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/29 11:08:39 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/11 00:22:00 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,9 @@ int main(int argc, char **argv, char **envp)
 	t_context ctx;
 	(void)argc;
 	(void)argv;
+	printf("\n████████████████████████████████\n");
+    printf("█       MINIHELL  aipaipara    █\n");
+    printf("████████████████████████████████\n\n");
 
 	init_context(&ctx, envp);
 	shell_loop(&ctx);
