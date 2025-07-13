@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/11 00:22:00 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/13 16:11:47 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+#include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdlib.h>
-
 
 void init_context(t_context *ctx, char **envp)
 {
@@ -25,7 +26,7 @@ void init_context(t_context *ctx, char **envp)
 	ctx->commands = NULL;
 }
 
-//serve para limpar dados da interação anterior
+// serve para limpar dados da interação anterior
 void cleanup_context(t_context *ctx)
 {
 	if (ctx->tokens)
@@ -43,19 +44,21 @@ void cleanup_context(t_context *ctx)
 void shell_loop(t_context *ctx)
 {
 	char *input;
+	//char *expanded_input;
 
 	while (!ctx->should_exit)
 	{
 		cleanup_context(ctx);
 		input = readline(MATRIX_PROMPT);
-		if (!input) //algum comando de scape
+		if (!input) // algum comando de scape
 		{
 			printf("exit\n"); // não pode ter o \n aqui
 			ctx->should_exit = 1;
-			break ;
+			break;
 		}
 
-		//começa o processamento do input
+		//expanded_input = expand_variables(input, ctx);
+		// começa o processamento do input
 		ctx->tokens = lexer_tokenize(input);
 		if (ctx->tokens)
 		{
@@ -66,6 +69,7 @@ void shell_loop(t_context *ctx)
 				execute_command(ctx->commands, ctx);
 			}
 		}
+		//free(expanded_input);
 		free(input);
 	}
 }
@@ -76,8 +80,8 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	printf("\n████████████████████████████████\n");
-    printf("█       MINIHELL  aipaipara    █\n");
-    printf("████████████████████████████████\n\n");
+	printf("█       MINIHELL  aipaipara    █\n");
+	printf("████████████████████████████████\n\n");
 
 	init_context(&ctx, envp);
 	shell_loop(&ctx);
@@ -95,7 +99,7 @@ int main(int argc, char **argv, char **envp)
 // expansão de variáveis – substitui $VAR, $?, etc.
 
 // heredoc – processa redirecionamentos << antes da execução
-// AST 
+// AST
 // executor – responsável por:
 // pipes (|)
 // redirecionamento (<, >, >>, <<)

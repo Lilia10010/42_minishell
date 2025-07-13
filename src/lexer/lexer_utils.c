@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:19 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/03 23:31:39 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/13 16:22:12 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,31 +26,39 @@ int	is_shell_operator(char c)
 	return (c == '|' || c == '<' || c == '>');
 }
 
-char	*extract_quoted_token(char **input, char quote_char)
+char *extract_quoted_token(char **input, char quote_char)
 {
-	char	*start;
-	char	*result;
-	int		len;
+	char *start;
+	char *raw;
+	char *final;
+	int len;
 
+	(*input)++; // pula a aspa de abertura
 	start = *input;
-	len = 1;
-	(*input)++;
+	len = 0;
 	while (**input && **input != quote_char)
 	{
 		(*input)++;
 		len++;
 	}
-	if (**input == quote_char)
-	{
-		len++;
-		(*input)++;
-	}
-	result = (char *)malloc(len + 1);
-	if (!result)
+	raw = (char *)malloc(len + 1);
+	if (!raw)
 		return (NULL);
-	ft_strlcpy(result, start, len + 1);
-	return (result);
+	ft_strlcpy(raw, start, len + 1);
+	if (**input == quote_char)
+		(*input)++; // pula a aspa de fechamento
+
+	if (quote_char == '\'') // aspas simples: literal
+		return (raw);
+	else // aspas duplas: expandir variáveis
+	{
+		final = expand_variables(raw);
+		free(raw);
+		return (final);
+	}
 }
+
+
 
 static int	handle_redirect_in_operators(t_token **tokens, char **current)
 {
