@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 16:11:47 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/13 18:45:06 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int main(int argc, char **argv, char **envp)
 // parser – converte tokens em comandos (t_command)
 // builtins – echo, cd, pwd, exit, export, unset, env
 // histórico de comandos – add_history(input)
+
+// echo lilia""11111111 remover aspas
 
 // expansão de variáveis – substitui $VAR, $?, etc.
 

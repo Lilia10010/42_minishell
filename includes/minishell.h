@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:52:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/01 20:31:04 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/13 20:28:53 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,17 @@
 
 # include "../lib/lib_ft.h"
 
-#define GREEN "\033[1;32m"
-#define RESET_COLOR "\033[0m"
-#define GREEN_BG     "\033[42m"
-#define ROSA "\033[48;5;206m"
+#define GREEN "\001\033[1;32m\002"
+#define RESET_COLOR "\001\033[0m\002"
+#define GREEN_BG     "\001\033[42m\002"
+#define ROSA "\001\033[48;5;206m\002"
+#define BOLD "\001\033[1m\002"
+
+
 //#define MATRIX_PROMPT "\033[1;32m\033[40m minishell$ " RESET_COLOR
 //#define MATRIX_PROMPT "\033[1;32m\033[40m minishell$ " RESET_COLOR
 //#define MATRIX_PROMPT "\033[30m" GREEN_BG " minishell$ " RESET_COLOR
-#define MATRIX_PROMPT GREEN_BG ROSA " minishell$ " RESET_COLOR " "
-
+#define MATRIX_PROMPT ROSA BOLD " minishell$ " RESET_COLOR " "
 
 typedef struct s_context
 {

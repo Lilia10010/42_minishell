@@ -6,9 +6,10 @@
   "editor.tabSize": 4,
   "editor.detectIndentation": false,
   "files.associations": {
-    "signals.h": "c",
-    "parser.h": "c",
-    "executor.h": "c",
-    "lexer.h": "c"
-  }
+	"signals.h": "c",
+	"parser.h": "c",
+	"executor.h": "c",
+	"lexer.h": "c",
+	"minishell.h": "c"
+}
 }

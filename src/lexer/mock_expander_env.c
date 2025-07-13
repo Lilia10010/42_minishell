@@ -1,19 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mock_expander_env.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/13 18:57:42 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/13 20:53:00 by lpaula-n         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <string.h>
 
 #include "lib_ft.h"
 #include <stdio.h>
-
 #include <unistd.h>
 #include "minishell.h"
 
-
 static const char *get_env_value(const char *key)
 {
-	int i;
-	size_t key_len;
+	int		i;
+	size_t	key_len;
 
-	key_len = strlen(key);
+	key_len = ft_strlen(key);
 	i = 0;
 	while (__environ[i])
 	{
@@ -21,82 +31,80 @@ static const char *get_env_value(const char *key)
 			return __environ[i] + key_len + 1;
 		i++;
 	}
-	return NULL;
+	return (NULL);
 }
 
 static char *extract_var_name(const char **ptr)
 {
-	const char *start = *ptr;
-	int len = 0;
+	const char	*start;
+	int			len;
+	char		*var_name;
 
-	// Calcula o tamanho da variável
-	while (**ptr && (ft_isalnum(**ptr) || **ptr == '_'))
+	start = *ptr;
+	len = 0;
+	while (**ptr && (ft_isalnum(**ptr) || **ptr == '-'))
 	{
 		(*ptr)++;
 		len++;
 	}
-
 	if (len == 0)
 		return (NULL);
-
-	char *var_name = malloc(len + 1);
+	var_name = malloc(len + 1);
 	if (!var_name)
 		return (NULL);
-
 	ft_strlcpy(var_name, start, len + 1);
-	return var_name;
+	return (var_name);
 }
 
-/*
- * append_char:
- * Adiciona um caractere único à string resultante.
- */
-static void append_char(char **result, char c)
+static void	append_char(char **result, char c)
 {
-	char tmp[2] = {c, '\0'};
-	char *old = *result;
-	*result = ft_strjoin(*result, tmp);
+	char	temp[2];
+	char	*old;
+
+	temp[0] = c;
+	temp[1] = '\0';
+	old = *result;
+	*result = ft_strjoin(*result, temp);
 	free(old);
 }
 
-/*
- * append_str:
- * Adiciona uma string inteira à string resultante.
- */
-static void append_str(char **result, const char *str)
+static void	append_str(char **result, const char *str)
 {
-	char *old = *result;
+	char *old;
+
+	old = *result;
 	*result = ft_strjoin(*result, str);
 	free(old);
 }
 
-
-/*
- * expand_variables:
- * Expande variáveis no formato $VAR se existirem no mock.
- * Retorna nova string com substituições.
- */
-
-char *expand_variables(const char *input)
+static void	handle_variable_expansio(char **result, const char **ptr)
 {
-	char *result = ft_strdup("");
-	const char *ptr = input;
+	char		*var_name;
+	const char	*value;
+
+	var_name = extract_var_name(ptr);
+	if (!var_name)
+		return ;
+	value = get_env_value(var_name);
+	if (value)
+		append_str(result,value);
+	free(var_name);
+}
+
+char	*expand_variables(const char *input)
+{
+	char		*result;
+	const char	*ptr;
+
+	result = ft_strdup("");
+	ptr = input;
 
 	while (*ptr)
 	{
 		if (*ptr == '$')
 		{
-			ptr++; // pula o '$'
-			char *var_name = extract_var_name(&ptr);
-
-			if (var_name)
-			{
-				const char *value = get_env_value(var_name);
-				if (value)
-					append_str(&result, value);
-				free(var_name);
-			}
-			// Se inválida: expande para vazio (nada é adicionado)
+			ptr++;
+			handle_variable_expansio(&result, &ptr);
 		}
 		else
 		{
@@ -104,5 +112,5 @@ char *expand_variables(const char *input)
 			ptr++;
 		}
 	}
-	return result;
+	return (result);
 }
