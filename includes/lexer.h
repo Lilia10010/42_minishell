@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:51:10 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 16:22:09 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/13 23:05:39 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,5 @@ void		skip_spaces(char **input);
 int			is_shell_operator(char c);
 char		*extract_quoted_token(char **input, char quote_char);
 int			add_operator_token(t_token **tokens, char **current);
-char *expand_variables(const char *input);
 
 #endif

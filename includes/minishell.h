@@ -6,23 +6,15 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:52:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 20:28:53 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/13 22:57:04 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "lexer.h"
-# include "parser.h"
-# include "executor.h"
-# include "builtins.h"
-# include "env.h"
-# include "signals.h"
-# include "redirections.h"
-# include "utils.h"
-
-# include "../lib/lib_ft.h"
+typedef struct s_token		t_token;
+typedef struct s_command	t_command;
 
 #define GREEN "\001\033[1;32m\002"
 #define RESET_COLOR "\001\033[0m\002"

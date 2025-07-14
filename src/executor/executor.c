@@ -5,11 +5,13 @@
 // [] implementar redirecionamentos
 // [] gerenciar processos filho
 
-#include "executor.h"
-#include "builtins.h"
 #include <string.h>
 #include <stdio.h>
+
 #include "minishell.h"
+#include "executor.h"
+#include "parser.h"
+#include "builtins.h"
 
 t_builtin get_builtin_id(char *cmd)
 {

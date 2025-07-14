@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:19 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 16:22:12 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/13 23:07:47 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "lexer.h"
+#include "env.h"
 #include "lib_ft.h"
 
 void	skip_spaces(char **input)

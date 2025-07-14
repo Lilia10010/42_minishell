@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mock_expander_env.c                                :+:      :+:    :+:   */
+/*   expander_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:57:42 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 20:53:00 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/13 22:50:46 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "lib_ft.h"
-#include <stdio.h>
 #include <unistd.h>
-#include "minishell.h"
+
+#include "env.h"
+#include "lib_ft.h"
 
 static const char *get_env_value(const char *key)
 {
@@ -68,12 +68,12 @@ static void	append_char(char **result, char c)
 	free(old);
 }
 
-static void	append_str(char **result, const char *str)
+static void	append_to_result(char **result, const char *to_append)
 {
 	char *old;
 
 	old = *result;
-	*result = ft_strjoin(*result, str);
+	*result = ft_strjoin(*result, to_append);
 	free(old);
 }
 
@@ -87,7 +87,7 @@ static void	handle_variable_expansio(char **result, const char **ptr)
 		return ;
 	value = get_env_value(var_name);
 	if (value)
-		append_str(result,value);
+		append_to_result(result,value);
 	free(var_name);
 }
 
@@ -95,6 +95,7 @@ char	*expand_variables(const char *input)
 {
 	char		*result;
 	const char	*ptr;
+	char		temp[2];
 
 	result = ft_strdup("");
 	ptr = input;
@@ -108,7 +109,9 @@ char	*expand_variables(const char *input)
 		}
 		else
 		{
-			append_char(&result, *ptr);
+			temp[0] = *ptr;
+			temp[1] = '\0';
+			append_char(&result, *temp);
 			ptr++;
 		}
 	}

@@ -1,16 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.c                                     :+:      :+:    :+:   */
+/*   redirection.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/23 21:23:33 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/23 22:02:44 by lpaula-n         ###   ########.fr       */
+/*   Created: 2025/07/13 23:53:00 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/13 23:53:21 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "redirections.h"
-#include <stdio.h>
-# include "parser.h"
 
+#ifndef REDIRECTIONS_H
+# define REDIRECTIONS_H
+
+typedef struct s_token		t_token;
+typedef struct s_command	t_command;
+
+int	set_redirection(t_command *cmd, t_token *token, char *target);
+
+#endif

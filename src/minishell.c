@@ -6,16 +6,22 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 18:45:06 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/13 23:01:13 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <stdlib.h>
+
+#include "lexer.h"
+#include "parser.h"
+#include "executor.h"
+
+# include "../lib/lib_ft.h"
 
 void init_context(t_context *ctx, char **envp)
 {

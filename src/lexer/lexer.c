@@ -3,16 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 16:34:36 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/13 23:06:38 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "minishell.h"
 #include "lexer.h"
-#include <stdio.h> //para o printf caso não for usar RETIRAR
+#include "env.h"
+#include "lib_ft.h"
 
 static int	has_dollar(const char *str)
 {

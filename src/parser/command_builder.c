@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/08 00:27:32 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/14 00:06:13 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,88 +43,91 @@ t_command *create_command(void)
     return (cmd);
 }
 
-
-int add_argument(t_command *cmd, char *arg)
+static int expand_args_array(t_command *cmd)
 {
-    char **new_args;
-    int new_capacity;
-    char *dup_arg;
+	char **new_args;
+	int new_capacity;
+	int i;
 
-    if (!cmd || !arg)
-        return (0);  // Erro de ponteiro
+	new_capacity = cmd->arg_capacity * 2;
+	new_args = (char **)malloc(sizeof(char *) * new_capacity);
+	if (!new_args)
+		return (0);
+	i = 0;
+	while (i < cmd->arg_count)
+	{
+		new_args[i] = cmd->args[i];
+		++i;
+	}
+	free(cmd->args);
+	cmd->args = new_args;
+	cmd->arg_capacity = new_capacity;
+	return (1);
+}
 
-    // Redimensionar array se necessário
-    if (cmd->arg_count >= cmd->arg_capacity - 1) // -1 para espaço do NULL final
-    {
-        new_capacity = cmd->arg_capacity * 2;
-        new_args = (char **)malloc(sizeof(char *) * new_capacity);
-        if (!new_args)
-        {
-            printf("Error: memory allocation failed\n");
-            return (0);
-        }
+int	add_argument(t_command *cmd, char *arg)
+{
+    char	*dup_arg;
 
-        // Copiar argumentos existentes
-        for (int i = 0; i < cmd->arg_count; i++)
-            new_args[i] = cmd->args[i];
-
-        free(cmd->args);
-        cmd->args = new_args;
-        cmd->arg_capacity = new_capacity;
-    }
-
-    // Duplicar argumento e verificar falha
-    dup_arg = ft_strdup(arg);
-    if (!dup_arg)
-        return (0);
-
-    cmd->args[cmd->arg_count] = dup_arg;
-    cmd->arg_count++;
-    cmd->args[cmd->arg_count] = NULL; // Terminador NULL
-
+	if (!cmd || !arg)
+		return (0);
+	if (cmd->arg_count >= cmd->arg_capacity -1)
+	{
+		if (!expand_args_array(cmd))
+		{
+			printf("eror: memory allocation failed\n");
+			return (0);
+		}
+	}
+	dup_arg = ft_strdup(arg);
+	if (!dup_arg)
+		return (0);
+	cmd->args[cmd->arg_count++] = dup_arg;
+	cmd->args[cmd->arg_count] = NULL;
     return (1);  // Sucesso
 }
 
 
-int set_redirection(t_command *cmd, t_token *token, char *target)
-{
-    if (!cmd || !token || !target)
-        return (0);
+// int set_redirection(t_command *cmd, t_token *token, char *target)
+// {
+//     if (!cmd || !token || !target)
+//         return (0);
     
-    if (token->type == TOKEN_REDIRECT_IN)
-    {
-        if (cmd->input_file)
-            free(cmd->input_file);
-        cmd->input_file = ft_strdup(target);
-        cmd->heredoc_mode = 0;
-    }
-    else if (token->type == TOKEN_REDIRECT_OUT)
-    {
-        if (cmd->output_file)
-            free(cmd->output_file);
-        cmd->output_file = ft_strdup(target);
-        cmd->append_mode = 0;
-    }
-    else if (token->type == TOKEN_REDIRECT_OUT_APPEND)
-    {
-        if (cmd->output_file)
-            free(cmd->output_file);
-        cmd->output_file = ft_strdup(target);
-        cmd->append_mode = 1;
-    }
-    else if (token->type == TOKEN_HEREDOC)
-    {
-        if (cmd->heredoc_delimiter)
-            free(cmd->heredoc_delimiter);
-        cmd->heredoc_delimiter = ft_strdup(target);
-        cmd->heredoc_mode = 1;
-        // Limpar input_file se existir
-        if (cmd->input_file)
-        {
-            free(cmd->input_file);
-            cmd->input_file = NULL;
-        }
-    }
+//     if (token->type == TOKEN_REDIRECT_IN)
+//     {
+//         if (cmd->input_file)
+//             free(cmd->input_file);
+//         cmd->input_file = ft_strdup(target);
+//         cmd->heredoc_mode = 0;
+//     }
+//     else if (token->type == TOKEN_REDIRECT_OUT)
+//     {
+//         if (cmd->output_file)
+//             free(cmd->output_file);
+//         cmd->output_file = ft_strdup(target);
+//         cmd->append_mode = 0;
+//     }
+//     else if (token->type == TOKEN_REDIRECT_OUT_APPEND)
+//     {
+//         if (cmd->output_file)
+//             free(cmd->output_file);
+//         cmd->output_file = ft_strdup(target);
+//         cmd->append_mode = 1;
+//     }
+//     else if (token->type == TOKEN_HEREDOC)
+//     {
+//         if (cmd->heredoc_delimiter)
+//             free(cmd->heredoc_delimiter);
+//         cmd->heredoc_delimiter = ft_strdup(target);
+//         cmd->heredoc_mode = 1;
+//         // Limpar input_file se existir
+//         if (cmd->input_file)
+//         {
+//             free(cmd->input_file);
+//             cmd->input_file = NULL;
+//         }
+//     }
     
-    return (1);
-}
+//     return (1);
+// }
+
