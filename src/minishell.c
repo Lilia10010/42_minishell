@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 23:01:13 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/14 00:17:46 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,3 +114,4 @@ int main(int argc, char **argv, char **envp)
 // comando externo – executa com fork + execve
 // redirecionamento – gerencia dup2, abertura/fechamento de arquivos
 // pipes – conexão entre processos com pipe(), fork(), dup2()
+//cmd->append_mode = append;//0 para >, 1 para >> na função de redirecionamento0 para >, 1 para >>
