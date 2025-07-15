@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 23:06:38 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/14 23:10:55 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ static int	has_dollar(const char *str)
 
 static char *read_next_word_partial(char **current)
 {
-	char *start;
-	char *word;
-	char *expanded;
-	int len;
+	char	*start;
+	char	*word;
+	char	*expanded;
+	int		len;
 
 	if (**current == '\'' || **current == '"')
 		return (extract_quoted_token(current, **current));
