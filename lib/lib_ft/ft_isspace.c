@@ -1,44 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/14 18:35:32 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/15 18:45:45 by meandrad         ###   ########.fr       */
+/*   Created: 2025/07/14 20:31:05 by meandrad          #+#    #+#             */
+/*   Updated: 2025/07/14 20:31:51 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/builtins.h"
+#include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+int	ft_isspace(int c)
 {
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
-	return (0);
-}
-
-int	builtin_pwd(t_context *ctx)
-{
-	char	*pwd;
-
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-	{
-		perror("pwd");
-		ctx->exit_status = 1;
+	if ((c >= 9 && c <= 13) || c == 32)
 		return (1);
-	}
-	ft_putstr_fd(pwd, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
-	free(pwd);
-	ctx->exit_status = 0;
-	return (0);
+	else
+		return (0);
 }

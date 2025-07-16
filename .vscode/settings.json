@@ -3,6 +3,7 @@
 	"editor.tabSize": 4,
 	"editor.detectIndentation": false,
 	"files.associations": {
-		"signals.h": "c"
+		"signals.h": "c",
+		"minishell.h": "c"
 	}
 }

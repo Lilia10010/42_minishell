@@ -1,44 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/14 18:35:32 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/15 18:45:45 by meandrad         ###   ########.fr       */
+/*   Created: 2025/07/14 20:30:05 by meandrad          #+#    #+#             */
+/*   Updated: 2025/07/14 20:37:40 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/builtins.h"
+#include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+long long	ft_atoll(const char *s)
 {
-	int	i;
+	long long	result;
+	int			i;
+	int			flag;
 
+	result = 0;
+	flag = 1;
 	i = 0;
-	while (s[i])
+	while (ft_isspace(s[i]) == 1)
+		i++;
+	if (s[i] == '-' || s[i] == '+')
 	{
-		write(fd, &s[i], 1);
+		if (s[i] == '-')
+			flag = -1;
 		i++;
 	}
-	return (0);
-}
-
-int	builtin_pwd(t_context *ctx)
-{
-	char	*pwd;
-
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
+	while (ft_isdigit(s[i]) == 1)
 	{
-		perror("pwd");
-		ctx->exit_status = 1;
-		return (1);
+		result = result * 10 + (s[i] - '0');
+		i++;
 	}
-	ft_putstr_fd(pwd, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
-	free(pwd);
-	ctx->exit_status = 0;
-	return (0);
+	return (result * flag);
 }
+
