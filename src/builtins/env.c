@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 19:27:15 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/15 18:39:15 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:03:40 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include <unistd.h>
+#include "builtins.h"
 
 int	builtin_env(char **args, t_context *ctx)
 {

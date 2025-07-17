@@ -6,22 +6,17 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:58:24 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/16 21:46:16 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:02:48 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "builtins.h"
 
-static void	old_pwd(t_context *ctx)
-{
-	
-}
-
 static char	*get_pwd(char **envp, char *s)
 {
 	int	i;
-	char *home;
+	//char *home;
 
 	if (!envp || !*envp)
 		return (NULL);
@@ -39,7 +34,8 @@ int	builtin_cd(char **args, t_context *ctx)
 {
 	char *caminho;
 
-	if (!args[1] || (ft_strncmp(args[1], '~', 1) == 0))
+	//if (!args[1] || (ft_strncmp(args[1], '~', 1) == 0))
+	if (!args[1] || (ft_strncmp(args[1], "~", 1) == 0))
 		caminho = get_pwd (ctx->envp, "HOME");
 	else
 		caminho = args[1];
@@ -49,4 +45,6 @@ int	builtin_cd(char **args, t_context *ctx)
 		ctx->exit_status = 1;
 		return (1);
 	}
+	//confirmar com MEL se é 0 ou 1
+	return (0);
 }

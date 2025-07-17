@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 20:16:50 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/15 18:05:53 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:03:17 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include <unistd.h>
+#include "builtins.h"
 
 static int	is_valid_exit_code(char *arg)
 {

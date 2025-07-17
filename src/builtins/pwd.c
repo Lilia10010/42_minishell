@@ -3,27 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 18:35:32 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/15 18:45:45 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/07/16 21:58:02 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/builtins.h"
 
-int	ft_putstr_fd(char *s, int fd)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
-	return (0);
-}
+#include <unistd.h>
+#include "builtins.h"
 
 int	builtin_pwd(t_context *ctx)
 {
@@ -32,7 +21,7 @@ int	builtin_pwd(t_context *ctx)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
-		perror("pwd");
+		//perror("pwd");
 		ctx->exit_status = 1;
 		return (1);
 	}
