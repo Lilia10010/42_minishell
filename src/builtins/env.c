@@ -6,12 +6,13 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 19:27:15 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/16 22:03:40 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:28:01 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "builtins.h"
+#include "lib_ft.h"
 
 int	builtin_env(char **args, t_context *ctx)
 {
