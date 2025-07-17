@@ -6,15 +6,22 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/06/29 11:08:39 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/14 00:17:46 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+#include <stdio.h>
+#include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <stdlib.h>
 
+#include "lexer.h"
+#include "parser.h"
+#include "executor.h"
+
+# include "../lib/lib_ft.h"
 
 void init_context(t_context *ctx, char **envp)
 {
@@ -25,7 +32,7 @@ void init_context(t_context *ctx, char **envp)
 	ctx->commands = NULL;
 }
 
-//serve para limpar dados da interação anterior
+// serve para limpar dados da interação anterior
 void cleanup_context(t_context *ctx)
 {
 	if (ctx->tokens)
@@ -43,19 +50,21 @@ void cleanup_context(t_context *ctx)
 void shell_loop(t_context *ctx)
 {
 	char *input;
+	//char *expanded_input;
 
 	while (!ctx->should_exit)
 	{
 		cleanup_context(ctx);
 		input = readline(MATRIX_PROMPT);
-		if (!input) //algum comando de scape
+		if (!input) // algum comando de scape
 		{
 			printf("exit\n"); // não pode ter o \n aqui
 			ctx->should_exit = 1;
-			break ;
+			break;
 		}
 
-		//começa o processamento do input
+		//expanded_input = expand_variables(input, ctx);
+		// começa o processamento do input
 		ctx->tokens = lexer_tokenize(input);
 		if (ctx->tokens)
 		{
@@ -66,6 +75,7 @@ void shell_loop(t_context *ctx)
 				execute_command(ctx->commands, ctx);
 			}
 		}
+		//free(expanded_input);
 		free(input);
 	}
 }
@@ -75,6 +85,9 @@ int main(int argc, char **argv, char **envp)
 	t_context ctx;
 	(void)argc;
 	(void)argv;
+	printf("\n████████████████████████████████\n");
+	printf("█       MINIHELL  aipaipara    █\n");
+	printf("████████████████████████████████\n\n");
 
 	init_context(&ctx, envp);
 	shell_loop(&ctx);
@@ -89,13 +102,16 @@ int main(int argc, char **argv, char **envp)
 // builtins – echo, cd, pwd, exit, export, unset, env
 // histórico de comandos – add_history(input)
 
+// echo lilia""11111111 remover aspas
+
 // expansão de variáveis – substitui $VAR, $?, etc.
 
 // heredoc – processa redirecionamentos << antes da execução
-// AST 
+// AST
 // executor – responsável por:
 // pipes (|)
 // redirecionamento (<, >, >>, <<)
 // comando externo – executa com fork + execve
 // redirecionamento – gerencia dup2, abertura/fechamento de arquivos
 // pipes – conexão entre processos com pipe(), fork(), dup2()
+//cmd->append_mode = append;//0 para >, 1 para >> na função de redirecionamento0 para >, 1 para >>

@@ -6,12 +6,13 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:49:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/16 21:41:31 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:13:56 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENV_H
 # define ENV_H
 
-void	print_env(char **env);
+char	*expand_variables(const char *input);
+
 #endif

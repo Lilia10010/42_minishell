@@ -6,12 +6,13 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:58:24 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/16 22:02:48 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:26:22 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "builtins.h"
+#include "lib_ft.h"
 
 static char	*get_pwd(char **envp, char *s)
 {
@@ -34,7 +35,6 @@ int	builtin_cd(char **args, t_context *ctx)
 {
 	char *caminho;
 
-	//if (!args[1] || (ft_strncmp(args[1], '~', 1) == 0))
 	if (!args[1] || (ft_strncmp(args[1], "~", 1) == 0))
 		caminho = get_pwd (ctx->envp, "HOME");
 	else

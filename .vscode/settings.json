@@ -1,10 +1,15 @@
 {
-	"editor.insertSpaces": false,
-	"editor.tabSize": 4,
-	"editor.detectIndentation": false,
-	"files.associations": {
-		"signals.h": "c",
-		"minishell.h": "c",
-		"builtins.h": "c"
-	}
+	"editor.formatOnSave": false, // Desativa formatação ao salvar
+	"editor.formatOnPaste": false, // Desativa formatação ao colar
+	"editor.formatOnType": false, // Desativa formatação ao digitar
+  "editor.insertSpaces": false,
+  "editor.tabSize": 4,
+  "editor.detectIndentation": false,
+  "files.associations": {
+	"signals.h": "c",
+	"parser.h": "c",
+	"executor.h": "c",
+	"lexer.h": "c",
+	"minishell.h": "c"
+}
 }

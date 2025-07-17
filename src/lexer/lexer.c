@@ -6,27 +6,42 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/03 23:23:59 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/14 23:10:55 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "minishell.h"
 #include "lexer.h"
-#include <stdio.h> //para o printf caso não for usar RETIRAR
+#include "env.h"
+#include "lib_ft.h"
 
-static char	*read_next_word_partial(char **current)
+static int	has_dollar(const char *str)
+{
+	while (*str)
+	{
+		if (*str == '$')
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+
+static char *read_next_word_partial(char **current)
 {
 	char	*start;
 	char	*word;
+	char	*expanded;
 	int		len;
 
 	if (**current == '\'' || **current == '"')
 		return (extract_quoted_token(current, **current));
 	start = *current;
 	len = 0;
-	while (**current && **current != ' ' && **current != '\t'
-		&& !is_shell_operator(**current)
-		&& **current != '\'' && **current != '"')
+	while (**current && **current != ' ' && **current != '\t' && !is_shell_operator(**current) && **current != '\'' && **current != '"')
 	{
 		(*current)++;
 		len++;
@@ -35,26 +50,31 @@ static char	*read_next_word_partial(char **current)
 	if (!word)
 		return (NULL);
 	ft_strlcpy(word, start, len + 1);
-	return (word);
+	if (has_dollar(word))
+	{
+		expanded = expand_variables(word);
+		free(word);
+		return expanded;
+	}
+return word;
 }
 
-static int	handle_word(t_token **tokens, char **current)
+static int handle_word(t_token **tokens, char **current)
 {
-	char	*word_value;
-	char	*partial;
+	char *word_value;
+	char *partial;
 
 	word_value = NULL;
-	while (**current && !is_shell_operator(**current)
-		&& **current != ' ' && **current != '\t')
+	while (**current && !is_shell_operator(**current) && **current != ' ' && **current != '\t')
 	{
 		partial = read_next_word_partial(current);
 		if (!partial)
-			break ;
+			break;
 		word_value = concatenate_strings(word_value, partial);
 		free(partial);
 		if (!word_value)
 		{
-			//ver qual o erro que deve ser retornado ou se apenas o break é suficiente
+			// ver qual o erro que deve ser retornado ou se apenas o break é suficiente
 			printf("Error allocating memory for token word_value\n");
 			return (0);
 		}
@@ -68,10 +88,10 @@ static int	handle_word(t_token **tokens, char **current)
 	return (0);
 }
 
-t_token	*lexer_tokenize(char *input)
+t_token *lexer_tokenize(char *input)
 {
-	t_token	*tokens;
-	char	*current;
+	t_token *tokens;
+	char *current;
 
 	tokens = NULL;
 	current = input;
@@ -79,16 +99,16 @@ t_token	*lexer_tokenize(char *input)
 	{
 		skip_spaces(&current);
 		if (!*current)
-			break ;
+			break;
 		if (is_shell_operator(*current))
 		{
 			if (!add_operator_token(&tokens, &current))
-				break ;
+				break;
 		}
 		else
 		{
 			if (!handle_word(&tokens, &current))
-				break ;
+				break;
 		}
 	}
 	debug_print_tokens(tokens);
