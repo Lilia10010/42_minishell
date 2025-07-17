@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:52:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 22:57:04 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:14:07 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_command	t_command;
 //#define MATRIX_PROMPT "\033[30m" GREEN_BG " minishell$ " RESET_COLOR
 #define MATRIX_PROMPT ROSA BOLD " minishell$ " RESET_COLOR " "
 
+//contexto temporário do loop - tokens, cmd ...
 typedef struct s_context
 {
 	char		**envp;
