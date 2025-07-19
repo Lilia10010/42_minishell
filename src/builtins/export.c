@@ -3,12 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 21:05:39 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/14 21:05:45 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/07/19 01:19:59 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include "builtins.h"
+#include <stdio.h>
 
+int builtin_export(char **args, t_context *ctx)
+{
+	//todo este codigo é só de debug, retirar tudinho inho 
+	(void)ctx;
+	int i = 0;
+	while (args[i])
+	{
+		printf("export %s\n", args[i]);
+		++i;
+	}
+	return (0);
+}

@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:58:24 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/16 22:26:22 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/19 01:20:32 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,5 @@ int	builtin_cd(char **args, t_context *ctx)
 		ctx->exit_status = 1;
 		return (1);
 	}
-	//confirmar com MEL se é 0 ou 1
 	return (0);
 }

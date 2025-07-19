@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:02:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 13:54:22 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/18 22:27:06 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
-#include <stdlib.h>
-#include "lib_ft.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+#include "redirection.h"
+#include "lib_ft.h"
+#include "parser.h"
 // Função auxiliar: inicializa novo comando e conecta à lista
 static int start_new_command(t_command **commands, t_command **current, t_command **last)
 {
