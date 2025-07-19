@@ -49,7 +49,16 @@ int execute_builtin(t_command *cmd, t_context *ctx)
 		return (builtin_echo(cmd->args, ctx));
 	if (id_builtin == BUILTIN_CD)
 		return (builtin_cd(cmd->args, ctx));
-	// demais builtins
+	if (id_builtin == BUILTIN_PWD)
+		return (builtin_pwd(cmd->args, ctx));
+	if (id_builtin == BUILTIN_EXPORT)
+		return (builtin_export(cmd->args, ctx));
+	if (id_builtin == BUILTIN_UNSET)
+		return (builtin_unset(cmd->args, ctx));
+	if (id_builtin == BUILTIN_ENV)
+		return (builtin_env(cmd->args, ctx));
+	if (id_builtin == BUILTIN_EXIT)
+		return (builtin_exit(cmd->args, ctx));
 	return (1); // Comando não encontrado
 }
 
@@ -76,15 +85,64 @@ void execute_external_command(t_command *cmd, t_context *ctx)
 	ctx->exit_status = 127; // Comando não encontrado
 	// retornar erro de comando não encontrado
 }
+void ft_free_split(char **split)
+{
+	int i = 0;
+	if (!split)
+		return;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+
 char *find_executable_in_path(const char *cmd)
 {
-	// [] implemntar busca de executável no PATH
-	printf("==> buscando executável no PATH: %s\n", cmd);
-	char *path_env = getenv("PATH");
-	//imprimir o path_env
-	printf(" PATH: %s\n", path_env);
+	char	*path_env;
+	char	**paths;
+	char	*full_path;
+	char	*temp;
+	int		i;
+
+	i = 0;
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
+	path_env = getenv("PATH");
+	if (!path_env)
+		return (NULL);
+	paths = ft_split(path_env, ':');
+	if (!paths)
+		return (NULL);
+	while (paths[i])
+	{
+		full_path = ft_strjoin(paths[i], "/");
+		if (!full_path)
+		{
+			ft_free_split(paths);
+			return (NULL);
+		}
+		temp = ft_strjoin(full_path, cmd);
+		free(full_path);
+		if (!temp)
+		{
+			ft_free_split(paths);
+			return (NULL);
+		}
+		if (access(temp, X_OK) == 0)
+		{
+			ft_free_split(paths);
+			return (temp);
+		}
+		free(temp);
+		i++;
+	}
+	ft_free_split(paths);
 	return (NULL);
+
 }
+
 int execute_single_command(t_command *cmd, t_context *ctx)
 {
 	t_builtin	id_builtin;
@@ -115,8 +173,8 @@ int execute_single_command(t_command *cmd, t_context *ctx)
 	full_path = find_executable_in_path(cmd->args[0]);
 	if (full_path)
 	{
-		printf("==> entrou comando externo: %s\n", cmd->args[0]);
-		cmd->args[0] = full_path; // p/ atualizar o comando com o caminho completo, mas talvez isto não seja necessário
+		printf("==> entrou comando externo: %s\n", full_path);
+		//cmd->args[0] = full_path; // p/ atualizar o comando com o caminho completo, mas talvez isto não seja necessário
 		// [] implementar execução de comandos externos com execve()
 		// [] verificar se o comando é um executável válido
 		//execute_external_command(cmd, ctx);

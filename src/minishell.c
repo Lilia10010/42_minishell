@@ -6,17 +6,16 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/14 00:17:46 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/18 23:39:23 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "minishell.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#include "minishell.h"
 #include "lexer.h"
 #include "parser.h"
 #include "executor.h"

@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/14 00:06:13 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/18 22:16:51 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ t_command *create_command(void)
     if (!cmd->args)
     {
         free(cmd);
-		int set_redirection(t_command *cmd, t_token *token, char *target);
         return (NULL);
     }
     
