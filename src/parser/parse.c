@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:02:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/18 22:27:06 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/20 20:20:01 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,8 @@ static int handle_word_token(t_token *token, t_parser_state *state, t_command **
 	{
 		if (!start_new_command(cmds, cmd, last))
 			return (-1); // Erro
-
 		if (!add_argument(*cmd, token->value))
 			return (-1); // Erro ao adicionar argumento
-
 		*state = EXPECTING_ARGS;
 	}
 	else if (*state == EXPECTING_ARGS)
@@ -77,7 +75,6 @@ static int handle_word_token(t_token *token, t_parser_state *state, t_command **
 		(*cmd)->heredoc_delimiter = ft_strdup(token->value);
 		if (!(*cmd)->heredoc_delimiter)
 			return (-1); // Erro de memória
-
 		(*cmd)->heredoc_mode = 1;
 		*state = EXPECTING_ARGS;
 	}
@@ -139,7 +136,6 @@ static t_command *build_command_list(t_token *tokens)
 	last_cmd = NULL;
 	current_token = tokens;
 	state = EXPECTING_COMMAND;
-
 	while (current_token)
 	{
 		consumed = handle_token(current_token, &state, &current_cmd, &commands, &last_cmd);
@@ -156,7 +152,6 @@ static t_command *build_command_list(t_token *tokens)
 			consumed--;
 		}
 	}
-
 	// Validação final: não pode terminar esperando comando após pipe
 	if (state == EXPECTING_COMMAND && commands)
 	{
@@ -164,7 +159,6 @@ static t_command *build_command_list(t_token *tokens)
 		free_commands(commands);
 		return (NULL);
 	}
-
 	return (commands);
 }
 
@@ -172,7 +166,6 @@ t_command *parse_tokens(t_token *tokens)
 {
 	if (!tokens)
 		return (NULL);
-
 	if (!validate_syntax(tokens))
 	{
 		printf("Syntax error in tokens\n");
