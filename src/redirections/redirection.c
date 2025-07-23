@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:39:21 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/22 23:16:22 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/22 23:59:15 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,7 @@ static void set_input_file(t_command *cmd, char *target)
 }
 
 static void set_output_file(t_command *cmd, char *target, int append)
-{
-	int i = 0;
-	while (cmd->args)
-	{
-		printf("output > %s", cmd->args[i]);
-		printf(" %d", i);
-		i++;
-		if (cmd->args[i] == NULL)
-			break;
-		printf(", ");	
-
-	}
+{	
 	if (cmd->output_file)
 		free(cmd->output_file);
 	cmd->output_file = ft_strdup(target);
