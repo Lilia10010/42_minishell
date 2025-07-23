@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:39:21 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/18 23:40:06 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/22 23:16:22 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void set_heredoc(t_command *cmd, char *target)
 		cmd->input_file = NULL;
 	}
 }
-//parametros: comando - token - e o alvo
+//parametros: comando - token - e o alvo arquivo de destino ou delimitador
 int	set_redirection(t_command *cmd, t_token *token, char *target)
 {
 	if (!cmd || !token || !target)

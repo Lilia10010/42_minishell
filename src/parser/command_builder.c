@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/18 22:16:51 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/22 23:07:49 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,48 +85,3 @@ int	add_argument(t_command *cmd, char *arg)
 	cmd->args[cmd->arg_count] = NULL;
     return (1);  // Sucesso
 }
-
-
-// int set_redirection(t_command *cmd, t_token *token, char *target)
-// {
-//     if (!cmd || !token || !target)
-//         return (0);
-    
-//     if (token->type == TOKEN_REDIRECT_IN)
-//     {
-//         if (cmd->input_file)
-//             free(cmd->input_file);
-//         cmd->input_file = ft_strdup(target);
-//         cmd->heredoc_mode = 0;
-//     }
-//     else if (token->type == TOKEN_REDIRECT_OUT)
-//     {
-//         if (cmd->output_file)
-//             free(cmd->output_file);
-//         cmd->output_file = ft_strdup(target);
-//         cmd->append_mode = 0;
-//     }
-//     else if (token->type == TOKEN_REDIRECT_OUT_APPEND)
-//     {
-//         if (cmd->output_file)
-//             free(cmd->output_file);
-//         cmd->output_file = ft_strdup(target);
-//         cmd->append_mode = 1;
-//     }
-//     else if (token->type == TOKEN_HEREDOC)
-//     {
-//         if (cmd->heredoc_delimiter)
-//             free(cmd->heredoc_delimiter);
-//         cmd->heredoc_delimiter = ft_strdup(target);
-//         cmd->heredoc_mode = 1;
-//         // Limpar input_file se existir
-//         if (cmd->input_file)
-//         {
-//             free(cmd->input_file);
-//             cmd->input_file = NULL;
-//         }
-//     }
-    
-//     return (1);
-// }
-

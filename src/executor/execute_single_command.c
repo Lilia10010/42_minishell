@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:16:52 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/20 23:19:47 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/22 22:38:07 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int execute_single_command(t_command *cmd, t_context *ctx)
 	path = find_executable_in_path(cmd->args[0]);
 	if (path)
 	{
-		printf("==> entrou comando externo: %s\n", path);
+		printf("==> entrou comando externo:: %s\n", path);
 		free(path);
 		return (1);
 	}
