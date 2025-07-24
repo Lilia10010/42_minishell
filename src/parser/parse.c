@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:02:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/22 23:19:25 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/23 23:34:57 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "redirection.h"
 #include "lib_ft.h"
 #include "parser.h"
-// Função auxiliar: inicializa novo comando e conecta à lista
+
 static int start_new_command(t_command **commands, t_command **current, t_command **last)
 {
 	*current = create_command();
@@ -41,16 +41,16 @@ static int handle_redirection(t_token *token, t_command *cmd)
 	if (!cmd)
 	{
 		printf("Syntax error: redirection without command\n");
-		return (-1); // Erro
+		return (-1);
 	}
 	if (!target || target->type != TOKEN_WORD)
 	{
 		printf("Syntax error: redirection without target\n");
-		return (-1); // Erro
+		return (-1);
 	}
 	if (!set_redirection(cmd, token, target->value))
 	{
-		return (-1); // Erro
+		return (-1);
 	}
 	return (2); // Consumiu 2 tokens (redirecionamento + target)
 }
@@ -120,7 +120,6 @@ static int handle_token(t_token *token, t_parser_state *state, t_command **curre
 		printf("Unknown token type: %d\n", token->type);
 		consumed = -1; // Erro
 	}
-
 	return (consumed);
 }
 

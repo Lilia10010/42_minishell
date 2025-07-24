@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_builtin_id_utils.c                             :+:      :+:    :+:   */
+/*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/20 21:00:34 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/20 21:41:00 by lpaula-n         ###   ########.fr       */
+/*   Created: 2025/07/23 21:47:39 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/23 21:54:18 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,9 @@ t_builtin get_builtin_id(char *cmd)
 	if (ft_strcmp(cmd, BUILTIN_NAME_EXIT) == 0)
 		return (BUILTIN_EXIT);
 	return (BUILTIN_NONE);
+}
+
+int	is_path_comman(const char *cmd)
+{
+	return (ft_strchr(cmd, '/') != NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:19 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 23:07:47 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/23 23:33:32 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char *extract_quoted_token(char **input, char quote_char)
 	char *final;
 	int len;
 
-	(*input)++; // pula a aspa de abertura
+	(*input)++;
 	start = *input;
 	len = 0;
 	while (**input && **input != quote_char)
@@ -47,19 +47,17 @@ char *extract_quoted_token(char **input, char quote_char)
 		return (NULL);
 	ft_strlcpy(raw, start, len + 1);
 	if (**input == quote_char)
-		(*input)++; // pula a aspa de fechamento
+		(*input)++;
 
-	if (quote_char == '\'') // aspas simples: literal
+	if (quote_char == '\'')
 		return (raw);
-	else // aspas duplas: expandir variáveis
+	else
 	{
 		final = expand_variables(raw);
 		free(raw);
 		return (final);
 	}
 }
-
-
 
 static int	handle_redirect_in_operators(t_token **tokens, char **current)
 {
