@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:39:21 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/18 23:40:06 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/22 23:59:15 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,7 @@ static void set_input_file(t_command *cmd, char *target)
 }
 
 static void set_output_file(t_command *cmd, char *target, int append)
-{
-	int i = 0;
-	while (cmd->args)
-	{
-		printf("output > %s", cmd->args[i]);
-		printf(" %d", i);
-		i++;
-		if (cmd->args[i] == NULL)
-			break;
-		printf(", ");	
-
-	}
+{	
 	if (cmd->output_file)
 		free(cmd->output_file);
 	cmd->output_file = ft_strdup(target);
@@ -57,7 +46,7 @@ static void set_heredoc(t_command *cmd, char *target)
 		cmd->input_file = NULL;
 	}
 }
-//parametros: comando - token - e o alvo
+//parametros: comando - token - e o alvo arquivo de destino ou delimitador
 int	set_redirection(t_command *cmd, t_token *token, char *target)
 {
 	if (!cmd || !token || !target)
