@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/22 23:16:44 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/26 16:48:24 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,20 +97,22 @@ int main(int argc, char **argv, char **envp)
 
 // readline – leitura do input do usuário
 // lexer – quebra o input em tokens (respeitando aspas, escapes...) Lília
-// parser – converte tokens em comandos (t_command)
-// builtins – echo, cd, pwd, exit, export, unset, env
-// histórico de comandos – add_history(input)
-
+// parser – converte tokens em comandos (t_command) Lília
+// comando externo – executa com fork + execve 
 // echo lilia""11111111 remover aspas
-
 // expansão de variáveis – substitui $VAR, $?, etc.
 
+
+// em execução: 
+//
+// histórico de comandos – add_history(input) Mel
+// builtins – echo, cd, pwd, exit, export, unset, env Mel
+// redirecionamento (<, >, >>, <<)
+// redirecionamento – gerencia dup2, abertura/fechamento de arquivos
+
+
 // heredoc – processa redirecionamentos << antes da execução
-// AST
 // executor – responsável por:
 // pipes (|)
-// redirecionamento (<, >, >>, <<)
-// comando externo – executa com fork + execve
-// redirecionamento – gerencia dup2, abertura/fechamento de arquivos
 // pipes – conexão entre processos com pipe(), fork(), dup2()
 //cmd->append_mode = append;//0 para >, 1 para >> na função de redirecionamento0 para >, 1 para >>
