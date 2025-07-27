@@ -6,17 +6,33 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 19:27:15 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/22 22:57:40 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/26 21:18:27 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include <stdio.h>
 #include "builtins.h"
 #include "lib_ft.h"
 
 int	builtin_env(char **args, t_context *ctx)
 {
 	int	i;
+
+	int p = 0;
+
+	while(args[p])
+	{
+		if (args[0] && args[0][0] == '-')
+		{
+			printf("env: invalid option -- '%s'\n", args[p]);
+			ctx->exit_status = 127;
+			return (127);
+		}
+		p++;
+		printf("env: too many argumentss %s\n", args[p]);
+
+	}
 
 	if (!ctx->envp || !*ctx->envp)
 	{
