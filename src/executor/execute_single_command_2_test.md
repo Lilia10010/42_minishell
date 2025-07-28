@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_single_command.c                           :+:      :+:    :+:   */
+/*   execute_single_command_2_test.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:16:52 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/28 16:18:20 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/28 16:20:21 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,33 @@
 #include "builtins.h"
 #include "executor.h"
 #include "lib_ft.h"
-#include "builtins.h"
 
 
+// static int apply_redirections(t_command *cmd)
+// {
+//     printf("Applying command: %s\n", cmd->args[0]);
+// 	return (1); 
+// }
+//função inicial
+// int execute_single_command(t_command *cmd, t_context *ctx)
+// {	
+// 	if (!cmd || !cmd->args || !cmd->args[0])
+// 	{
+// 		ctx->exit_status = 0;
+// 		return (0);
+// 		//return (ctx->exit_status = 0, 0); pode?
+// 	}
+// 	if (get_builtin_id(cmd->args[0]) != BUILTIN_NONE)
+// 		return (builtin_dispatcher(cmd, ctx));
+// 	if (is_path_comman(cmd->args[0]))
+// 		return (execute_path_command(cmd, ctx));
+// 	return (execute_command_from_path(cmd, ctx));
+
+// }
+
+
+//testes com redirecionamentos
+/* Função para aplicar redirecionamento de entrada */
 static int apply_input_redirection(t_command *cmd)
 {
     int fd;
@@ -50,6 +74,7 @@ static int apply_input_redirection(t_command *cmd)
     return (1);
 }
 
+/* Função para aplicar redirecionamento de saída */
 static int apply_output_redirection(t_command *cmd)
 {
     int fd;
@@ -81,6 +106,7 @@ static int apply_output_redirection(t_command *cmd)
     return (1);
 }
 
+/* Função para lidar com heredoc */
 static int apply_heredoc_redirection(t_command *cmd)
 {
     int pipefd[2];
@@ -96,23 +122,23 @@ static int apply_heredoc_redirection(t_command *cmd)
     }
 
     printf("heredoc> ");
-    /* while ((line = get_next_line(STDIN_FILENO)) != NULL)
-    {
-        // Remove o \n do final se existir
-        if (line[ft_strlen(line) - 1] == '\n')
-            line[ft_strlen(line) - 1] = '\0';
+    // while ((line = get_next_line(STDIN_FILENO)) != NULL)
+    // {
+    //     // Remove o \n do final se existir
+    //     if (line[ft_strlen(line) - 1] == '\n')
+    //         line[ft_strlen(line) - 1] = '\0';
 
-        if (ft_strcmp(line, cmd->heredoc_delimiter) == 0)
-        {
-            free(line);
-            break;
-        }
+    //     if (ft_strcmp(line, cmd->heredoc_delimiter) == 0)
+    //     {
+    //         free(line);
+    //         break;
+    //     }
 
-        write(pipefd[1], line, ft_strlen(line));
-        write(pipefd[1], "\n", 1);
-        free(line);
-        printf("heredoc> ");
-    } */
+    //     write(pipefd[1], line, ft_strlen(line));
+    //     write(pipefd[1], "\n", 1);
+    //     free(line);
+    //     printf("heredoc> ");
+    // }
 
     close(pipefd[1]);
 
@@ -127,6 +153,7 @@ static int apply_heredoc_redirection(t_command *cmd)
     return (1);
 }
 
+/* Função principal para aplicar todos os redirecionamentos */
 int apply_redirections(t_command *cmd)
 {
     if (!cmd)
@@ -154,12 +181,14 @@ int apply_redirections(t_command *cmd)
     return (1);
 }
 
+/* Função para salvar os file descriptors originais */
 void save_original_fds(int *original_stdin, int *original_stdout)
 {
     *original_stdin = dup(STDIN_FILENO);
     *original_stdout = dup(STDOUT_FILENO);
 }
 
+/* Função para restaurar os file descriptors originais */
 void restore_original_fds(int original_stdin, int original_stdout)
 {
     if (original_stdin != -1)
@@ -174,43 +203,58 @@ void restore_original_fds(int original_stdin, int original_stdout)
     }
 }
 
-/* Executa comando builtin com redirecionamento */
-static int execute_builtin_with_redirections(t_command *cmd, t_context *ctx)
-{
-    int original_stdin, original_stdout;
-    int result;
+// /* Versão atualizada do execute_single_command com redirecionamentos */
+// int execute_single_command(t_command *cmd, t_context *ctx)
+// {
+//     int original_stdin, original_stdout;
+//     int result;
 
-    // Salva os file descriptors originais
-    save_original_fds(&original_stdin, &original_stdout);
+//     if (!cmd || !cmd->args || !cmd->args[0])
+//     {
+//         ctx->exit_status = 0;
+//         return (0);
+//     }
 
-    // Aplica redirecionamentos
-    if (!apply_redirections(cmd))
-    {
-        restore_original_fds(original_stdin, original_stdout);
-        ctx->exit_status = 1;
-        return (1);
-    }
+//     // Salva os file descriptors originais
+//     save_original_fds(&original_stdin, &original_stdout);
 
-    // Executa o builtin diretamente no processo atual
-    result = builtin_dispatcher(cmd, ctx);
+//     // Aplica redirecionamentos
+//     if (!apply_redirections(cmd))
+//     {
+//         restore_original_fds(original_stdin, original_stdout);
+//         ctx->exit_status = 1;
+//         return (1);
+//     }
 
-    // Restaura os file descriptors originais
-    restore_original_fds(original_stdin, original_stdout);
+//     // Executa o comando
+//     if (get_builtin_id(cmd->args[0]) != BUILTIN_NONE)
+//         result = builtin_dispatcher(cmd, ctx);
+//     else if (is_path_command(cmd->args[0]))
+//         result = execute_path_command(cmd, ctx);
+//     else
+//         result = execute_command_from_path(cmd, ctx);
 
-    return (result);
-}
+//     // Restaura os file descriptors originais
+//     restore_original_fds(original_stdin, original_stdout);
 
-/* Executa comando externo com redirecionamento */
-static int execute_external_with_redirections(t_command *cmd, t_context *ctx)
+//     return (result);
+// }
+
+/* Exemplo de implementação para comando simples com redirecionamento */
+int execute_single_command(t_command *cmd, t_context *ctx)
 {
     pid_t pid;
     int status;
+    int original_stdin, original_stdout;
+
+    // Salva FDs originais
+    save_original_fds(&original_stdin, &original_stdout);
 
     pid = fork();
     if (pid == -1)
     {
         perror("fork");
-        ctx->exit_status = 1;
+        restore_original_fds(original_stdin, original_stdout);
         return (1);
     }
 
@@ -220,27 +264,17 @@ static int execute_external_with_redirections(t_command *cmd, t_context *ctx)
         if (!apply_redirections(cmd))
             exit(1);
 
-        // Executa o comando externo
-       /*  if (is_path_command(cmd->args[0]))
+        // Executa o comando
+        if (execvp(cmd->args[0], cmd->args) == -1)
         {
-            if (execve(cmd->args[0], cmd->args, ctx->envp) == -1)
-            {
-                perror(cmd->args[0]);
-                exit(127);
-            }
-        } */
-        else
-        {
-            if (execvp(cmd->args[0], cmd->args) == -1)
-            {
-                perror(cmd->args[0]);
-                exit(127);
-            }
+            perror(cmd->args[0]);
+            exit(127);
         }
     }
     else // Processo pai
     {
         waitpid(pid, &status, 0);
+        restore_original_fds(original_stdin, original_stdout);
         
         if (WIFEXITED(status))
             ctx->exit_status = WEXITSTATUS(status);
@@ -251,55 +285,16 @@ static int execute_external_with_redirections(t_command *cmd, t_context *ctx)
     return (ctx->exit_status);
 }
 
-/* Função principal melhorada para executar comandos */
-int execute_single_command(t_command *cmd, t_context *ctx)
-{
-    if (!cmd || !cmd->args || !cmd->args[0])
-    {
-        ctx->exit_status = 0;
-        return (0);
-    }
+/* Função auxiliar para verificar se é um token de redirecionamento */
+// static int is_redirection_token(t_token_type token_type)
+// {
+//     return (token_type == TOKEN_REDIRECT_IN ||
+//             token_type == TOKEN_REDIRECT_OUT ||
+//             token_type == TOKEN_REDIRECT_OUT_APPEND ||
+//             token_type == TOKEN_HEREDOC);
+// }
 
-    // Verifica se é um comando builtin
-    if (get_builtin_id(cmd->args[0]) != BUILTIN_NONE)
-    {
-        // Para builtins, executa diretamente sem fork
-        return execute_builtin_with_redirections(cmd, ctx);
-    }
-    else
-    {
-        // Para comandos externos, usa fork
-        return execute_external_with_redirections(cmd, ctx);
-    }
-}
-
-/* Função para validar redirecionamentos antes da execução */
-int validate_redirections(t_command *cmd)
-{
-    // Valida arquivo de entrada
-    if (cmd->input_file)
-    {
-        if (!validate_redirection_file(cmd->input_file, 0))
-            return (0);
-    }
-
-    // Valida arquivo de saída
-    if (cmd->output_file)
-    {
-        if (!validate_redirection_file(cmd->output_file, 1))
-            return (0);
-    }
-
-    // Validações adicionais para heredoc
-    if (cmd->heredoc_mode && !cmd->heredoc_delimiter)
-    {
-        fprintf(stderr, "minishell: syntax error: heredoc without delimiter\n");
-        return (0);
-    }
-
-    return (1);
-}
-
+/* Função para validar se o arquivo pode ser criado/aberto */
 int validate_redirection_file(char *filename, int is_output)
 {
     int fd;
@@ -309,7 +304,7 @@ int validate_redirection_file(char *filename, int is_output)
 
     if (is_output)
     {
-        // Para saída, tenta criar/abrir o arquivo
+        // Tenta criar/abrir o arquivo para escrita
         fd = open(filename, O_WRONLY | O_CREAT, 0644);
         if (fd == -1)
         {
@@ -320,18 +315,14 @@ int validate_redirection_file(char *filename, int is_output)
     }
     else
     {
-        // Para entrada, verifica se o arquivo existe
-        if (access(filename, F_OK) == -1)
+        // Verifica se o arquivo existe e pode ser lido
+        fd = open(filename, O_RDONLY);
+        if (fd == -1)
         {
             perror(filename);
             return (0);
         }
-        // Verifica se pode ser lido
-        if (access(filename, R_OK) == -1)
-        {
-            perror(filename);
-            return (0);
-        }
+        close(fd);
     }
 
     return (1);
