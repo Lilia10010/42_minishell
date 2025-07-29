@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/22 23:07:49 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/28 21:25:41 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ t_command *create_command(void)
     return (cmd);
 }
 
-static int expand_args_array(t_command *cmd)
+static int	expand_args_array(t_command *cmd)
 {
-	char **new_args;
-	int new_capacity;
-	int i;
+	char	**new_args;
+	int		new_capacity;
+	int		i;
 
 	new_capacity = cmd->arg_capacity * 2;
 	new_args = (char **)malloc(sizeof(char *) * new_capacity);
@@ -83,5 +83,5 @@ int	add_argument(t_command *cmd, char *arg)
 		return (0);
 	cmd->args[cmd->arg_count++] = dup_arg;
 	cmd->args[cmd->arg_count] = NULL;
-    return (1);  // Sucesso
+    return (1);
 }

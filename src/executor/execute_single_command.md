@@ -16,7 +16,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-#include <sys/types.h> // Required for pid_t
+#include <sys/types.h>
 #include "minishell.h"
 #include "parser.h"
 #include "builtins.h"

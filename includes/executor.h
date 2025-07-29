@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:50:11 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/28 16:19:15 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/28 22:23:13 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int			is_path_comman(const char *cmd);
 int			execute_path_command(t_command *cmd, t_context *ctx);
 int			execute_command_from_path(t_command *cmd, t_context *ctx);
 int			validate_redirection_file(char *filename, int is_output);
+int			aplly_redirection(t_command *cmd);
 
 //criar um arquivo .h para funções de free
 void	ft_free_split(char **split);
