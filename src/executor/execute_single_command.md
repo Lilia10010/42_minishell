@@ -19,10 +19,10 @@
 #include <sys/types.h>
 #include "minishell.h"
 #include "parser.h"
-#include "builtins.h"
+#include "builtin.h"
 #include "executor.h"
 #include "lib_ft.h"
-#include "builtins.h"
+#include "builtin.h"
 
 
 static int apply_input_redirection(t_command *cmd)

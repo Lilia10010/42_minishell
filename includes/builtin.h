@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:08:44 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/18 21:43:02 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/29 18:04:55 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,9 @@
 # define BUILTINS_H
 
 # include "minishell.h"
+# include "builtin_types.h"
 
 typedef struct s_context	t_context;
-
-typedef enum e_builtin
-{
-	BUILTIN_NONE = -1,
-	BUILTIN_ECHO,
-	BUILTIN_CD,
-	BUILTIN_PWD,
-	BUILTIN_EXPORT,
-	BUILTIN_UNSET,
-	BUILTIN_ENV,
-	BUILTIN_EXIT
-}	t_builtin;
 
 # define BUILTIN_NAME_ECHO "echo"
 # define BUILTIN_NAME_CD "cd"

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 21:05:39 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/19 01:19:59 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/29 18:04:31 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "builtin.h"
 #include <stdio.h>
 
 int builtin_export(char **args, t_context *ctx)

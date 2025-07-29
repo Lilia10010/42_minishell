@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:47:39 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/23 21:54:18 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/29 18:04:31 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-#include "builtins.h"
+#include "builtin.h"
 #include "lib_ft.h"
 
 t_builtin get_builtin_id(char *cmd)

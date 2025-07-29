@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_dispatcher.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:29:26 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/28 23:00:45 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/29 18:04:31 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-#include "builtins.h"
+#include "builtin.h"
 #include "parser.h"
 
 static int	call_builtin(t_builtin id, t_command *cmd, t_context *ctx)

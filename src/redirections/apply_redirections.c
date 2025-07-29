@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   apply_redirections.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/28 23:59:52 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/29 18:06:09 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 #include <unistd.h>
 #include <stdio.h>
 
-
 #include "redirection.h"
 #include "parser.h"
 #include "minishell.h"
-#include "builtins.h"
 #include "executor.h"
+#include "builtin_types.h"
+#include "builtin.h"
+
+
 
 static int aplly_input_redirection(t_command *cmd)
 {

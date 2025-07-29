@@ -19,7 +19,7 @@
 #include <sys/types.h> // Required for pid_t
 #include "minishell.h"
 #include "parser.h"
-#include "builtins.h"
+#include "builtin.h"
 #include "executor.h"
 #include "lib_ft.h"
 
