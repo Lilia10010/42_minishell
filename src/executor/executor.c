@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 20:20:59 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/28 22:32:47 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/28 23:44:40 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 int execute_command(t_command *commands, t_context *ctx)
 {
 	// if (!commands || !commands->args || !commands->args[0] verificar se tratar dps é melhor
-	printf("entrou no xxxxxxxxxxxx\n");
+	printf("entrou no executor xxxxxxxxxxxx\n");
 	if (!commands)
 	{
 		// ctx->exit_status = 0;

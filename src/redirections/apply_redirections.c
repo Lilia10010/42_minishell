@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/28 23:01:10 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/28 23:59:52 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 
 #include "redirection.h"
 #include "parser.h"
+#include "minishell.h"
+#include "builtins.h"
+#include "executor.h"
 
 static int aplly_input_redirection(t_command *cmd)
 {
@@ -98,14 +101,6 @@ int aplly_redirection(t_command *cmd)
 	return (1);
 }
 
-int			execute_single_command(t_command *cmd, t_context *ctx)
-{
-	(void)cmd;
-	(void)ctx;
-	printf("cu =>>");
-	return (1);
-}
-
 static void save_original_fds(int *fd_stdin, int *fd_stdout)
 {
 	*fd_stdin = dup(STDIN_FILENO);
@@ -136,11 +131,54 @@ static int	execute_builtin_with_redirection(t_command *cmd, t_context *ctx)
 	save_original_fds(&original_stdin, &original_stdout);
 	if (!aplly_redirection(cmd))
 	{
-		restore_original_fds(&original_stdin, &original_stdout);
-		
+		restore_original_fds(original_stdin, original_stdout);
+		ctx->exit_status = 1;
+		return (1);
 	}
-
-
-
-	return (1);
+	result = builtin_dispatcher(cmd, ctx);
+	restore_original_fds(original_stdin, original_stdout);
+	return (result);
 }
+
+static int execute_external_command_with_redirectons(t_command *cmd, t_context *ctx)
+{
+	(void)cmd;
+	(void)ctx;
+	printf("execução de comandos externos não implementado");
+	return (1);
+	//return (ctx->exit_status = 0);
+}
+int	execute_single_command(t_command *cmd, t_context *ctx)
+{
+	if (!cmd || !cmd->args || !cmd->args[0])
+	{
+		ctx->exit_status = 0;
+		return (0);
+	}
+	if (get_builtin_id(cmd->args[0]) != BUILTIN_NONE)
+		return (execute_builtin_with_redirection(cmd, ctx));
+	else
+		return (execute_external_command_with_redirectons(cmd, ctx));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//ver a questão do save e reste * &

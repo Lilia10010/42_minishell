@@ -57,3 +57,4 @@ re: fclean all
 .PHONY: all clean fclean re
 
 #valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --track-fds=yes --show-reachable=yes ./minishell
+#make && valgrind --leak-check=full ./minishell
