@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/29 18:06:09 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/30 15:59:17 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int aplly_redirection(t_command *cmd)
 	}
 	if (cmd->input_file)
 	{
-		if (! aplly_input_redirection(cmd))
+		if (!aplly_input_redirection(cmd))
 		return (0);
 	}
 	if (cmd->output_file)
@@ -146,7 +146,11 @@ static int execute_external_command_with_redirectons(t_command *cmd, t_context *
 {
 	(void)cmd;
 	(void)ctx;
-	printf("execução de comandos externos não implementado");
+	printf("execução de comandos externos em andamento\n");
+	if (is_path_comman(cmd->args[0]))
+		return (execute_path_command(cmd, ctx));
+	else
+		return (execute_command_from_path(cmd, ctx));
 	return (1);
 	//return (ctx->exit_status = 0);
 }

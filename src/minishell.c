@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/26 16:48:24 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/30 16:59:49 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void cleanup_context(t_context *ctx)
 void shell_loop(t_context *ctx)
 {
 	char *input;
-	//char *expanded_input;
 
 	while (!ctx->should_exit)
 	{
@@ -84,9 +83,9 @@ int main(int argc, char **argv, char **envp)
 	t_context ctx;
 	(void)argc;
 	(void)argv;
-	printf("\n████████████████████████████████\n");
-	printf("█       MINIHELL  aipaipara    █\n");
-	printf("████████████████████████████████\n\n");
+	printf("\n███████████████████████\n");
+	printf("█       MINIHELL      █\n");
+	printf("███████████████████████\n\n");
 
 	init_context(&ctx, envp);
 	shell_loop(&ctx);
@@ -108,11 +107,9 @@ int main(int argc, char **argv, char **envp)
 // histórico de comandos – add_history(input) Mel
 // builtins – echo, cd, pwd, exit, export, unset, env Mel
 // redirecionamento (<, >, >>, <<)
-// redirecionamento – gerencia dup2, abertura/fechamento de arquivos
 
 
 // heredoc – processa redirecionamentos << antes da execução
-// executor – responsável por:
-// pipes (|)
-// pipes – conexão entre processos com pipe(), fork(), dup2()
-//cmd->append_mode = append;//0 para >, 1 para >> na função de redirecionamento0 para >, 1 para >>
+// pipes –(|) conexão entre processos com pipe(), fork(), dup2()
+// sinais
+// norma

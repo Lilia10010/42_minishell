@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_command.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/26 21:00:43 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/30 19:14:22 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,6 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 	int		status;
 
 	printf("entrou aqui execute_external command\n");
-	int i = 0 ;
-	while (ctx->envp[i])
-	{
-		printf("envp %s", ctx->envp[i]);
-		++i;
-	}
-
 	pid = fork();
 	if (pid < 0)
 	{
@@ -43,9 +36,11 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 	}
 	if (pid == 0)
 	{
+		if (!aplly_redirection(cmd))
+			exit(1);
 		execve(path, cmd->args, ctx->envp);
 		perror("execve failed");
-		ctx->exit_status = 127;
+		exit(127);
 		return (1);
 	}
 	waitpid(pid, &status, 0);
