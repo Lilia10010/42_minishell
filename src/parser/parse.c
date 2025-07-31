@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:02:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/23 23:34:57 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/31 00:34:34 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "redirection.h"
 #include "lib_ft.h"
 #include "parser.h"
+#include "command_types.h"
 
 static int start_new_command(t_command **commands, t_command **current, t_command **last)
 {

@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:08:44 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/29 18:04:55 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/30 23:56:16 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# include "minishell.h"
 # include "builtin_types.h"
 
 typedef struct s_context	t_context;

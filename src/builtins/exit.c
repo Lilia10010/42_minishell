@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 20:16:50 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/30 18:00:35 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/31 00:01:14 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "builtin.h"
 #include "lib_ft.h"
+#include "context_types.h"
 
 
 static int	check_digit(char *arg)

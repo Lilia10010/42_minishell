@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:52:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/16 22:14:07 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/30 23:59:29 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 typedef struct s_token		t_token;
 typedef struct s_command	t_command;
+typedef struct s_context	t_context;
 
 #define GREEN "\001\033[1;32m\002"
 #define RESET_COLOR "\001\033[0m\002"
@@ -27,16 +28,6 @@ typedef struct s_command	t_command;
 //#define MATRIX_PROMPT "\033[1;32m\033[40m minishell$ " RESET_COLOR
 //#define MATRIX_PROMPT "\033[30m" GREEN_BG " minishell$ " RESET_COLOR
 #define MATRIX_PROMPT ROSA BOLD " minishell$ " RESET_COLOR " "
-
-//contexto temporário do loop - tokens, cmd ...
-typedef struct s_context
-{
-	char		**envp;
-	int			exit_status;
-	int			should_exit;
-	t_token		*tokens;
-	t_command	*commands;
-}	t_context;
 
 void	shell_loop(t_context *ctx);
 void	cleanup_context(t_context *ctx);

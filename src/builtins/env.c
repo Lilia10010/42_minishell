@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 19:27:15 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/29 18:04:31 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/31 00:02:07 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include "builtin.h"
 #include "lib_ft.h"
+#include "context_types.h"
 
 int	builtin_env(char **args, t_context *ctx)
 {

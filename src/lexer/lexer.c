@@ -6,14 +6,13 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/14 23:10:55 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/31 00:10:43 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "minishell.h"
 #include "lexer.h"
 #include "env.h"
 #include "lib_ft.h"
@@ -28,7 +27,6 @@ static int	has_dollar(const char *str)
 	}
 	return (0);
 }
-
 
 static char *read_next_word_partial(char **current)
 {

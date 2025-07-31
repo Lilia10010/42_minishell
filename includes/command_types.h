@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_types.h                                    :+:      :+:    :+:   */
+/*   command_types.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/30 23:08:25 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/30 23:08:26 by lpaula-n         ###   ########.fr       */
+/*   Created: 2025/07/31 00:29:31 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/31 00:30:47 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_TYPES_H
-# define BUILTIN_TYPES_H
+#ifndef COMMAND_TYPES_H
+# define COMMAND_TYPES_H
 
-typedef enum e_builtin
+typedef struct s_command
 {
-	BUILTIN_NONE = -1,
-	BUILTIN_ECHO,
-	BUILTIN_CD,
-	BUILTIN_PWD,
-	BUILTIN_EXPORT,
-	BUILTIN_UNSET,
-	BUILTIN_ENV,
-	BUILTIN_EXIT
-}	t_builtin;
+	char				**args;
+	int					arg_count;
+	int					arg_capacity;
+	char				*input_file; // <, <<
+	char				*output_file; // >, >>
+	int					append_mode;
+	int					heredoc_mode;
+	char				*heredoc_delimiter;
+	struct s_command	*next; //vamos usar principalmente para implementar o pipes
+}	t_command;
 
 #endif

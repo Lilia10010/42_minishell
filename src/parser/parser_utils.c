@@ -6,12 +6,13 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:54:56 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/10 22:35:06 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/31 00:26:17 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-# include "parser.h"
+#include "parser.h"
+#include "token_types.h"
 
 int is_redirection_token(t_token_type type)
 {

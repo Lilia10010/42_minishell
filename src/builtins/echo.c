@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 18:35:20 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/29 18:04:31 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/31 00:01:49 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include "builtin.h"
 #include "lib_ft.h"
+#include "context_types.h"
 
 static int	valid_flag(char *arg)
 {

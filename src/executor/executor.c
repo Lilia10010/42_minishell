@@ -6,22 +6,14 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 20:20:59 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/28 23:44:40 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/31 00:38:06 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-// TODO
-// [] mplementar execução de comandos externos com execve()
-// [] adicionar suporte a pipes
-// [] implementar redirecionamentos
-// [] gerenciar processos filho
-
-#include "minishell.h"
-#include "executor.h"
-#include "parser.h"
 #include <stdio.h>
 
+#include "executor.h"
+#include "command_types.h"
 
 int execute_command(t_command *commands, t_context *ctx)
 {

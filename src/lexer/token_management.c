@@ -6,13 +6,13 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 22:17:08 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/29 00:22:11 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/31 00:27:23 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h> //para o printf caso não for usar RETIRAR
 #include "lexer.h"
 #include "lib_ft.h"
-#include <stdio.h> //para o printf caso não for usar RETIRAR
 
 t_token	*create_token(t_token_type type, char *value)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/30 16:59:49 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/31 00:11:39 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@
 #include "lexer.h"
 #include "parser.h"
 #include "executor.h"
+#include "context_types.h"
 
-# include "../lib/lib_ft.h"
+# include "lib_ft.h"
 
 void init_context(t_context *ctx, char **envp)
 {

@@ -6,27 +6,16 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:46:45 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/18 22:23:35 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/31 00:32:09 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "lexer.h"
+#include "token_types.h"
 
-typedef struct s_command
-{
-	char				**args;
-	int					arg_count;
-	int					arg_capacity;
-	char				*input_file; // <, <<
-	char				*output_file; // >, >>
-	int					append_mode;
-	int					heredoc_mode;
-	char				*heredoc_delimiter;
-	struct s_command	*next; //vamos usar principalmente para implementar o pipes
-}	t_command;
+typedef struct s_command t_command;
 
 typedef enum e_parser_state
 {

@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_types.h                                    :+:      :+:    :+:   */
+/*   aplly_heredoc_redirection.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/30 23:08:25 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/30 23:08:26 by lpaula-n         ###   ########.fr       */
+/*   Created: 2025/07/30 21:34:38 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/31 00:41:03 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_TYPES_H
-# define BUILTIN_TYPES_H
+#include <stdio.h>
+#include "command_types.h"
 
-typedef enum e_builtin
+int aplly_heredoc_redirection(t_command *cmd)
 {
-	BUILTIN_NONE = -1,
-	BUILTIN_ECHO,
-	BUILTIN_CD,
-	BUILTIN_PWD,
-	BUILTIN_EXPORT,
-	BUILTIN_UNSET,
-	BUILTIN_ENV,
-	BUILTIN_EXIT
-}	t_builtin;
-
-#endif
+	(void)cmd;
+	printf("nos redirects HEREDOC");
+	return (1);
+}

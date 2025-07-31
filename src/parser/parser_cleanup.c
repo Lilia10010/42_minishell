@@ -6,12 +6,13 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:00:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/06 19:00:52 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/31 00:33:16 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
 #include <stdlib.h>
+#include "parser.h"
+#include "command_types.h"
 
 void free_command(t_command *cmd)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   apply_redirections.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/30 15:59:17 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/07/31 00:41:29 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,8 @@
 #include <stdio.h>
 
 #include "redirection.h"
-#include "parser.h"
-#include "minishell.h"
+#include "command_types.h"
 #include "executor.h"
-#include "builtin_types.h"
-#include "builtin.h"
-
-
 
 static int aplly_input_redirection(t_command *cmd)
 {
@@ -73,14 +68,6 @@ static int aplly_output_redirection(t_command *cmd)
 	return (1);
 }
 
-//criar a função do heredoc
-static int aplly_heredoc_redirection(t_command *cmd)
-{
-	(void)cmd;
-	printf("nos redirects HEREDOC");
-	return (1);
-}
-
 int aplly_redirection(t_command *cmd)
 {
 	if (!cmd)
@@ -103,13 +90,13 @@ int aplly_redirection(t_command *cmd)
 	return (1);
 }
 
-static void save_original_fds(int *fd_stdin, int *fd_stdout)
+void save_original_fds(int *fd_stdin, int *fd_stdout)
 {
 	*fd_stdin = dup(STDIN_FILENO);
 	*fd_stdout = dup(STDOUT_FILENO);
 }
 
-static void restore_original_fds(int fd_stdin, int fd_stdout)
+void restore_original_fds(int fd_stdin, int fd_stdout)
 {
 	if (fd_stdin != -1)
 	{
@@ -122,64 +109,6 @@ static void restore_original_fds(int fd_stdin, int fd_stdout)
 		close(fd_stdout);
 	}
 }
-
-//builtin sem fork e com redirect
-static int	execute_builtin_with_redirection(t_command *cmd, t_context *ctx)
-{
-	int	original_stdin;
-	int	original_stdout;
-	int	result;
-
-	save_original_fds(&original_stdin, &original_stdout);
-	if (!aplly_redirection(cmd))
-	{
-		restore_original_fds(original_stdin, original_stdout);
-		ctx->exit_status = 1;
-		return (1);
-	}
-	result = builtin_dispatcher(cmd, ctx);
-	restore_original_fds(original_stdin, original_stdout);
-	return (result);
-}
-
-static int execute_external_command_with_redirectons(t_command *cmd, t_context *ctx)
-{
-	(void)cmd;
-	(void)ctx;
-	printf("execução de comandos externos em andamento\n");
-	if (is_path_comman(cmd->args[0]))
-		return (execute_path_command(cmd, ctx));
-	else
-		return (execute_command_from_path(cmd, ctx));
-	return (1);
-	//return (ctx->exit_status = 0);
-}
-int	execute_single_command(t_command *cmd, t_context *ctx)
-{
-	if (!cmd || !cmd->args || !cmd->args[0])
-	{
-		ctx->exit_status = 0;
-		return (0);
-	}
-	if (get_builtin_id(cmd->args[0]) != BUILTIN_NONE)
-		return (execute_builtin_with_redirection(cmd, ctx));
-	else
-		return (execute_external_command_with_redirectons(cmd, ctx));
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

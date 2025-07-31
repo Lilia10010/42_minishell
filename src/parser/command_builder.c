@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/28 21:25:41 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/07/31 00:33:41 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>
 # include "parser.h"
 #include "lib_ft.h"
+#include "command_types.h"
 
 t_command *create_command(void)
 {
