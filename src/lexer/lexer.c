@@ -1,115 +1,115 @@
-#include "lexer.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/08/02 14:48:29 by microbiana       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-# include "lib_ft.h"
+#include "lexer.h"
+#include "env.h"
+#include "lib_ft.h"
+#include "context_types.h"
 
-t_token *create_token(t_token_type type, char *value)
+static int	has_dollar(const char *str)
 {
-    t_token *token;
-
-	token = malloc(sizeof(t_token));
-    if (!token)
-        return (NULL);
-    
-    token->type = type;
-   // token->value = value ? strdup(value) : NULL;
-	if (value)
-		token->value = ft_strdup(value);
-	else
-		token->value = NULL;
-
-    token->next = NULL;
-    return (token);
+	while (*str)
+	{
+		if (*str == '$')
+			return (1);
+		str++;
+	}
+	return (0);
 }
 
-void add_token(t_token **head, t_token *new_token)
+static char *read_next_word_partial(char **current, t_context *ctx)
 {
-    if (!*head)
-    {
-        *head = new_token;
-        return;
-    }
-    
-    t_token *current = *head;
-    while (current->next)
-        current = current->next;
-    current->next = new_token;
+	char	*start;
+	char	*word;
+	char	*expanded;
+	int		len;
+
+	if (**current == '\'' || **current == '"')
+		return (extract_quoted_token(current, **current, ctx));
+	start = *current;
+	len = 0;
+	while (**current && **current != ' ' && **current != '\t' && !is_shell_operator(**current) && **current != '\'' && **current != '"')
+	{
+		(*current)++;
+		len++;
+	}
+	word = malloc(len + 1);
+	if (!word)
+		return (NULL);
+	ft_strlcpy(word, start, len + 1);
+	if (has_dollar(word))
+	{
+		expanded = expand_variables(word, ctx);
+		free(word);
+		return expanded;
+	}
+return word;
 }
 
-t_token	*lexer_tokenize(char *input)
+static int handle_word(t_token **tokens, char **current, t_context *ctx)
+{
+	char *word_value;
+	char *partial;
+
+	word_value = NULL;
+	while (**current && !is_shell_operator(**current) && **current != ' ' && **current != '\t')
+	{
+		partial = read_next_word_partial(current, ctx);
+		if (!partial)
+			break;
+		word_value = concatenate_strings(word_value, partial);
+		free(partial);
+		if (!word_value)
+		{
+			// ver qual o erro que deve ser retornado ou se apenas o break é suficiente
+			printf("Error allocating memory for token word_value\n");
+			return (0);
+		}
+	}
+	if (word_value)
+	{
+		add_token(tokens, create_token(TOKEN_WORD, word_value));
+		free(word_value);
+		return (1);
+	}
+	return (0);
+}
+
+t_token *lexer_tokenize(char *input, t_context *ctx)
 {
 	t_token *tokens;
 	char *current;
-	char *word_start;
-	char *word;
-	int len;
 
 	tokens = NULL;
 	current = input;
-	
 	while (*current)
 	{
-		while (*current == ' ' || *current == '\t')
-			current++;
-		if (*current == '\0')
-			break ;
-		//TODO
-		//[] criar handle pipes
-		// [] handle redirections QUOTE [> >> , < <<]
-		// [] handle words
-		//ex: (mas no lugar dos ifs criar as handles)
-		if (*current == '|')
+		skip_spaces(&current);
+		if (!*current)
+			break;
+		if (is_shell_operator(*current))
 		{
-			//chama a função add_token e add o pipe
-			printf("pipe detectado");
-			current++;
+			if (!add_operator_token(&tokens, &current))
+				break;
 		}
 		else
 		{
-			word_start = current;
-			
-			len = 0;
-			//encontrar o limit da string
-			while (*current && *current != ' ' && *current != '\t' && *current != '|' && *current != '>' && *current != '<')
-			{
-				current++;
-				len++;
-			}
-			word = malloc(len + 1);
-			strncpy(word, word_start, len);
-			word[len] = '\0';
-			//printf("DEBUGZIM in lexer.c word [%s] size: [%d]\n", word, len);
-			add_token(&tokens, create_token(TOKEN_WORD, word));
-			free(word);
+			if (!handle_word(&tokens, &current, ctx))
+				break;
 		}
 	}
-	 // debugzim dos token
-    printf("DEBUG: Tokens criados:\n");
-    t_token *debug_token = tokens;
-    int token_count = 0;
-	
-    while (debug_token)
-    {
-        printf(" DEBUGZIM Token %d: tipo= %d, valor= '%s'\n", token_count++, debug_token->type, debug_token->value);
-        debug_token = debug_token->next;
-    }
+	//debug_print_tokens(tokens);
 	return (tokens);
-}
-
-void free_tokens(t_token *tokens)
-{
-	t_token *current;
-	t_token *next;
-
-	current = tokens;
-
-	while (current)
-	{
-		next = current->next;
-		free(current->value);
-		free(current);
-		current = next;
-	}
 }

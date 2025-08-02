@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   command_types.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/18 22:56:11 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/22 21:32:41 by lpaula-n         ###   ########.fr       */
+/*   Created: 2025/07/31 00:29:31 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/31 00:30:47 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#ifndef COMMAND_TYPES_H
+# define COMMAND_TYPES_H
 
-void	ft_free_split(char **split);
+typedef struct s_command
+{
+	char				**args;
+	int					arg_count;
+	int					arg_capacity;
+	char				*input_file; // <, <<
+	char				*output_file; // >, >>
+	int					append_mode;
+	int					heredoc_mode;
+	char				*heredoc_delimiter;
+	struct s_command	*next; //vamos usar principalmente para implementar o pipes
+}	t_command;
 
 #endif

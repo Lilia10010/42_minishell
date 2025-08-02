@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 19:27:15 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/15 18:39:15 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/01 23:19:53 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include <unistd.h>
+#include <stdio.h>
+#include "builtin.h"
+#include "lib_ft.h"
+#include "context_types.h"
 
 int	builtin_env(char **args, t_context *ctx)
 {
@@ -40,4 +44,3 @@ int	builtin_env(char **args, t_context *ctx)
 	ctx->exit_status = 0;
 	return (0);
 }
-//verificar como podemos diminuir o número de linhas sem essa gambiarra feia de i = -1;

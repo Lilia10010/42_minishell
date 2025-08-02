@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:58:24 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/16 12:51:31 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/01 23:19:53 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include <unistd.h>
+#include "builtin.h"
+#include "lib_ft.h"
+#include "context_types.h"
 
-static void	old_pwd(t_context *ctx)
-{
-	
-}
 static char	*get_pwd(char **envp, char *s)
 {
 	int	i;
-	char *home;
+	//char *home;
 
 	if (!envp || !*envp)
 		return (NULL);
@@ -37,8 +36,8 @@ int	builtin_cd(char **args, t_context *ctx)
 {
 	char *caminho;
 
-	if (!args[1] || (ft_strncmp(args[1], '~', 1) == 0))
-		caminho = get_pwd (ctx->envp, "HOME");
+	if (!args[1] || (ft_strncmp(args[1], "~", 1) == 0))
+		caminho = get_pwd(ctx->envp, "HOME");
 	else
 		caminho = args[1];
 	if (!caminho)
@@ -47,4 +46,5 @@ int	builtin_cd(char **args, t_context *ctx)
 		ctx->exit_status = 1;
 		return (1);
 	}
+	return (0);
 }

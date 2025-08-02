@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 18:35:20 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/15 18:30:28 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/07/31 00:01:49 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/builtins.h"
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "builtin.h"
+#include "lib_ft.h"
+#include "context_types.h"
 
 static int	valid_flag(char *arg)
 {

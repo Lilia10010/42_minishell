@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.h                                              :+:      :+:    :+:   */
+/*   builtin_defs.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/18 22:49:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/02 14:46:55 by microbiana       ###   ########.fr       */
+/*   Created: 2025/07/30 23:08:25 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/31 14:53:37 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_H
-# define ENV_H
+#ifndef BUILTIN_DEFS_H
+# define BUILTIN_DEFS_H
 
-#include "context_types.h"
-
-char	*expand_variables(const char *input, t_context *ctx);
+# define BUILTIN_NAME_ECHO "echo"
+# define BUILTIN_NAME_CD "cd"
+# define BUILTIN_NAME_PWD "pwd"
+# define BUILTIN_NAME_EXPORT "export"
+# define BUILTIN_NAME_UNSET "unset"
+# define BUILTIN_NAME_ENV "env"
+# define BUILTIN_NAME_EXIT "exit"
 
 #endif

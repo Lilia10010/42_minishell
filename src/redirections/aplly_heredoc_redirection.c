@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.h                                              :+:      :+:    :+:   */
+/*   aplly_heredoc_redirection.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/18 22:49:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/02 14:46:55 by microbiana       ###   ########.fr       */
+/*   Created: 2025/07/30 21:34:38 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/31 00:41:03 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_H
-# define ENV_H
+#include <stdio.h>
+#include "command_types.h"
 
-#include "context_types.h"
-
-char	*expand_variables(const char *input, t_context *ctx);
-
-#endif
+int aplly_heredoc_redirection(t_command *cmd)
+{
+	(void)cmd;
+	printf("nos redirects HEREDOC");
+	return (1);
+}

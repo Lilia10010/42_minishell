@@ -1,42 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   execute_builtin_with_redirection.c                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/14 18:35:32 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/31 00:00:14 by lpaula-n         ###   ########.fr       */
+/*   Created: 2025/07/30 21:28:49 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/31 00:03:09 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#include <stdio.h>
-#include <unistd.h>
+#include "executor.h"
 #include "context_types.h"
-#include "builtin.h"
-#include "lib_ft.h"
 
-int	builtin_pwd(char **args, t_context *ctx)
+int	execute_builtin_with_redirection(t_command *cmd, t_context *ctx)
 {
-	int i = 0;
-	while (args[i])
-	{
-		printf("PWD %s", args[i]);
-		++i;
-	}
-	char	*pwd;
+	int	original_stdin;
+	int	original_stdout;
+	int	result;
 
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
+	save_original_fds(&original_stdin, &original_stdout);
+	if (!aplly_redirection(cmd))
 	{
-		//perror("pwd");
+		restore_original_fds(original_stdin, original_stdout);
 		ctx->exit_status = 1;
 		return (1);
 	}
-	ft_putstr_fd(pwd, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
-	free(pwd);
-	ctx->exit_status = 0;
-	return (0);
+	result = builtin_dispatcher(cmd, ctx);
+	restore_original_fds(original_stdin, original_stdout);
+	return (result);
 }

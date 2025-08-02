@@ -54,4 +54,25 @@ fclean: clean
 
 re: fclean all
 
+val: suppression_file.supp all
+	@valgrind -q --suppressions=suppression_file.supp \
+				--leak-check=full \
+				--show-leak-kinds=all \
+				--track-origins=yes \
+				--track-fds=yes \
+				--trace-children=yes \
+				--trace-children-skip='*/bin/*,*/sbin/*,/usr/bin/*' \
+				./${NAME}
+
+suppression_file.supp:
+	@echo '{' > $@
+	@echo '   ignore_libreadline_memory_errors' >> $@
+	@echo '   Memcheck:Leak' >> $@
+	@echo '   ...' >> $@
+	@echo '   obj:*/libreadline.so.*' >> $@
+	@echo '}' >> $@
+
 .PHONY: all clean fclean re
+
+#valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --track-fds=yes --show-reachable=yes  ./minishell
+#make && valgrind --leak-check=full --suppressions=suppression_file.sup --track-fds=yes -q ./minishell

@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.h                                              :+:      :+:    :+:   */
+/*   builtin_types.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/18 22:49:50 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/02 14:46:55 by microbiana       ###   ########.fr       */
+/*   Created: 2025/07/30 23:08:25 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/30 23:08:26 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_H
-# define ENV_H
+#ifndef BUILTIN_TYPES_H
+# define BUILTIN_TYPES_H
 
-#include "context_types.h"
-
-char	*expand_variables(const char *input, t_context *ctx);
+typedef enum e_builtin
+{
+	BUILTIN_NONE = -1,
+	BUILTIN_ECHO,
+	BUILTIN_CD,
+	BUILTIN_PWD,
+	BUILTIN_EXPORT,
+	BUILTIN_UNSET,
+	BUILTIN_ENV,
+	BUILTIN_EXIT
+}	t_builtin;
 
 #endif

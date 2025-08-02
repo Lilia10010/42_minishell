@@ -1,21 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/18 22:46:45 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/31 00:32:09 by lpaula-n         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSER_H
-#define PARSER_H
+# define PARSER_H
 
-#include "lexer.h"
+#include "token_types.h"
 
-typedef struct s_command
+typedef struct s_command t_command;
+
+typedef enum e_parser_state
 {
-	char				**args;
-	char				*input_file;
-	char				*output_file;
-	int					append_output;
-	char				*heredoc_delimiter;
-	struct s_command	*next;
-} t_command;
+	EXPECTING_COMMAND,
+	EXPECTING_ARGS,
+	EXPECTING_REDIRECT_TARGET,
+	EXPECTING_HEREDOC_DELIMITER
+} t_parser_state;
 
-t_command *parse_tokens(t_token *tokens);
-t_command *create_command(void);
+t_command	*parse_tokens(t_token *tokens);
+int			is_redirection_token(t_token_type type);
+int validate_syntax(t_token *tokens);
+void free_command(t_command *cmd);
 void free_commands(t_command *commands);
-int count_word_tokens(t_token *tokens);
+t_command *create_command(void);
+int add_argument(t_command *cmd, char *arg);
+
+//debug
+void debug_print_commands(t_command *commands);
+// t_command	*create_command(void);
+// void		free_commands(t_command *commands);
+// int			count_word_tokens(t_token *tokens);
+
 
 #endif

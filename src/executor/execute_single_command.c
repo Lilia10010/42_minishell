@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
+/*   execute_single_command.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/20 20:20:59 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/01 21:52:08 by lpaula-n         ###   ########.fr       */
+/*   Created: 2025/07/30 21:11:45 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/07/31 00:39:33 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-
+#include "builtin_types.h"
+#include "context_types.h"
 #include "executor.h"
 #include "command_types.h"
 
-int execute_command(t_command *commands, t_context *ctx)
+int	execute_single_command(t_command *cmd, t_context *ctx)
 {
-	// if (!commands || !commands->args || !commands->args[0] verificar se tratar dps é melhor
-	//printf("entrou no executor xxxxxxxxxxxx\n");
-	if (!commands)
+	if (!cmd || !cmd->args || !cmd->args[0])
 	{
-		// ctx->exit_status = 0;
+		ctx->exit_status = 0;
 		return (0);
 	}
-	if (!commands->next)
-		return (execute_single_command(commands, ctx));
-	return (execute_pipe(commands, ctx));
+	if (get_builtin_id(cmd->args[0]) != BUILTIN_NONE)
+		return (execute_builtin_with_redirection(cmd, ctx));
+	else
+		return (execute_external_command_with_redirectons(cmd, ctx));
 }
