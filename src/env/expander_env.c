@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:57:42 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/13 22:50:46 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/02 15:00:43 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 #include "env.h"
 #include "lib_ft.h"
+#include "context_types.h"
 
 static const char *get_env_value(const char *key)
 {
@@ -77,21 +78,31 @@ static void	append_to_result(char **result, const char *to_append)
 	free(old);
 }
 
-static void	handle_variable_expansio(char **result, const char **ptr)
+static void	handle_variable_expansio(char **result, const char **ptr, t_context *ctx)
 {
 	char		*var_name;
 	const char	*value;
 
+	if (**ptr == '?')
+	{
+		char *exit_code_str = ft_itoa(ctx->exit_status);
+		append_to_result(result, exit_code_str);
+		free(exit_code_str);
+		(*ptr)++;
+		return ;
+	}
+
 	var_name = extract_var_name(ptr);
 	if (!var_name)
 		return ;
+
 	value = get_env_value(var_name);
 	if (value)
-		append_to_result(result,value);
+		append_to_result(result, value);
 	free(var_name);
 }
 
-char	*expand_variables(const char *input)
+char	*expand_variables(const char *input, t_context *ctx)
 {
 	char		*result;
 	const char	*ptr;
@@ -105,7 +116,7 @@ char	*expand_variables(const char *input)
 		if (*ptr == '$')
 		{
 			ptr++;
-			handle_variable_expansio(&result, &ptr);
+			handle_variable_expansio(&result, &ptr, ctx);
 		}
 		else
 		{

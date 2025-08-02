@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/01 23:07:16 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/02 14:42:21 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ void shell_loop(t_context *ctx)
 
 		//expanded_input = expand_variables(input, ctx);
 		// começa o processamento do input
-		ctx->tokens = lexer_tokenize(input);
+		ctx->tokens = lexer_tokenize(input, ctx);
 		if (ctx->tokens)
 		{
 			ctx->commands = parse_tokens(ctx->tokens);
 			if (ctx->commands)
 			{
-				debug_print_commands(ctx->commands);
+				//debug_print_commands(ctx->commands);
 				execute_command(ctx->commands, ctx);
 			}
 		}
