@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:19 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:11:23 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/02 14:48:40 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	is_shell_operator(char c)
 	return (c == '|' || c == '<' || c == '>');
 }
 
-char *extract_quoted_token(char **input, char quote_char)
+char *extract_quoted_token(char **input, char quote_char, t_context *ctx)
 {
 	char *start;
 	char *raw;
@@ -53,7 +53,7 @@ char *extract_quoted_token(char **input, char quote_char)
 		return (raw);
 	else
 	{
-		final = expand_variables(raw);
+		final = expand_variables(raw, ctx);
 		free(raw);
 		return (final);
 	}

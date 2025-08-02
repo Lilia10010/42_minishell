@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:10:43 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/02 14:48:29 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "lexer.h"
 #include "env.h"
 #include "lib_ft.h"
+#include "context_types.h"
 
 static int	has_dollar(const char *str)
 {
@@ -28,7 +29,7 @@ static int	has_dollar(const char *str)
 	return (0);
 }
 
-static char *read_next_word_partial(char **current)
+static char *read_next_word_partial(char **current, t_context *ctx)
 {
 	char	*start;
 	char	*word;
@@ -36,7 +37,7 @@ static char *read_next_word_partial(char **current)
 	int		len;
 
 	if (**current == '\'' || **current == '"')
-		return (extract_quoted_token(current, **current));
+		return (extract_quoted_token(current, **current, ctx));
 	start = *current;
 	len = 0;
 	while (**current && **current != ' ' && **current != '\t' && !is_shell_operator(**current) && **current != '\'' && **current != '"')
@@ -50,14 +51,14 @@ static char *read_next_word_partial(char **current)
 	ft_strlcpy(word, start, len + 1);
 	if (has_dollar(word))
 	{
-		expanded = expand_variables(word);
+		expanded = expand_variables(word, ctx);
 		free(word);
 		return expanded;
 	}
 return word;
 }
 
-static int handle_word(t_token **tokens, char **current)
+static int handle_word(t_token **tokens, char **current, t_context *ctx)
 {
 	char *word_value;
 	char *partial;
@@ -65,7 +66,7 @@ static int handle_word(t_token **tokens, char **current)
 	word_value = NULL;
 	while (**current && !is_shell_operator(**current) && **current != ' ' && **current != '\t')
 	{
-		partial = read_next_word_partial(current);
+		partial = read_next_word_partial(current, ctx);
 		if (!partial)
 			break;
 		word_value = concatenate_strings(word_value, partial);
@@ -86,7 +87,7 @@ static int handle_word(t_token **tokens, char **current)
 	return (0);
 }
 
-t_token *lexer_tokenize(char *input)
+t_token *lexer_tokenize(char *input, t_context *ctx)
 {
 	t_token *tokens;
 	char *current;
@@ -105,10 +106,10 @@ t_token *lexer_tokenize(char *input)
 		}
 		else
 		{
-			if (!handle_word(&tokens, &current))
+			if (!handle_word(&tokens, &current, ctx))
 				break;
 		}
 	}
-	debug_print_tokens(tokens);
+	//debug_print_tokens(tokens);
 	return (tokens);
 }

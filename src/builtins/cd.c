@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:58:24 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/31 00:00:49 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/01 23:19:53 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	builtin_cd(char **args, t_context *ctx)
 	char *caminho;
 
 	if (!args[1] || (ft_strncmp(args[1], "~", 1) == 0))
-		caminho = get_pwd (ctx->envp, "HOME");
+		caminho = get_pwd(ctx->envp, "HOME");
 	else
 		caminho = args[1];
 	if (!caminho)
