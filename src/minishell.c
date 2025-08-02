@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:11:39 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/01 23:07:16 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ int main(int argc, char **argv, char **envp)
 	t_context ctx;
 	(void)argc;
 	(void)argv;
-	printf("\n███████████████████████\n");
-	printf("█       MINIHELL      █\n");
-	printf("███████████████████████\n\n");
+	// printf("\n███████████████████████\n");
+	// printf("█       MINIHELL      █\n");
+	// printf("███████████████████████\n\n");
 
 	init_context(&ctx, envp);
 	shell_loop(&ctx);
@@ -105,12 +105,12 @@ int main(int argc, char **argv, char **envp)
 
 // em execução: 
 //
+// sinais
+// redirecionamento (<, >, >>, <<)
+// pipes –(|) conexão entre processos com pipe(), fork(), dup2()
 // histórico de comandos – add_history(input) Mel
 // builtins – echo, cd, pwd, exit, export, unset, env Mel
-// redirecionamento (<, >, >>, <<)
 
 
 // heredoc – processa redirecionamentos << antes da execução
-// pipes –(|) conexão entre processos com pipe(), fork(), dup2()
-// sinais
 // norma

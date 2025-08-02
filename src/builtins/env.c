@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 19:27:15 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/31 00:02:07 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/01 23:19:53 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,6 @@
 int	builtin_env(char **args, t_context *ctx)
 {
 	int	i;
-
-	int p = 0;
-
-	while(args[p])
-	{
-		if (args[0] && args[0][0] == '-')
-		{
-			printf("env: invalid option -- '%s'\n", args[p]);
-			ctx->exit_status = 127;
-			return (127);
-		}
-		p++;
-		printf("env: too many argumentss %s\n", args[p]);
-
-	}
 
 	if (!ctx->envp || !*ctx->envp)
 	{
@@ -59,4 +44,3 @@ int	builtin_env(char **args, t_context *ctx)
 	ctx->exit_status = 0;
 	return (0);
 }
-//verificar como podemos diminuir o número de linhas sem essa gambiarra feia de i = -1;

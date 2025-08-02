@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:06:14 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 18:27:52 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/01 21:49:38 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@
 
 int	execute_pipe(t_command *commands, t_context *ctx)
 {
-	printf("pipeeeeeeeeeeeeeee\n");
 	t_command	*current = commands;
 	int			pipe_fd[2];
 	int			prev_fd = -1;

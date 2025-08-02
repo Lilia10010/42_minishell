@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:10:43 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/01 21:50:16 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,6 @@ t_token *lexer_tokenize(char *input)
 				break;
 		}
 	}
-	debug_print_tokens(tokens);
+	//debug_print_tokens(tokens);
 	return (tokens);
 }
