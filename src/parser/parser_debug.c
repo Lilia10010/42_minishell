@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parser_debug.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:01:21 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:34:02 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:53:50 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "parser.h"
 #include "command_types.h"
-
+/* 
 void debug_print_commands(t_command *commands)
 {
     t_command *current;
@@ -48,4 +48,4 @@ void debug_print_commands(t_command *commands)
             printf("  | (pipe to next command)\n");
     }
     printf("======================\n");
-}
+} */

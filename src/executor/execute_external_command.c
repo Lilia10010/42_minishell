@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_command.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/01 21:52:57 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:03:07 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 #include "command_types.h"
 #include "context_types.h"
 #include "executor.h"
+#include "lib_ft.h"
 
 static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 {
@@ -29,7 +31,7 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 	pid = fork();
 	if (pid < 0)
 	{
-		perror("fork failed ");
+		ft_putstr_fd("", STDERR_FILENO);
 		ctx->exit_status = 1;
 		return (1);
 	}
@@ -38,7 +40,7 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 		if (!aplly_redirection(cmd))
 			exit(1);
 		execve(path, cmd->args, ctx->envp);
-		perror("execve failed");
+		ft_putstr_fd("bash: ", STDERR_FILENO);
 		exit(127);
 		return (1);
 	}
@@ -53,9 +55,51 @@ int	execute_path_command_absolut(t_command *cmd, t_context *ctx)
 	if (access(cmd->args[0], X_OK) == 0)
 		return (execute_external_command(cmd, ctx, cmd->args[0]));
 	//STDERR_FILENO
+	ft_putstr_fd("bash: ", STDERR_FILENO);
+	ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+	ft_putstr_fd(": comando não encontrado\n", STDERR_FILENO);
 	ctx->exit_status = 127;
 	return (1);
 }
+/* 
+int	execute_path_command_absolut(t_command *cmd, t_context *ctx)
+{
+	struct stat sb;
+
+	// Verifica se o arquivo existe
+	if (stat(cmd->args[0], &sb) == -1)
+	{
+		// Arquivo não existe
+		ft_putstr_fd("bash: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+		ft_putstr_fd(": comando não encontrado\n", STDERR_FILENO);
+		ctx->exit_status = 127;
+		return (1);
+	}
+
+	// Verifica se é um diretório
+	if (S_ISDIR(sb.st_mode))
+	{
+		ft_putstr_fd("bash: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+		ft_putstr_fd(": É um diretório\n", STDERR_FILENO);
+		ctx->exit_status = 126;
+		return (1);
+	}
+
+	// Verifica permissão de execução
+	if (access(cmd->args[0], X_OK) != 0)
+	{
+		ft_putstr_fd("bash: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+		ft_putstr_fd(": Permissão negada\n", STDERR_FILENO);
+		ctx->exit_status = 126;
+		return (1);
+	}
+
+	// Tudo certo, executa
+	return (execute_external_command(cmd, ctx, cmd->args[0]));
+} */
 
 int	execute_command_from_path(t_command *cmd, t_context *ctx)
 {
@@ -67,8 +111,9 @@ int	execute_command_from_path(t_command *cmd, t_context *ctx)
 	path = find_executable_in_path(cmd->args[0]);
 	if (!path)
 	{
-		//STDERR_FILENO
-		printf("comando not found: %s\n", cmd->args[0]);
+		ft_putstr_fd("bash: ", STDERR_FILENO);
+        ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+        ft_putstr_fd(": comando não encontrado\n", STDERR_FILENO);
 		ctx->exit_status = 127;
 		return (1);
 	}

@@ -467,3 +467,44 @@ int	builtin_exit(char **args, t_context *ctx)
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	exit(exit_code);
 }
+
+static void shell_loop_simple(t_context *ctx)
+{
+    char *input;
+    
+    while (!ctx->should_exit)
+    {
+        cleanup_context(ctx);
+        
+        if (isatty(STDIN_FILENO))
+												{
+			input = readline(MATRIX_PROMPT);
+			if (input && *input)
+			{
+				add_history(input); // Adiciona o comando ao histórico
+			}
+		}
+		else
+		{
+			input = NULL;
+			size_t len = 0;
+			getline(&input, &len, stdin);
+		}	
+        if (!input)
+        {
+            ctx->should_exit = 1;
+            break;
+        }
+        
+        ctx->tokens = lexer_tokenize(input, ctx);
+        if (ctx->tokens)
+        {
+            ctx->commands = parse_tokens(ctx->tokens);
+            if (ctx->commands)
+            {
+                execute_command(ctx->commands, ctx);
+            }
+        }
+        free(input);
+    }
+}

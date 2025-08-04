@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:19 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/02 14:48:40 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/04 18:24:15 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ char *extract_quoted_token(char **input, char quote_char, t_context *ctx)
 		return (raw);
 	else
 	{
+		if (!has_expandable_dollar(raw))
+			return (raw);
 		final = expand_variables(raw, ctx);
 		free(raw);
 		return (final);

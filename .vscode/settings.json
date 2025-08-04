@@ -14,6 +14,9 @@
 	"builtins.h": "c",
 	"struct_iovec.h": "c",
 	"fcntl.h": "c",
-	"redirection.h": "c"
+	"redirection.h": "c",
+	"string": "c",
+	"streambuf": "c",
+	"functional": "c"
 }
 }
