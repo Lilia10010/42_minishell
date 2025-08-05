@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/02 14:42:21 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 17:11:25 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <unistd.h>
 
 #include "minishell.h"
 #include "lexer.h"
 #include "parser.h"
 #include "executor.h"
 #include "context_types.h"
+#include "prompt_defs.h"
 
 # include "lib_ft.h"
 
@@ -32,7 +34,6 @@ void init_context(t_context *ctx, char **envp)
 	ctx->commands = NULL;
 }
 
-// serve para limpar dados da interação anterior
 void cleanup_context(t_context *ctx)
 {
 	if (ctx->tokens)
@@ -47,30 +48,26 @@ void cleanup_context(t_context *ctx)
 	}
 }
 
-void shell_loop(t_context *ctx)
+static void shell_loop(t_context *ctx)
 {
 	char *input;
-
 	while (!ctx->should_exit)
 	{
-		cleanup_context(ctx);
-		input = readline(MATRIX_PROMPT);
-		if (!input) // algum comando de scape
+		cleanup_context(ctx);		
+		input = readline(MINI_PROMPT);
+		if (!input)
 		{
-			printf("exit\n"); // não pode ter o \n aqui
+			ft_putstr_fd("\n", STDOUT_FILENO);
 			ctx->should_exit = 1;
 			break;
 		}
-
-		//expanded_input = expand_variables(input, ctx);
-		// começa o processamento do input
 		ctx->tokens = lexer_tokenize(input, ctx);
 		if (ctx->tokens)
 		{
 			ctx->commands = parse_tokens(ctx->tokens);
+				//debug_print_commands(ctx->commands);
 			if (ctx->commands)
 			{
-				//debug_print_commands(ctx->commands);
 				execute_command(ctx->commands, ctx);
 			}
 		}
@@ -101,13 +98,13 @@ int main(int argc, char **argv, char **envp)
 // comando externo – executa com fork + execve 
 // echo lilia""11111111 remover aspas
 // expansão de variáveis – substitui $VAR, $?, etc.
+// redirecionamento (<, >, >>, <<)
+// pipes –(|) conexão entre processos com pipe(), fork(), dup2()
 
 
 // em execução: 
 //
 // sinais
-// redirecionamento (<, >, >>, <<)
-// pipes –(|) conexão entre processos com pipe(), fork(), dup2()
 // histórico de comandos – add_history(input) Mel
 // builtins – echo, cd, pwd, exit, export, unset, env Mel
 

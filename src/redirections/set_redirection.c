@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_redirection.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:39:21 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:43:33 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:41:04 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,64 @@ static void set_input_file(t_command *cmd, char *target)
 	cmd->heredoc_mode = 0;//ára desatovar o mode heredoc
 }
 
-static void set_output_file(t_command *cmd, char *target, int append)
+/* static void set_output_file(t_command *cmd, char *target, int append)
 {	
 	if (cmd->output_file)
 		free(cmd->output_file);
-	cmd->output_file = ft_strdup(target);
+	cmd->output_file[0] = ft_strdup(target);
 	cmd->append_mode = append;//0 para >, 1 para >>
+} */
+
+static int expand_output_file_array(t_command *cmd)
+{
+	char **new_array;
+	int new_capacity;
+	int i;
+
+	new_capacity = cmd->output_file_count + 10;
+	new_array = (char **)malloc(sizeof(char *) * new_capacity);
+	if (!new_array)
+		return (0);
+	i = 0;
+	while (i < cmd->output_file_count)
+	{
+		new_array[i] = cmd->output_file[i];
+		i++;
+	}
+	free(cmd->output_file);
+	cmd->output_file = new_array;
+	return (1);
+}
+
+static void set_output_file(t_command *cmd, char *target, int append_mode)
+{
+	char *dup_target;
+
+	if (!cmd || !target)
+		return;
+
+	// Expande se necessário
+	if (cmd->output_file_count % 10 == 0)
+	{
+		if (!expand_output_file_array(cmd))
+		{
+			perror("Error: expanding output file array");
+			return;
+		}
+	}
+
+	// Duplica o nome do arquivo
+	dup_target = ft_strdup(target);
+	if (!dup_target)
+	{
+		perror("Error duplicating output filename");
+		return;
+	}
+
+	cmd->output_file[cmd->output_file_count++] = dup_target;
+	cmd->output_file[cmd->output_file_count] = NULL; // garante NULL termination
+
+	cmd->append_mode = append_mode; // 0 = truncate (>), 1 = append (>>)
 }
 
 static void set_heredoc(t_command *cmd, char *target)

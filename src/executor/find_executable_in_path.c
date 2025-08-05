@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path_utils.c                                       :+:      :+:    :+:   */
+/*   find_executable_in_path.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:47:45 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/20 22:05:51 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/05 13:53:08 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ char *find_executable_in_path(const char *cmd)
 
 	if (!cmd || !*cmd)
 		return (NULL);
+	/* if (ft_strchr(cmd, '/'))
+		return (NULL); */
 	path_env = getenv("PATH");
 	if (!path_env)
 		return (NULL);

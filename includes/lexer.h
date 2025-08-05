@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:51:10 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/02 14:51:18 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/04 18:24:59 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ void		skip_spaces(char **input);
 int			is_shell_operator(char c);
 char		*extract_quoted_token(char **input, char quote_char, t_context *ctx);
 int			add_operator_token(t_token **tokens, char **current);
+int			has_expandable_dollar(const char *str);
 
 #endif

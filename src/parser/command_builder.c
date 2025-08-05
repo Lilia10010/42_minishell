@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_builder.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:33:41 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:17:20 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,20 @@ t_command *create_command(void)
         free(cmd);
         return (NULL);
     }
+	 cmd->output_file = (char **)malloc(sizeof(char *) * 10); // Initial capacity for output files
+    if (!cmd->output_file)
+    {
+        free(cmd->args);
+        free(cmd);
+        return (NULL);
+    }
     
     cmd->arg_count = 0;
     cmd->arg_capacity = 10;
     cmd->input_file = NULL;
-    cmd->output_file = NULL;
+    //cmd->output_file = NULL;
+	cmd->output_file_count = 0;
+	cmd->arg_capacity = 10;
     cmd->append_mode = 0;
     cmd->heredoc_mode = 0;
     cmd->heredoc_delimiter = NULL;

@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/02 14:48:29 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 14:27:50 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-static int	has_dollar(const char *str)
+/* static int	has_dollar(const char *str)
 {
 	while (*str)
 	{
@@ -27,7 +27,32 @@ static int	has_dollar(const char *str)
 		str++;
 	}
 	return (0);
+} */
+
+int	has_expandable_dollar(const char *str)
+{
+	int i = 0;
+
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			char next = str[i + 1];
+
+			// Se for último caractere, ou seguido de espaço/tab, ou caractere inválido, pula
+			if (next == '\0' || next == ' ' || next == '\t' ||
+				!(ft_isalnum(next) || next == '_' || next == '?'))
+			{
+				i++;
+				continue;
+			}
+			return (1);
+		}
+		i++;
+	}
+	return (0);
 }
+
 
 static char *read_next_word_partial(char **current, t_context *ctx)
 {
@@ -49,7 +74,7 @@ static char *read_next_word_partial(char **current, t_context *ctx)
 	if (!word)
 		return (NULL);
 	ft_strlcpy(word, start, len + 1);
-	if (has_dollar(word))
+	if (has_expandable_dollar(word))
 	{
 		expanded = expand_variables(word, ctx);
 		free(word);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   apply_redirections.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:41:29 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:41:42 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,25 +46,33 @@ static int aplly_output_redirection(t_command *cmd)
 	int	fd;
 	int	flags;
 
+	int i = 0;
 	if (!cmd->output_file)
 		return (1);
 	if (cmd->append_mode)
 		flags = O_WRONLY | O_CREAT | O_APPEND;
 	else
 		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	fd = open(cmd->output_file, flags, 0644);
-	if (fd == -1)
-	{
-		perror(cmd->output_file);
-		return (0);
-	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		printf("ERROR: apply output redirect");
-		close(fd);
-		return (0);
-	}
-	close(fd);
+	for (i = 0; i < cmd->output_file_count; i++)
+    {
+        fd = open(cmd->output_file[i], flags, 0644);
+        if (fd == -1)
+        {
+            perror(cmd->output_file[i]);
+            return (0); // Retornar erro se não conseguir abrir o arquivo
+        }
+        // Apenas o último arquivo recebe o redirecionamento
+        if (i == cmd->output_file_count - 1)
+        {
+            if (dup2(fd, STDOUT_FILENO) == -1)
+            {
+                printf("ERROR: apply output redirect\n");
+                close(fd);
+                return (0);
+            }
+        }
+        close(fd); // Fechar o arquivo após criar ou redirecionar
+    }
 	return (1);
 }
 

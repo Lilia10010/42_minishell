@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_types.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 00:29:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:30:47 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:37:10 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ typedef struct s_command
 	int					arg_count;
 	int					arg_capacity;
 	char				*input_file; // <, <<
-	char				*output_file; // >, >>
+	char				**output_file; // >, >>
+	int					output_file_count;
 	int					append_mode;
 	int					heredoc_mode;
 	char				*heredoc_delimiter;
