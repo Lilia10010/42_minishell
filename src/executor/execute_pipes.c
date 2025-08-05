@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:06:14 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/01 21:49:38 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/05 18:19:36 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 	int			prev_fd = -1;
 	pid_t		pid;
 	int			status;
+	int 		last_pid = -1;
 
 	while (current)
 	{
@@ -85,7 +86,7 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 			}
 			if (current->next)
 			{
-				close(pipe_fd[0]); // fechar leitura
+				close(pipe_fd[0]);
 				dup2(pipe_fd[1], STDOUT_FILENO);
 				close(pipe_fd[1]);
 			}
@@ -98,21 +99,21 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 				exit(execute_external_command_with_redirectons(current, ctx));
 		}
 
-		// Processo pai
 		if (prev_fd != -1)
 			close(prev_fd);
 		if (current->next)
 		{
-			close(pipe_fd[1]); // fechar escrita
+			close(pipe_fd[1]);
 			prev_fd = pipe_fd[0];
 		}
+		last_pid = pid;
 		current = current->next;
 	}
 
 	// Esperar todos os filhos
 	while (wait(&status) > 0)
 	{
-		if (WIFEXITED(status))
+		if (WIFEXITED(status) && last_pid == pid)
 			ctx->exit_status = WEXITSTATUS(status);
 	}
 	return (0);

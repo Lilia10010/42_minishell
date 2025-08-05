@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/04 16:41:42 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 18:06:04 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ static int aplly_output_redirection(t_command *cmd)
         if (fd == -1)
         {
             perror(cmd->output_file[i]);
-            return (0); // Retornar erro se não conseguir abrir o arquivo
+            return (0);
         }
         // Apenas o último arquivo recebe o redirecionamento
         if (i == cmd->output_file_count - 1)
         {
             if (dup2(fd, STDOUT_FILENO) == -1)
             {
-                printf("ERROR: apply output redirect\n");
+                perror("ERROR: aplly output redirection dup2");
                 close(fd);
                 return (0);
             }
@@ -85,15 +85,15 @@ int aplly_redirection(t_command *cmd)
 		if (!aplly_heredoc_redirection(cmd))
 			return (0);
 	}
-	if (cmd->input_file)
-	{
-		if (!aplly_input_redirection(cmd))
-		return (0);
-	}
 	if (cmd->output_file)
 	{
 		if (!aplly_output_redirection(cmd))
 			return (0);
+	}
+	if (cmd->input_file)
+	{
+		if (!aplly_input_redirection(cmd))
+		return (0);
 	}
 	return (1);
 }
