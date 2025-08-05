@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/04 18:25:37 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 14:27:50 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,7 @@
 	}
 	return (0);
 } */
-/* static int has_expandable_dollar(const char *str)
-{
-    int i = 0;
-    
-    while (str[i])
-    {
-        if (str[i] == '$')
-        {
-			     
-			if (str[i + 1] == '\0')
-				return (0);
-            if (str[i + 1] == ' ' || str[i + 1] == '\t')
-                return (0);
-            return (1);
-        }
-        i++;
-    }
-    return (0);
-} */
+
 int	has_expandable_dollar(const char *str)
 {
 	int i = 0;
@@ -64,7 +46,7 @@ int	has_expandable_dollar(const char *str)
 				i++;
 				continue;
 			}
-			return (1); // Achou um dólar que pode ser expandido
+			return (1);
 		}
 		i++;
 	}

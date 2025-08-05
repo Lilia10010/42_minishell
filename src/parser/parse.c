@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:02:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/04 15:47:30 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 14:12:36 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ static t_command *build_command_list(t_token *tokens)
 	t_token *current_token;
 	t_parser_state state;
 	int consumed;
+	t_command *cmd_iter;
 
 	commands = NULL;
 	current_cmd = NULL;
@@ -151,6 +152,12 @@ static t_command *build_command_list(t_token *tokens)
 			current_token = current_token->next;
 			consumed--;
 		}
+	}
+	cmd_iter = commands;
+	while (cmd_iter)
+	{
+		cmd_iter->args = remove_empty_args(cmd_iter->args);
+		cmd_iter = cmd_iter->next;
 	}
 	// Validação final: não pode terminar esperando comando após pipe
 	/* if (state == EXPECTING_COMMAND && commands)

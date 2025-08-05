@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:46:45 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/04 15:54:02 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 14:13:23 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ void free_command(t_command *cmd);
 void free_commands(t_command *commands);
 t_command *create_command(void);
 int add_argument(t_command *cmd, char *arg);
+char **remove_empty_args(char **args);
 
 //debug
-//void debug_print_commands(t_command *commands);
+void debug_print_commands(t_command *commands);
 // t_command	*create_command(void);
 // void		free_commands(t_command *commands);
 // int			count_word_tokens(t_token *tokens);
