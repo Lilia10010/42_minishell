@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:19 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/05 14:02:31 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 20:02:09 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,31 @@ char *extract_quoted_token(char **input, char quote_char, t_context *ctx)
 
 static int	handle_redirect_in_operators(t_token **tokens, char **current)
 {
+	t_token *token;
+
 	if (*(*current +1) == '<')
 	{
-		add_token(tokens, create_token(TOKEN_HEREDOC, ft_strdup("<<")));
+		token = create_token(TOKEN_HEREDOC, "<<");
+		if (!token)
+			return (0);
+		if(!add_token(tokens, token))
+		{
+			free_token(token);
+			return (0);
+		}
 		(*current) += 2;
 		return (1);
 	}
 	else
 	{
-		add_token(tokens, create_token(TOKEN_REDIRECT_IN, ft_strdup("<")));
+		token = create_token(TOKEN_REDIRECT_IN, "<");
+		if (!token)
+			return (0);
+		if(!add_token(tokens, token))
+		{
+			free_token(token);
+			return (0);
+		}
 		(*current)++;
 		return (1);
 	}
@@ -79,23 +95,38 @@ static int	handle_redirect_in_operators(t_token **tokens, char **current)
 
 int	add_operator_token(t_token **tokens, char **current)
 {
-	if (**current == '|' )
+	t_token *token;
+
+	if (**current == '|')
 	{
-		add_token(tokens, create_token(TOKEN_PIPE, ft_strdup("|")));
+		token = create_token(TOKEN_PIPE, "|");
+		if (!token)
+			return (0);
+		if(!add_token(tokens, token))
+		{
+			free_token(token);
+			return (0);
+		}
 		(*current)++;
-		return (1);
-	}
-	else if (**current == '>' && *(*current + 1) == '>')
-	{
-		add_token(tokens,
-			create_token(TOKEN_REDIRECT_OUT_APPEND, ft_strdup(">>")));
-		(*current) += 2;
 		return (1);
 	}
 	else if (**current == '>')
 	{
-		add_token(tokens, create_token(TOKEN_REDIRECT_OUT, ft_strdup(">")));
-		(*current)++;
+		if (*(*current + 1) == '>')
+			token = create_token(TOKEN_REDIRECT_OUT_APPEND, ">>");
+		else
+			token = create_token(TOKEN_REDIRECT_OUT, ">");
+		if (!token)
+			return (0);
+		if(!add_token(tokens, token))
+		{
+			free_token(token);
+			return (0);
+		}
+		if (*(*current + 1) == '>')
+			(*current) += 2;
+		else
+			(*current)++;
 		return (1);
 	}
 	else if (**current == '<')

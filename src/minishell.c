@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/05 17:11:25 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 19:07:39 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void shell_loop(t_context *ctx)
 	char *input;
 	while (!ctx->should_exit)
 	{
-		cleanup_context(ctx);		
+		cleanup_context(ctx);
 		input = readline(MINI_PROMPT);
 		if (!input)
 		{
@@ -73,6 +73,7 @@ static void shell_loop(t_context *ctx)
 		}
 		//free(expanded_input);
 		free(input);
+		//cleanup_context(ctx);		
 	}
 }
 

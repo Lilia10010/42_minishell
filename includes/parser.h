@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:46:45 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/05 14:13:23 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 18:55:34 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ typedef enum e_parser_state
 t_command	*parse_tokens(t_token *tokens);
 int			is_redirection_token(t_token_type type);
 int validate_syntax(t_token *tokens);
-void free_command(t_command *cmd);
-void free_commands(t_command *commands);
+/* void free_command(t_command *cmd);*/
+void free_commands(t_command *commands); 
+//void free_all_commands(t_command *commands);
 t_command *create_command(void);
 int add_argument(t_command *cmd, char *arg);
 char **remove_empty_args(char **args);

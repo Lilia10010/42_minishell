@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:51:10 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/04 18:24:59 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/05 20:05:43 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ typedef struct s_token t_token;
 
 t_token		*lexer_tokenize(char *input, t_context *ctx);
 t_token		*create_token(t_token_type type, char *value);
-void		add_token(t_token **head, t_token *new_token);
+int			add_token(t_token **head, t_token *new_token);
 void		free_tokens(t_token *tokens);
+void		free_token(t_token *token);
+
 char		*concatenate_strings(char *str1, char *str2);
 void		debug_print_tokens(t_token *tokens);// RETIRAR SEGUELADA
 void		skip_spaces(char **input);
