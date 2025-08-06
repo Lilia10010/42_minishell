@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:06:14 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/05 18:19:36 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/06 14:04:40 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,39 +19,7 @@
 #include "context_types.h"
 #include "command_types.h"
 #include "builtin_types.h"
-
-/* int	execute_pipe(t_command *commands, t_context *ctx)
-{
-	t_command *current;
-
-	current = commands;
-	if (!commands)
-	{
-		ctx->exit_status = 0;
-		return (0);
-	}
-	
-	while (current)
-	{
-		int i = 0;
-		while (i < current->arg_count)
-		{
-			printf("argd =>> %s\n", current->args[i]);
-			++i;
-		}
-		current = current->next;
-	}
-
-
-
-	//[] implementação do pipe
-	//[] criação do processo filho
-	//[] dentro do processo filho verificar se é builtin ou se é execve
-
-	ctx->exit_status = 127;
-	return (1);
-}
- */
+#include "signals.h"
 
 int	execute_pipe(t_command *commands, t_context *ctx)
 {
@@ -77,8 +45,9 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 			perror("fork failed");
 			return (1);
 		}
-		else if (pid == 0) // Processo filho
+		else if (pid == 0) 
 		{
+			setup_signals_child();
 			if (prev_fd != -1)
 			{
 				dup2(prev_fd, STDIN_FILENO);
@@ -111,10 +80,13 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 	}
 
 	// Esperar todos os filhos
-	while (wait(&status) > 0)
-	{
-		if (WIFEXITED(status) && last_pid == pid)
-			ctx->exit_status = WEXITSTATUS(status);
-	}
+	pid_t waited_pid;
+while ((waited_pid = wait(&status)) > 0)
+{
+    if (WIFEXITED(status) && waited_pid == last_pid)
+        ctx->exit_status = WEXITSTATUS(status);
+    else if (WIFSIGNALED(status) && waited_pid == last_pid)
+        ctx->exit_status = 128 + WTERMSIG(status);
+}
 	return (0);
 }

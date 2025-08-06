@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/05 17:11:49 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/06 16:18:44 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@
 #include "context_types.h"
 #include "executor.h"
 #include "lib_ft.h"
+#include "signals.h"
 
 static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 {
 	pid_t	pid;
 	int		status;
+	
 
 	pid = fork();
 	if (pid < 0)
@@ -37,19 +39,24 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 	}
 	if (pid == 0)
 	{
+		setup_signals_child(); 
 		if (!aplly_redirection(cmd))
 			exit(1);
 		execve(path, cmd->args, ctx->envp);
-		ft_putstr_fd("bash: ", STDERR_FILENO);
+		ft_putstr_fd("bash: comando não encontrado\n", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		ft_putstr_fd(": comando não encontrado\n", STDERR_FILENO);
 		exit(127);
 	}
+	setup_signals_ignore();
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		ctx->exit_status = WEXITSTATUS(status);
 	else
-		ctx->exit_status = 1;  // erro genérico se não saiu normalmente
+	{
+		ctx->exit_status = 128 + WTERMSIG(status);
+		write(STDOUT_FILENO, "\n", 1);
+	}
+	restore_signals();
 	return (ctx->exit_status);
 }
 
@@ -61,9 +68,8 @@ int	execute_path_command_absolut(t_command *cmd, t_context *ctx)
 	// Verifica se o caminho existe
 	if (stat(cmd->args[0], &sb) == -1)
 	{
-		ft_putstr_fd("bash: ", STDERR_FILENO);
+		ft_putstr_fd("bash: comando não encontrado\n", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		ft_putstr_fd(": comando não encontrado\n", STDERR_FILENO);
 		ctx->exit_status = 127;
 		return (127);
 	}

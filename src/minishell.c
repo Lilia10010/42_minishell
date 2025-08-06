@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/05 19:07:39 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/06 16:30:34 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@
 #include "executor.h"
 #include "context_types.h"
 #include "prompt_defs.h"
+#include "signals.h"
 
 # include "lib_ft.h"
+
+volatile sig_atomic_t g_signal_received = 0;
 
 void init_context(t_context *ctx, char **envp)
 {
@@ -47,13 +50,24 @@ void cleanup_context(t_context *ctx)
 		ctx->commands = NULL;
 	}
 }
+static void handle_signal_in_loop(t_context *ctx)
+{
+    if (g_signal_received == SIGINT)
+    {
+        ctx->exit_status = 130;
+        g_signal_received = 0;
+		
+    }
+}
 
 static void shell_loop(t_context *ctx)
 {
 	char *input;
 	while (!ctx->should_exit)
 	{
-		cleanup_context(ctx);
+		//cleanup_context(ctx);
+		handle_signal_in_loop(ctx);
+
 		input = readline(MINI_PROMPT);
 		if (!input)
 		{
@@ -61,6 +75,13 @@ static void shell_loop(t_context *ctx)
 			ctx->should_exit = 1;
 			break;
 		}
+		if (g_signal_received)
+		{
+			ctx->exit_status = g_signal_received + 128;
+			g_signal_received = 0;
+		}
+		 if (*input)
+            add_history(input);
 		ctx->tokens = lexer_tokenize(input, ctx);
 		if (ctx->tokens)
 		{
@@ -71,9 +92,7 @@ static void shell_loop(t_context *ctx)
 				execute_command(ctx->commands, ctx);
 			}
 		}
-		//free(expanded_input);
-		free(input);
-		//cleanup_context(ctx);		
+		free(input);	
 	}
 }
 
@@ -87,6 +106,7 @@ int main(int argc, char **argv, char **envp)
 	// printf("███████████████████████\n\n");
 
 	init_context(&ctx, envp);
+	setup_signals();
 	shell_loop(&ctx);
 	cleanup_context(&ctx);
 
