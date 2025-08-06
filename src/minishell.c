@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/06 16:30:34 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/06 18:02:02 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int main(int argc, char **argv, char **envp)
 
 // em execução: 
 //
-// sinais
+// sinais quase lá
 // histórico de comandos – add_history(input) Mel
 // builtins – echo, cd, pwd, exit, export, unset, env Mel
 
