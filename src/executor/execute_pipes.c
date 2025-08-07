@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:06:14 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/06 14:04:40 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/06 21:42:40 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 	pid_t		pid;
 	int			status;
 	int 		last_pid = -1;
-
+	pid_t 		waited_pid;
+	
 	while (current)
 	{
 		// Se não for o último comando, criamos um pipe
@@ -80,13 +81,14 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 	}
 
 	// Esperar todos os filhos
-	pid_t waited_pid;
-while ((waited_pid = wait(&status)) > 0)
-{
-    if (WIFEXITED(status) && waited_pid == last_pid)
-        ctx->exit_status = WEXITSTATUS(status);
-    else if (WIFSIGNALED(status) && waited_pid == last_pid)
-        ctx->exit_status = 128 + WTERMSIG(status);
-}
+	setup_signals_ignore();
+	while ((waited_pid = wait(&status)) > 0)
+	{
+		if (WIFEXITED(status) && waited_pid == last_pid)
+			ctx->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status) && waited_pid == last_pid)
+			ctx->exit_status = 128 + WTERMSIG(status);
+	}
+	restore_signals();
 	return (0);
 }
