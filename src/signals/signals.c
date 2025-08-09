@@ -4,7 +4,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <unistd.h>
-#include "context_types.h"
 #include "lib_ft.h"
 
 extern volatile sig_atomic_t g_signal_received;
@@ -22,25 +21,25 @@ void handle_sigint(int sig)
 void handle_sigquit(int sig)
 {
     (void)sig;
-    // ctrl-\ não faz nada
 }
 
 void setup_signals(void)
 {
     signal(SIGINT, handle_sigint);
     signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
 }
-//nos processos filhos
+
 void setup_signals_child(void)
 {
-	signal(SIGINT, SIG_DFL);  // ctrl-C
-	signal(SIGQUIT, SIG_DFL); // ctrl-
+	signal(SIGINT, SIG_DFL);  // c
+	signal(SIGQUIT, SIG_DFL); // /
+	signal(SIGTSTP, SIG_IGN);//z
 }
-//para ignorar durante pipes ou execução de comandos
 void setup_signals_ignore(void)
 {
-	signal(SIGINT, SIG_IGN);  // ctrl-C
-	signal(SIGQUIT, SIG_IGN); // ctrl-
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }
 void restore_signals(void)
 {

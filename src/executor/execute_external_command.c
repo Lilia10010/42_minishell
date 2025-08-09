@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/06 16:18:44 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/09 17:56:26 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,25 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 
 #include "command_types.h"
 #include "context_types.h"
 #include "executor.h"
 #include "lib_ft.h"
 #include "signals.h"
+#include "minishell.h"
+
+static void internal_exit(t_context *ctx, int code)
+{
+    cleanup_context(ctx);
+    clear_history();         // limpa histórico visível
+    rl_clear_history();      // limpa memória interna do readline
+    rl_free_line_state();    // limpa linha atual
+    ft_putstr_fd("exit\n", STDOUT_FILENO);
+    exit(code);
+}
 
 static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 {
@@ -41,11 +54,14 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 	{
 		setup_signals_child(); 
 		if (!aplly_redirection(cmd))
-			exit(1);
+		{
+			internal_exit(ctx, 1);
+		}
 		execve(path, cmd->args, ctx->envp);
 		ft_putstr_fd("bash: comando não encontrado\n", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		exit(127);
+		cleanup_context(ctx);
+		internal_exit(ctx, 127);
 	}
 	setup_signals_ignore();
 	waitpid(pid, &status, 0);
@@ -65,7 +81,6 @@ int	execute_path_command_absolut(t_command *cmd, t_context *ctx)
 {
 	struct stat sb;
 
-	// Verifica se o caminho existe
 	if (stat(cmd->args[0], &sb) == -1)
 	{
 		ft_putstr_fd("bash: comando não encontrado\n", STDERR_FILENO);
@@ -73,8 +88,6 @@ int	execute_path_command_absolut(t_command *cmd, t_context *ctx)
 		ctx->exit_status = 127;
 		return (127);
 	}
-
-	// Verifica se é diretório
 	if (S_ISDIR(sb.st_mode))
 	{
 		ft_putstr_fd("bash: ", STDERR_FILENO);
@@ -83,8 +96,6 @@ int	execute_path_command_absolut(t_command *cmd, t_context *ctx)
 		ctx->exit_status = 126;
 		return (126);
 	}
-
-	// Verifica permissão de execução
 	if (access(cmd->args[0], X_OK) != 0)
 	{
 		ft_putstr_fd("bash: ", STDERR_FILENO);
@@ -103,12 +114,6 @@ int	execute_command_from_path(t_command *cmd, t_context *ctx)
 	char	*path;
 	int		result;
 
-	//printf("entrou no execute command from path\n");
-	/* if (!cmd->args[0] || cmd->args[0][0] == '\0')
-	{
-		ctx->exit_status = 0;
-		return (0);
-	} */
 	path = find_executable_in_path(cmd->args[0]);
 	if (!path)
 	{
@@ -133,6 +138,5 @@ int execute_external_command_with_redirectons(t_command *cmd, t_context *ctx)
 	else
 		return (execute_command_from_path(cmd, ctx));
 	return (1);
-	//return (ctx->exit_status = 0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:06:14 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/06 21:42:40 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/09 18:04:37 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,37 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <stdlib.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 
 #include "executor.h"
 #include "context_types.h"
 #include "command_types.h"
 #include "builtin_types.h"
 #include "signals.h"
+#include "minishell.h"
+#include "lib_ft.h"
+
+
+static void internal_exit(t_context *ctx, int code)
+{
+    cleanup_context(ctx);
+    clear_history();
+    rl_clear_history();
+    rl_free_line_state();
+    exit(code);
+}
+
+#include <unistd.h>
+
+void close_all_fds(void)
+{
+    int fd;
+
+    for (fd = 3; fd < 1024; fd++)
+        close(fd);
+}
+
 
 int	execute_pipe(t_command *commands, t_context *ctx)
 {
@@ -33,13 +58,11 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 	
 	while (current)
 	{
-		// Se não for o último comando, criamos um pipe
 		if (current->next && pipe(pipe_fd) == -1)
 		{
 			perror("pipe failed");
 			return (1);
 		}
-
 		pid = fork();
 		if (pid == -1)
 		{
@@ -49,6 +72,7 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 		else if (pid == 0) 
 		{
 			setup_signals_child();
+			 close_all_fds();
 			if (prev_fd != -1)
 			{
 				dup2(prev_fd, STDIN_FILENO);
@@ -61,14 +85,12 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 				close(pipe_fd[1]);
 			}
 			if (!aplly_redirection(current))
-				exit(1);
-
+				internal_exit(ctx, 1);
 			if (get_builtin_id(current->args[0]) != BUILTIN_NONE)
-				exit(execute_builtin_with_redirection(current, ctx));
+				internal_exit(ctx, execute_builtin_with_redirection(current, ctx));
 			else
-				exit(execute_external_command_with_redirectons(current, ctx));
+				internal_exit(ctx, execute_external_command_with_redirectons(current, ctx));
 		}
-
 		if (prev_fd != -1)
 			close(prev_fd);
 		if (current->next)
@@ -79,8 +101,6 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 		last_pid = pid;
 		current = current->next;
 	}
-
-	// Esperar todos os filhos
 	setup_signals_ignore();
 	while ((waited_pid = wait(&status)) > 0)
 	{
