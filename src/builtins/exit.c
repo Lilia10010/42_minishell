@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 20:16:50 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/09 18:07:08 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/10 18:54:04 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,12 @@ static void close_all_fds(void)
 {
     int fd;
 
-    for (fd = 3; fd < 1024; fd++)
-        close(fd);
+	fd = 3;
+	while(fd < 1024)
+	{
+		close(fd);
+		fd++;
+	}
 }
 
 static void internal_exit(t_context *ctx)

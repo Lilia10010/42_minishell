@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_command.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/09 17:56:26 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/10 18:48:39 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void internal_exit(t_context *ctx, int code)
     clear_history();         // limpa histórico visível
     rl_clear_history();      // limpa memória interna do readline
     rl_free_line_state();    // limpa linha atual
-    ft_putstr_fd("exit\n", STDOUT_FILENO);
+    //ft_putstr_fd("exitt\n", STDOUT_FILENO);
     exit(code);
 }
 

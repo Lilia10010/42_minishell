@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:06:14 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/09 18:04:37 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/10 18:39:40 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "signals.h"
 #include "minishell.h"
 #include "lib_ft.h"
-
+#include "utils.h"
 
 static void internal_exit(t_context *ctx, int code)
 {
@@ -32,19 +32,9 @@ static void internal_exit(t_context *ctx, int code)
     clear_history();
     rl_clear_history();
     rl_free_line_state();
-    exit(code);
+	exit(code);
+	//close_all_fds();
 }
-
-#include <unistd.h>
-
-void close_all_fds(void)
-{
-    int fd;
-
-    for (fd = 3; fd < 1024; fd++)
-        close(fd);
-}
-
 
 int	execute_pipe(t_command *commands, t_context *ctx)
 {
@@ -72,7 +62,7 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 		else if (pid == 0) 
 		{
 			setup_signals_child();
-			 close_all_fds();
+			 //close_all_fds();
 			if (prev_fd != -1)
 			{
 				dup2(prev_fd, STDIN_FILENO);
