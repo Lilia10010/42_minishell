@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 21:34:38 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/11 13:00:17 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/11 17:56:30 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,27 @@
 #include "command_types.h"
 #include "lib_ft.h"
 #include "context_types.h"
+#include "lexer.h"
+#include "env.h"
 
-// void close_all_fds(void)
-// {
-// 	int i;
+/*static void close_all_fds(void)
+{
+	int i;
 
-// 	i = 3;
-// 	while (i < 1024)
-// 	{
-// 		close(i);
-// 		i++;
-// 	}
-// }
+	i = 3;
+	while (i < 1024)
+	{
+		close(i);
+		i++;
+	}
+} */
 
 int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
 {
     char    *line;
     int     fd;
     char    *file_name;
+	char	*expanded_line;
 
     file_name = ".heredoc_tmp";
     fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0600);
@@ -67,7 +70,13 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
             free(line);
 			close(fd);
             break;
-        }        
+        }    
+		if (has_expandable_dollar(line))
+        {
+            expanded_line = expand_variables(line, ctx);
+            free(line);
+            line = expanded_line;
+        }
         write(fd, line, ft_strlen(line));
         write(fd, "\n", 1);
         free(line);
