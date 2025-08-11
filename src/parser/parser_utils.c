@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:54:56 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/05 14:14:01 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/11 17:07:07 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,52 +28,49 @@ int validate_syntax(t_token *tokens)
 	current = tokens;    
     if (!current)
         return (1);
-    // Verificar se começa com pipe
     if (current->type == TOKEN_PIPE)
         return (0);
     while (current)
     {
-        if (current->type == TOKEN_PIPE)
-        {
-            // Verificar se próximo token existe e não é pipe
-            if (!current->next || current->next->type == TOKEN_PIPE)
+        if (current->type == TOKEN_PIPE && (!current->next || current->next->type == TOKEN_PIPE))
                 return (0);
-        }
-        if (is_redirection_token(current->type))
-        {
-            // Verificar se próximo token é WORD
-            if (!current->next || current->next->type != TOKEN_WORD)
-                return (0);
-        }
+        if (is_redirection_token(current->type) && (!current->next || current->next->type != TOKEN_WORD))
+			return (0);
         current = current->next;
     }
-    // Verificar se termina com redirecionamento
-    if (tokens)
-    {
-        // Encontrar último token
-        current = tokens;
-        while (current->next)
-            current = current->next;
-        
-        if (is_redirection_token(current->type))
-            return (0);
-    }
+	current = tokens;
+	while (current && current->next)
+		current = current->next;	
+	if (current && is_redirection_token(current->type))
+		return (0);
     return (1);
+}
+
+static int count_valid_args(char **args)
+{
+	int count;
+	int i;
+
+	count = 0;
+	i = 0;
+	if (!args)
+		return (0);
+	while(args[i])
+	{
+		if (args[i][0] != '\0')
+			count++;
+		i++;
+	}
+	return (count);
 }
 char **remove_empty_args(char **args)
 {
-	int		i, j;
+	int		i;
+	int		j;
+	int		count;
 	char	**cleaned;
 
-	if (!args)
-		return (NULL);
-
-	// Conta número de argumentos válidos
-	int count = 0;
-	for (i = 0; args[i]; i++)
-		if (args[i][0] != '\0')
-			count++;
-
+	count = count_valid_args(args);
 	cleaned = malloc(sizeof(char *) * (count + 1));
 	if (!cleaned)
 		return (NULL);
@@ -85,10 +82,10 @@ char **remove_empty_args(char **args)
 		if (args[i][0] != '\0')
 			cleaned[j++] = args[i];
 		else
-			free(args[i]); // libera string vazia
+			free(args[i]);
 		i++;
 	}
 	cleaned[j] = NULL;
-	free(args); // libera array antigo (opcional)
+	free(args);
 	return cleaned;
 }
