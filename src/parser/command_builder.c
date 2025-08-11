@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/04 16:17:20 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/11 13:37:00 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@
 #include "lib_ft.h"
 #include "command_types.h"
 
+static void init_command(t_command *cmd)
+{
+	cmd->arg_count = 0;
+    cmd->arg_capacity = 10;
+    cmd->input_file = NULL;
+	cmd->output_file_count = 0;
+    cmd->append_mode = 0;
+    cmd->heredoc_mode = 0;
+    cmd->heredoc_delimiter = NULL;
+    cmd->next = NULL;
+
+}
+
 t_command *create_command(void)
 {
     t_command *cmd;
@@ -23,32 +36,20 @@ t_command *create_command(void)
     cmd = (t_command *)malloc(sizeof(t_command));
     if (!cmd)
         return (NULL);
-    
-    cmd->args = (char **)malloc(sizeof(char *) * 10); // Capacidade inicial
+    cmd->args = (char **)malloc(sizeof(char *) * 10);
     if (!cmd->args)
     {
         free(cmd);
         return (NULL);
     }
-	 cmd->output_file = (char **)malloc(sizeof(char *) * 10); // Initial capacity for output files
+	 cmd->output_file = (char **)malloc(sizeof(char *) * 10);
     if (!cmd->output_file)
     {
         free(cmd->args);
         free(cmd);
         return (NULL);
     }
-    
-    cmd->arg_count = 0;
-    cmd->arg_capacity = 10;
-    cmd->input_file = NULL;
-    //cmd->output_file = NULL;
-	cmd->output_file_count = 0;
-	cmd->arg_capacity = 10;
-    cmd->append_mode = 0;
-    cmd->heredoc_mode = 0;
-    cmd->heredoc_delimiter = NULL;
-    cmd->next = NULL;
-    
+	init_command(cmd);    
     return (cmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:00:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/05 18:54:57 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/11 13:43:21 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,37 @@
 #include "parser.h"
 #include "command_types.h"
 
+static void free_string_array(char **array, int count)
+{
+	int i;
+
+	i = 0;
+	if (!array)
+		return;
+	while (i < count)
+	{
+		if (array[i])
+			free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
 void free_command(t_command *cmd)
 {
-    int i;
-
     if (!cmd)
         return;
-
-    // Free arguments
     if (cmd->args)
     {
-        for (i = 0; i < cmd->arg_count; i++)
-        {
-            if (cmd->args[i])
-                free(cmd->args[i]);
-        }
-        free(cmd->args);
+		free_string_array(cmd->args, cmd->arg_count);
     }
-
-    // Free input file
     if (cmd->input_file)
         free(cmd->input_file);
-
-    // Free output files
     if (cmd->output_file)
     {
-        for (i = 0; i < cmd->output_file_count; i++)
-        {
-            if (cmd->output_file[i])
-                free(cmd->output_file[i]);
-        }
-        free(cmd->output_file);
+		free_string_array(cmd->output_file, cmd->output_file_count);
     }
-
-    free(cmd); // Free the command structure itself
+    free(cmd);
 }
 
 void free_commands(t_command *commands)

@@ -74,4 +74,4 @@ suppression_file.supp:
 .PHONY: all clean fclean re
 
 #valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --track-fds=yes --show-reachable=yes  ./minishell --show-leak-kinds=all \
-#make && valgrind --leak-check=full --suppressions=suppression_file.sup --track-fds=yes -q ./minishell
+#make && valgrind --leak-check=full --suppressions=suppression_file.supp --track-fds=yes -q ./minishell
