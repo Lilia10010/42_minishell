@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_redirection.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:39:21 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/04 16:41:04 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/10 23:49:55 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "lib_ft.h"
 #include "token_types.h"
 
-
 static void set_input_file(t_command *cmd, char *target)
 {
 	if (cmd->input_file)
@@ -25,14 +24,6 @@ static void set_input_file(t_command *cmd, char *target)
 	cmd->input_file = ft_strdup(target);
 	cmd->heredoc_mode = 0;//ára desatovar o mode heredoc
 }
-
-/* static void set_output_file(t_command *cmd, char *target, int append)
-{	
-	if (cmd->output_file)
-		free(cmd->output_file);
-	cmd->output_file[0] = ft_strdup(target);
-	cmd->append_mode = append;//0 para >, 1 para >>
-} */
 
 static int expand_output_file_array(t_command *cmd)
 {

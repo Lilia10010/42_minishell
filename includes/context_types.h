@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   context_types.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 23:53:43 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/30 23:55:10 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:37:06 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_context
 	char		**envp;
 	int			exit_status;
 	int			should_exit;
+	int			redisplay;
 	t_token		*tokens;
 	t_command	*commands;
 }	t_context;
