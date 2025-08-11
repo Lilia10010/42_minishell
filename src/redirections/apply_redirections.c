@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/10 18:22:15 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/10 23:28:24 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ int aplly_redirection(t_command *cmd)
 	if (cmd->heredoc_mode)
 	{
 		if (!aplly_heredoc_redirection(cmd))
+		{
 			return (0);
+		}
 	}
 	if (cmd->output_file)
 	{

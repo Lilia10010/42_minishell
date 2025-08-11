@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:06:14 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/10 18:39:40 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/11 00:09:13 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static void internal_exit(t_context *ctx, int code)
     rl_clear_history();
     rl_free_line_state();
 	exit(code);
-	//close_all_fds();
 }
 
 int	execute_pipe(t_command *commands, t_context *ctx)
@@ -62,7 +61,6 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 		else if (pid == 0) 
 		{
 			setup_signals_child();
-			 //close_all_fds();
 			if (prev_fd != -1)
 			{
 				dup2(prev_fd, STDIN_FILENO);

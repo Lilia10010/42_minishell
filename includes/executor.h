@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:50:11 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:42:30 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/10 23:29:39 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int			is_path_comman(const char *cmd);
 int			execute_path_command_absolut(t_command *cmd, t_context *ctx);
 int			execute_command_from_path(t_command *cmd, t_context *ctx);
 int			validate_redirection_file(char *filename, int is_output);
-int			aplly_redirection(t_command *cmd);
+int aplly_redirection(t_command *cmd);
 
 int			execute_external_command_with_redirectons(t_command *cmd, t_context *ctx);
 int			execute_builtin_with_redirection(t_command *cmd, t_context *ctx);

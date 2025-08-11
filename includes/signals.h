@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:55:20 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/06 12:10:46 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/10 22:15:20 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,8 @@ void	restore_signals(void);
 // Handlers
 void	handle_sigint(int sig);
 void	handle_sigquit(int sig);
+
+void setup_signals_heredoc(void);
+void setup_signals_heredoc(void);
 
 #endif

@@ -1,12 +1,41 @@
-#include "signal.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/10 22:10:10 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/08/10 22:49:01 by lpaula-n         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <unistd.h>
 #include "lib_ft.h"
+#include "signals.h"
 
 extern volatile sig_atomic_t g_signal_received;
+
+void handle_sigint_heredoc(int sig)
+{
+    (void)sig;
+    g_signal_received = sig;
+	rl_done = 1;
+    // Quebra de linha
+    write(STDOUT_FILENO, "\n", 1);
+}
+
+void setup_signals_heredoc(void)
+{
+	printf("[DEBUG] Configurando sinais para heredoc\n");
+    signal(SIGINT, handle_sigint_heredoc); 
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
+}
 
 void handle_sigint(int sig)
 {

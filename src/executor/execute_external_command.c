@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/10 18:48:39 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/10 23:29:09 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 		setup_signals_child(); 
 		if (!aplly_redirection(cmd))
 		{
+			if(cmd->heredoc_mode)
+				internal_exit(ctx, 0);
 			internal_exit(ctx, 1);
 		}
 		execve(path, cmd->args, ctx->envp);
