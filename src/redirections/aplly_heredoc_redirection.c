@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   aplly_heredoc_redirection.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 21:34:38 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/11 00:08:50 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/11 13:00:17 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <readline/readline.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include "signals.h"
 #include "command_types.h"
