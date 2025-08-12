@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 21:34:38 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/11 17:56:30 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/12 14:13:11 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,75 +22,131 @@
 #include "lexer.h"
 #include "env.h"
 
-/*static void close_all_fds(void)
-{
-	int i;
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <readline/readline.h>
 
-	i = 3;
-	while (i < 1024)
+
+
+/* static void heredoc_sigint_handler(int sig)
+{
+    (void)sig;
+    write(STDOUT_FILENO, "\n", 1);
+    exit(130); // Código padrão para Ctrl+C
+} */
+static int	has_dollar(const char *str)
+{
+	int i = 0;
+
+	while (str[i])
 	{
-		close(i);
+		if (str[i] == '$')
+		{
+			char next = str[i + 1];
+
+			// Se for último caractere, ou seguido de espaço/tab, ou caractere inválido, pula
+			if (next == '\0' || next == ' ' || next == '\t' ||
+				!(ft_isalnum(next) || next == '_' ))
+			{
+				i++;
+				continue;
+			}
+			return (1);
+		}
 		i++;
 	}
-} */
+	return (0);
+}
 
 int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
 {
-    char    *line;
-    int     fd;
-    char    *file_name;
-	char	*expanded_line;
+    int     pipefd[2];
+    pid_t   pid;
+    char    *line = NULL;
+    char    *expanded_line = NULL;
 
-    file_name = ".heredoc_tmp";
-    fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-    if (fd == -1)
+    if (!cmd || !cmd->heredoc_delimiter)
     {
-        perror("ERROR: aplly heredoc redirection open");
-        return (0);
+        fprintf(stderr, "HEREDOC ERROR: cmd ou delimiter é NULL\n");
+        return 0;
     }
-    
-    while (1)
-    {
-		signal(SIGINT, SIG_DFL);
-        line = readline("> ");
 
-        if (!line)
+    if (pipe(pipefd) == -1)
+    {
+        perror("pipe");
+        return 0;
+    }
+
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("fork");
+        close(pipefd[0]);
+        close(pipefd[1]);
+        return 0;
+    }
+
+    if (pid == 0) // Processo filho: coleta o heredoc
+    {
+       // signal(SIGINT, heredoc_sigint_handler);
+	   signal(SIGINT, SIG_DFL);
+        close(pipefd[0]); // Filho escreve no pipe
+
+        while (1)
         {
-            printf("warning: here-document delimited by end-of-file (wanted `%s')\n", 
-                   cmd->heredoc_delimiter);
-			ctx->exit_status = 0;
-            close(fd);
-            unlink(file_name);
-			g_signal_received = -1;
-			//close_all_fds();
-            return (0);
-        }  
-        if (ft_strcmp(line, cmd->heredoc_delimiter) == 0)
-        {
+            line = readline("> ");
+            if (!line)
+            {
+                fprintf(stderr,
+                    "warning: here-document delimited by end-of-file (wanted `%s`)\n",
+                    cmd->heredoc_delimiter);
+                close(pipefd[1]);
+                exit(0);
+            }
+
+            if (ft_strcmp(line, cmd->heredoc_delimiter) == 0)
+            {
+                free(line);
+                break;
+            }
+
+            if (has_dollar(line))
+            {
+                expanded_line = expand_variables(line, ctx);
+                free(line);
+                line = expanded_line;
+            }
+
+            dprintf(pipefd[1], "%s\n", line);
             free(line);
-			close(fd);
-            break;
-        }    
-		if (has_expandable_dollar(line))
-        {
-            expanded_line = expand_variables(line, ctx);
-            free(line);
-            line = expanded_line;
         }
-        write(fd, line, ft_strlen(line));
-        write(fd, "\n", 1);
-        free(line);
-    }
-    close(fd);
-    int read_fd = open(file_name, O_RDONLY);
-    if (read_fd == -1)
-    {
-		unlink(file_name);
-        return (0);
-    }
-    dup2(read_fd, STDIN_FILENO);
-    close(read_fd);
-    unlink(file_name);
 
-    return (1);
+        close(pipefd[1]);
+        exit(0);
+    }
+
+    // Processo pai: redireciona STDIN e espera o filho
+    close(pipefd[1]); // Pai lê do pipe
+    if (dup2(pipefd[0], STDIN_FILENO) == -1)
+    {
+        perror("dup2");
+        close(pipefd[0]);
+        return 0;
+    }
+    close(pipefd[0]);
+
+    int status;
+    waitpid(pid, &status, 0);
+    if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+    {
+        ctx->exit_status = 130;
+        g_signal_received = -1;
+        return 0;
+    }
+
+    return 1;
 }
