@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:00:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/11 13:43:21 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/12 13:15:59 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void free_command(t_command *cmd)
     {
 		free_string_array(cmd->output_file, cmd->output_file_count);
     }
+	if (cmd->heredoc_delimiter)
+        free(cmd->heredoc_delimiter);
     free(cmd);
 }
 
