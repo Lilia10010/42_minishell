@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/09 17:55:40 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/12 16:51:05 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,21 +116,19 @@ int main(int argc, char **argv, char **envp)
 }
 
 // readline – leitura do input do usuário
-// lexer – quebra o input em tokens (respeitando aspas, escapes...) Lília
-// parser – converte tokens em comandos (t_command) Lília
+// lexer – quebra o input em tokens (respeitando aspas, escapes...)
+// parser – converte tokens em comandos (t_command)
 // comando externo – executa com fork + execve 
 // echo lilia""11111111 remover aspas
 // expansão de variáveis – substitui $VAR, $?, etc.
 // redirecionamento (<, >, >>, <<)
 // pipes –(|) conexão entre processos com pipe(), fork(), dup2()
+// heredoc – processa redirecionamentos << antes da execução
+// sinais
+// histórico de comandos – add_history(input)
 
 
 // em execução: 
 //
-// sinais quase lá
-// histórico de comandos – add_history(input) Mel
 // builtins – echo, cd, pwd, exit, export, unset, env Mel
-
-
-// heredoc – processa redirecionamentos << antes da execução
 // norma

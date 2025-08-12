@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   apply_redirections.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/10 23:28:24 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/12 16:55:02 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "redirection.h"
 #include "command_types.h"
 #include "executor.h"
+#include "lib_ft.h"
 
 static int aplly_input_redirection(t_command *cmd)
 {
@@ -53,7 +54,7 @@ static int aplly_output_redirection(t_command *cmd)
 		flags = O_WRONLY | O_CREAT | O_APPEND;
 	else
 		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	for (i = 0; i < cmd->output_file_count; i++)
+	while (i < cmd->output_file_count)
     {
         fd = open(cmd->output_file[i], flags, 0644);
         if (fd == -1)
@@ -71,7 +72,8 @@ static int aplly_output_redirection(t_command *cmd)
                 return (0);
             }
         }
-        close(fd); // Fechar o arquivo após criar ou redirecionar
+        close(fd);
+		i++;
     }
 	return (1);
 }
@@ -87,15 +89,15 @@ int aplly_redirection(t_command *cmd)
 			return (0);
 		}
 	}
-	if (cmd->output_file)
-	{
-		if (!aplly_output_redirection(cmd))
-			return (0);
-	}
 	if (cmd->input_file)
 	{
 		if (!aplly_input_redirection(cmd))
 		return (0);
+	}
+	if (cmd->output_file)
+	{
+		if (!aplly_output_redirection(cmd))
+			return (0);
 	}
 	return (1);
 }
