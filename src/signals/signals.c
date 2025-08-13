@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 22:10:10 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/10 22:49:01 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/13 16:25:37 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void setup_signals_child(void)
 	signal(SIGINT, SIG_DFL);  // c
 	signal(SIGQUIT, SIG_DFL); // /
 	signal(SIGTSTP, SIG_IGN);//z
+	signal(SIGPIPE, SIG_IGN);
 }
 void setup_signals_ignore(void)
 {
