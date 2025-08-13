@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/12 16:51:05 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 15:44:03 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,17 @@ static void handle_signal_in_loop(t_context *ctx)
 		
     }
 }
+/* #include "command_types.h" // Ensure this header contains the definition of t_command
 
+void debug_array(char **array) {
+	int i = 0;
+	printf("Array dump:\n");
+	while (array && array[i]) {
+		printf(" [%d]: %s\n", i, array[i]);
+		i++;
+	}
+	printf(" [%d]: NULL\n", i);
+} */
 static void shell_loop(t_context *ctx)
 {
 	char *input;
@@ -77,8 +87,10 @@ static void shell_loop(t_context *ctx)
 		}
 		if (g_signal_received)
 		{
+			cleanup_context(ctx);
 			ctx->exit_status = g_signal_received + 128;
 			g_signal_received = 0;
+			continue ;
 		}
 		 if (*input)
             add_history(input);
@@ -86,15 +98,21 @@ static void shell_loop(t_context *ctx)
 		if (ctx->tokens)
 		{
 			ctx->commands = parse_tokens(ctx->tokens);
-				//debug_print_commands(ctx->commands);
+			//debug_print_commands(ctx->commands);
 			if (ctx->commands)
 			{
+				/* t_command *cmd = ctx->commands;
+                while (cmd)
+                {
+                    debug_array(cmd->args);
+                    cmd = cmd->next;
+                } */
 				execute_command(ctx->commands, ctx);
+				cleanup_context(ctx);
 			}
 		}
 		free(input);	
 	}
-	//cleanup_context(ctx);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -111,6 +129,8 @@ int main(int argc, char **argv, char **envp)
 	shell_loop(&ctx);
 	cleanup_context(&ctx);
 	clear_history();
+	rl_clear_history();
+	rl_free_line_state();
 
 	return (ctx.exit_status);
 }

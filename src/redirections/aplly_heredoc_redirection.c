@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 21:34:38 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/12 14:13:11 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 15:01:37 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,6 @@
 #include <unistd.h>
 #include <readline/readline.h>
 #include <stdlib.h>
-#include "signals.h"
-#include "command_types.h"
-#include "lib_ft.h"
-#include "context_types.h"
-#include "lexer.h"
-#include "env.h"
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -29,6 +23,14 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <readline/readline.h>
+
+#include "minishell.h"
+#include "signals.h"
+#include "command_types.h"
+#include "lib_ft.h"
+#include "context_types.h"
+#include "lexer.h"
+#include "env.h"
 
 
 
@@ -77,6 +79,7 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
 
     if (pipe(pipefd) == -1)
     {
+		cleanup_context(ctx);
         perror("pipe");
         return 0;
     }
@@ -87,6 +90,7 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
         perror("fork");
         close(pipefd[0]);
         close(pipefd[1]);
+		cleanup_context(ctx);
         return 0;
     }
 

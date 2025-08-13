@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_command.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/10 23:29:09 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/13 15:48:53 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,11 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 				internal_exit(ctx, 0);
 			internal_exit(ctx, 1);
 		}
+		
 		execve(path, cmd->args, ctx->envp);
 		ft_putstr_fd("bash: comando não encontrado\n", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		cleanup_context(ctx);
+		//cleanup_context(ctx);
 		internal_exit(ctx, 127);
 	}
 	setup_signals_ignore();
@@ -75,6 +76,7 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 		write(STDOUT_FILENO, "\n", 1);
 	}
 	restore_signals();
+	cleanup_context(ctx);
 	return (ctx->exit_status);
 }
 

@@ -17,6 +17,7 @@
 	"redirection.h": "c",
 	"string": "c",
 	"streambuf": "c",
-	"functional": "c"
+	"functional": "c",
+	"stdio.h": "c"
 }
 }

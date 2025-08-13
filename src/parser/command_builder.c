@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/11 13:37:00 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 11:49:38 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static void init_command(t_command *cmd)
 t_command *create_command(void)
 {
     t_command *cmd;
-    
+	int i;
+
     cmd = (t_command *)malloc(sizeof(t_command));
     if (!cmd)
         return (NULL);
@@ -42,6 +43,9 @@ t_command *create_command(void)
         free(cmd);
         return (NULL);
     }
+	i = 0;    
+	while (i < 10)
+		cmd->args[i++] = NULL;
 	 cmd->output_file = (char **)malloc(sizeof(char *) * 10);
     if (!cmd->output_file)
     {
@@ -49,6 +53,9 @@ t_command *create_command(void)
         free(cmd);
         return (NULL);
     }
+	i = 0;
+	while (i < 10)
+		cmd->output_file[i++] = NULL;
 	init_command(cmd);    
     return (cmd);
 }
@@ -69,6 +76,11 @@ static int	expand_args_array(t_command *cmd)
 		new_args[i] = cmd->args[i];
 		++i;
 	}
+	while (i < new_capacity)
+	{
+		new_args[i] = NULL;
+		++i;
+	}
 	free(cmd->args);
 	cmd->args = new_args;
 	cmd->arg_capacity = new_capacity;
@@ -81,6 +93,8 @@ int	add_argument(t_command *cmd, char *arg)
 
 	if (!cmd || !arg)
 		return (0);
+	if (arg[0] == '\0')
+		return (1);
 	if (cmd->arg_count >= cmd->arg_capacity -1)
 	{
 		if (!expand_args_array(cmd))

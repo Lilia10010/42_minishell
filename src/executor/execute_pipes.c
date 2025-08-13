@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:06:14 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/11 00:09:13 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/13 15:59:26 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include <stdlib.h>
 #include <readline/history.h>
 #include <readline/readline.h>
+
+#include <errno.h>    // Para errno e EPIPE
+#include <unistd.h>   // Para write()
 
 #include "executor.h"
 #include "context_types.h"
@@ -56,6 +59,7 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 		if (pid == -1)
 		{
 			perror("fork failed");
+			cleanup_context(ctx);
 			return (1);
 		}
 		else if (pid == 0) 
@@ -74,6 +78,12 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 			}
 			if (!aplly_redirection(current))
 				internal_exit(ctx, 1);
+			 /* if (write(STDOUT_FILENO, "", 0) == -1 && errno == EPIPE) {
+				 cleanup_context(ctx);
+				 clear_history();
+				rl_clear_history();
+				rl_free_line_state();
+			} */
 			if (get_builtin_id(current->args[0]) != BUILTIN_NONE)
 				internal_exit(ctx, execute_builtin_with_redirection(current, ctx));
 			else
@@ -97,6 +107,8 @@ int	execute_pipe(t_command *commands, t_context *ctx)
 		else if (WIFSIGNALED(status) && waited_pid == last_pid)
 			ctx->exit_status = 128 + WTERMSIG(status);
 	}
+
 	restore_signals();
+	cleanup_context(ctx);
 	return (0);
 }

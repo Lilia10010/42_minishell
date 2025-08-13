@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:54:56 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/11 17:07:07 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 11:36:02 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "parser.h"
 #include "token_types.h"
+#include "lib_ft.h"
 
 int is_redirection_token(t_token_type type)
 {
@@ -70,6 +71,7 @@ char **remove_empty_args(char **args)
 	int		count;
 	char	**cleaned;
 
+	count = 0;
 	count = count_valid_args(args);
 	cleaned = malloc(sizeof(char *) * (count + 1));
 	if (!cleaned)

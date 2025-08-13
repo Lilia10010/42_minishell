@@ -76,3 +76,5 @@ suppression_file.supp:
 #valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --track-fds=yes --show-reachable=yes  ./minishell --show-leak-kinds=all \
 
 #valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --track-fds=yes --show-reachable=yes -q --suppressions=suppression_file.supp  -v ./minishell 
+
+#valgrind --leak-check=full --show-leak-kinds=all --gen-suppressions=all ./minishell
