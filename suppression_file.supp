@@ -1,40 +1,33 @@
 {
-   <Readline>
+   suppress_readline_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
    ...
-   fun:readline
-   ...
+   obj:*/libreadline.so*
 }
+
+# Suprime todos os still reachable do ncurses
 {
-   <AddHistory>
+   suppress_ncurses_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
-   fun:malloc
-   fun:xmalloc
-   fun:add_history
    ...
+   obj:*/libncurses.so*
 }
+
+# Suprime todos os still reachable relacionados a readline por função
 {
-   <Heredoc Readline Leak>
+   suppress_readline_functions
    Memcheck:Leak
-   match-leak-kinds: definite
-   fun:malloc
-   fun:xmalloc
-   fun:readline_internal_teardown
-   fun:readline
-   fun:heredoc_open
-   fun:heredoc
-   fun:main
+   match-leak-kinds: reachable
    ...
+   fun:*readline*
 }
+
 {
-   <Readline Teardown Leak>
+   suppress_rl_functions
    Memcheck:Leak
-   match-leak-kinds: definite
-   fun:malloc
-   fun:xmalloc
-   fun:readline_internal_teardown
-   fun:readline
+   match-leak-kinds: reachable
    ...
+   fun:rl_*
 }

@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 00:29:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/04 16:37:10 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 18:11:45 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_command
 	int					append_mode;
 	int					heredoc_mode;
 	char				*heredoc_delimiter;
-	struct s_command	*next; //vamos usar principalmente para implementar o pipes
+	struct s_command	*next;
 }	t_command;
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:50:11 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/10 23:29:39 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:17:59 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,19 @@ t_builtin	get_builtin_id(char *cmd);
 int			builtin_dispatcher(t_command *cmd, t_context *ctx);
 int			execute_single_command(t_command *cmd, t_context *ctx);
 int			execute_pipe(t_command *cmd, t_context *ctx);
-//int			execute_external_command(t_command *cmd, t_context *ctx, char *path);
 t_builtin	get_builtin_id(char *cmd);
 char		*find_executable_in_path(const char *cmd);
 int			is_path_comman(const char *cmd);
 int			execute_path_command_absolut(t_command *cmd, t_context *ctx);
 int			execute_command_from_path(t_command *cmd, t_context *ctx);
 int			validate_redirection_file(char *filename, int is_output);
-int aplly_redirection(t_command *cmd);
+int			aplly_redirection(t_command *cmd);
 
-int			execute_external_command_with_redirectons(t_command *cmd, t_context *ctx);
+int			execute_external_command_with_redirectons(t_command *cmd,
+				t_context *ctx);
 int			execute_builtin_with_redirection(t_command *cmd, t_context *ctx);
 void		restore_original_fds(int fd_stdin, int fd_stdout);
 void		save_original_fds(int *fd_stdin, int *fd_stdout);
 
-//criar um arquivo .h para funções de free
-void	ft_free_split(char **split);
+void		ft_free_split(char **split);
 #endif

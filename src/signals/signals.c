@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 22:10:10 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/13 16:25:37 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 18:06:34 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "lib_ft.h"
 #include "signals.h"
 
-extern volatile sig_atomic_t g_signal_received;
+volatile sig_atomic_t g_signal_received = 0;
 
 void handle_sigint_heredoc(int sig)
 {
@@ -32,7 +32,7 @@ void handle_sigint_heredoc(int sig)
 void setup_signals_heredoc(void)
 {
 	printf("[DEBUG] Configurando sinais para heredoc\n");
-    signal(SIGINT, handle_sigint_heredoc); 
+    signal(SIGINT, handle_sigint_heredoc);
     signal(SIGQUIT, SIG_IGN);
     signal(SIGTSTP, SIG_IGN);
 }
@@ -73,6 +73,6 @@ void setup_signals_ignore(void)
 }
 void restore_signals(void)
 {
-	setup_signals();  
+	setup_signals();
 }
 

@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/12 16:51:05 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 18:08:52 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,9 @@
 #include "context_types.h"
 #include "prompt_defs.h"
 #include "signals.h"
+#include "lib_ft.h"
 
-# include "lib_ft.h"
-
-volatile sig_atomic_t g_signal_received = 0;
-
-void init_context(t_context *ctx, char **envp)
+void	init_context(t_context *ctx, char **envp)
 {
 	ctx->envp = envp;
 	ctx->exit_status = 0;
@@ -37,7 +34,7 @@ void init_context(t_context *ctx, char **envp)
 	ctx->commands = NULL;
 }
 
-void cleanup_context(t_context *ctx)
+void	cleanup_context(t_context *ctx)
 {
 	if (ctx->tokens)
 	{
@@ -50,75 +47,62 @@ void cleanup_context(t_context *ctx)
 		ctx->commands = NULL;
 	}
 }
-static void handle_signal_in_loop(t_context *ctx)
+
+static void	handle_signal_in_loop(t_context *ctx)
 {
-    if (g_signal_received == SIGINT)
-    {
-        ctx->exit_status = 130;
-        g_signal_received = 0;
-		
-    }
+	if (g_signal_received == SIGINT)
+	{
+		ctx->exit_status = 130;
+		g_signal_received = 0;
+	}
 }
 
-static void shell_loop(t_context *ctx)
+static void	shell_loop(t_context *ctx)
 {
-	char *input;
+	char	*input;
+
 	while (!ctx->should_exit)
 	{
 		cleanup_context(ctx);
 		handle_signal_in_loop(ctx);
-
 		input = readline(MINI_PROMPT);
 		if (!input)
 		{
 			ft_putstr_fd("\n", STDOUT_FILENO);
 			ctx->should_exit = 1;
-			break;
+			break ;
 		}
-		if (g_signal_received)
-		{
-			ctx->exit_status = g_signal_received + 128;
-			g_signal_received = 0;
-		}
-		 if (*input)
-            add_history(input);
+		if (*input)
+			add_history(input);
 		ctx->tokens = lexer_tokenize(input, ctx);
 		if (ctx->tokens)
 		{
 			ctx->commands = parse_tokens(ctx->tokens);
-				//debug_print_commands(ctx->commands);
 			if (ctx->commands)
-			{
 				execute_command(ctx->commands, ctx);
-			}
 		}
-		free(input);	
+		free(input);
 	}
-	//cleanup_context(ctx);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	t_context ctx;
+	t_context	ctx;
+
 	(void)argc;
 	(void)argv;
-	// printf("\n███████████████████████\n");
-	// printf("█       MINIHELL      █\n");
-	// printf("███████████████████████\n\n");
-
 	init_context(&ctx, envp);
 	setup_signals();
 	shell_loop(&ctx);
 	cleanup_context(&ctx);
 	clear_history();
-
 	return (ctx.exit_status);
 }
 
 // readline – leitura do input do usuário
 // lexer – quebra o input em tokens (respeitando aspas, escapes...)
 // parser – converte tokens em comandos (t_command)
-// comando externo – executa com fork + execve 
+// comando externo – executa com fork + execve
 // echo lilia""11111111 remover aspas
 // expansão de variáveis – substitui $VAR, $?, etc.
 // redirecionamento (<, >, >>, <<)
@@ -126,9 +110,8 @@ int main(int argc, char **argv, char **envp)
 // heredoc – processa redirecionamentos << antes da execução
 // sinais
 // histórico de comandos – add_history(input)
-
-
-// em execução: 
+//
+// em execução:
 //
 // builtins – echo, cd, pwd, exit, export, unset, env Mel
 // norma
