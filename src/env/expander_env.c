@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:57:42 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/04 17:25:02 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 18:56:17 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-static const char *get_env_value(const char *key)
+static const char	*get_env_value(const char *key)
 {
 	int		i;
 	size_t	key_len;
@@ -28,14 +28,15 @@ static const char *get_env_value(const char *key)
 	i = 0;
 	while (__environ[i])
 	{
-		if (strncmp(__environ[i], key, key_len) == 0 && __environ[i][key_len] == '=')
-			return __environ[i] + key_len + 1;
+		if (strncmp(__environ[i], key, key_len) == 0
+			&& __environ[i][key_len] == '=')
+			return (__environ[i] + key_len + 1);
 		i++;
 	}
 	return (NULL);
 }
 
-static char *extract_var_name(const char **ptr)
+static char	*extract_var_name(const char **ptr)
 {
 	const char	*start;
 	int			len;
@@ -71,31 +72,31 @@ static void	append_char(char **result, char c)
 
 static void	append_to_result(char **result, const char *to_append)
 {
-	char *old;
+	char	*old;
 
 	old = *result;
 	*result = ft_strjoin(*result, to_append);
 	free(old);
 }
 
-static void	handle_variable_expansio(char **result, const char **ptr, t_context *ctx)
+static void	handle_variable_expansio(char **result, const char **ptr,
+	t_context *ctx)
 {
 	char		*var_name;
 	const char	*value;
+	char		*exit_code_str;
 
 	if (**ptr == '?')
 	{
-		char *exit_code_str = ft_itoa(ctx->exit_status);
+		exit_code_str = ft_itoa(ctx->exit_status);
 		append_to_result(result, exit_code_str);
 		free(exit_code_str);
 		(*ptr)++;
 		return ;
 	}
-
 	var_name = extract_var_name(ptr);
 	if (!var_name)
 		return ;
-
 	value = get_env_value(var_name);
 	if (value)
 		append_to_result(result, value);
@@ -110,7 +111,6 @@ char	*expand_variables(const char *input, t_context *ctx)
 
 	result = ft_strdup("");
 	ptr = input;
-
 	while (*ptr)
 	{
 		if (*ptr == '$')
