@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 21:34:38 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/12 14:13:11 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 21:56:22 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,6 @@
 #include <readline/readline.h>
 
 
-
-/* static void heredoc_sigint_handler(int sig)
-{
-    (void)sig;
-    write(STDOUT_FILENO, "\n", 1);
-    exit(130); // Código padrão para Ctrl+C
-} */
 static int	has_dollar(const char *str)
 {
 	int i = 0;
@@ -47,8 +40,6 @@ static int	has_dollar(const char *str)
 		if (str[i] == '$')
 		{
 			char next = str[i + 1];
-
-			// Se for último caractere, ou seguido de espaço/tab, ou caractere inválido, pula
 			if (next == '\0' || next == ' ' || next == '\t' ||
 				!(ft_isalnum(next) || next == '_' ))
 			{
@@ -74,13 +65,11 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
         fprintf(stderr, "HEREDOC ERROR: cmd ou delimiter é NULL\n");
         return 0;
     }
-
     if (pipe(pipefd) == -1)
     {
         perror("pipe");
         return 0;
     }
-
     pid = fork();
     if (pid == -1)
     {
@@ -89,12 +78,10 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
         close(pipefd[1]);
         return 0;
     }
-
-    if (pid == 0) // Processo filho: coleta o heredoc
+    if (pid == 0)
     {
-       // signal(SIGINT, heredoc_sigint_handler);
 	   signal(SIGINT, SIG_DFL);
-        close(pipefd[0]); // Filho escreve no pipe
+        close(pipefd[0]);
 
         while (1)
         {
@@ -107,20 +94,17 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
                 close(pipefd[1]);
                 exit(0);
             }
-
             if (ft_strcmp(line, cmd->heredoc_delimiter) == 0)
             {
                 free(line);
                 break;
             }
-
             if (has_dollar(line))
             {
                 expanded_line = expand_variables(line, ctx);
                 free(line);
                 line = expanded_line;
             }
-
             dprintf(pipefd[1], "%s\n", line);
             free(line);
         }
@@ -128,9 +112,7 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
         close(pipefd[1]);
         exit(0);
     }
-
-    // Processo pai: redireciona STDIN e espera o filho
-    close(pipefd[1]); // Pai lê do pipe
+    close(pipefd[1]);
     if (dup2(pipefd[0], STDIN_FILENO) == -1)
     {
         perror("dup2");
@@ -147,6 +129,5 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
         g_signal_received = -1;
         return 0;
     }
-
-    return 1;
+    return (1);
 }

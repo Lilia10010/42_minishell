@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 22:10:10 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/13 18:06:34 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 21:49:59 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void handle_sigint_heredoc(int sig)
 
 void setup_signals_heredoc(void)
 {
-	printf("[DEBUG] Configurando sinais para heredoc\n");
     signal(SIGINT, handle_sigint_heredoc);
     signal(SIGQUIT, SIG_IGN);
     signal(SIGTSTP, SIG_IGN);
@@ -57,6 +56,8 @@ void setup_signals(void)
     signal(SIGINT, handle_sigint);
     signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
+
+
 }
 
 void setup_signals_child(void)
