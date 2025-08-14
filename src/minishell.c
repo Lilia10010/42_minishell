@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/13 18:08:52 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/13 22:07:21 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,13 @@ static void	shell_loop(t_context *ctx)
 			ft_putstr_fd("\n", STDOUT_FILENO);
 			ctx->should_exit = 1;
 			break ;
+		}
+		if (g_signal_received)
+		{
+			cleanup_context(ctx);
+			ctx->exit_status = g_signal_received + 128;
+			g_signal_received = 0;
+			continue ;
 		}
 		if (*input)
 			add_history(input);
