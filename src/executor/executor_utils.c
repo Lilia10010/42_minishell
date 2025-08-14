@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:47:39 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/29 18:04:31 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/14 13:07:41 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "builtin.h"
 #include "lib_ft.h"
 
-t_builtin get_builtin_id(char *cmd)
+t_builtin	get_builtin_id(char *cmd)
 {
 	if (!cmd)
 		return (BUILTIN_NONE);

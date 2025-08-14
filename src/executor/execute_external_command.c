@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/13 19:05:50 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/14 13:10:15 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	internal_exit(t_context *ctx, int code)
 	clear_history();
 	rl_clear_history();
 	rl_free_line_state();
-	//ft_putstr_fd("exitt\n", STDOUT_FILENO);
 	exit(code);
 }
 
