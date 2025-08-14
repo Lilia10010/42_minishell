@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:50:11 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/13 18:17:59 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/14 14:47:07 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int			execute_command(t_command *commands, t_context *ctx);
 t_builtin	get_builtin_id(char *cmd);
 int			builtin_dispatcher(t_command *cmd, t_context *ctx);
 int			execute_single_command(t_command *cmd, t_context *ctx);
-int			execute_pipe(t_command *cmd, t_context *ctx);
 t_builtin	get_builtin_id(char *cmd);
 char		*find_executable_in_path(const char *cmd);
 int			is_path_comman(const char *cmd);
