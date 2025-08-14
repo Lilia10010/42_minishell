@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/05 20:09:15 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/14 15:51:50 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,16 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-/* static int	has_dollar(const char *str)
-{
-	while (*str)
-	{
-		if (*str == '$')
-			return (1);
-		str++;
-	}
-	return (0);
-} */
-
 int	has_expandable_dollar(const char *str)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '$')
 		{
 			char next = str[i + 1];
-
-			// Se for último caractere, ou seguido de espaço/tab, ou caractere inválido, pula
 			if (next == '\0' || next == ' ' || next == '\t' ||
 				!(ft_isalnum(next) || next == '_' || next == '?'))
 			{
@@ -80,13 +68,13 @@ static char *read_next_word_partial(char **current, t_context *ctx)
 		free(word);
 		return expanded;
 	}
-return word;
+	return word;
 }
 
-static int handle_word(t_token **tokens, char **current, t_context *ctx)
+static int	handle_word(t_token **tokens, char **current, t_context *ctx)
 {
-	char *word_value;
-	char *partial;
+	char	*word_value;
+	char	*partial;
 
 	word_value = NULL;
 	while (**current && !is_shell_operator(**current) && **current != ' ' && **current != '\t')
@@ -98,7 +86,6 @@ static int handle_word(t_token **tokens, char **current, t_context *ctx)
 		free(partial);
 		if (!word_value)
 		{
-			// ver qual o erro que deve ser retornado ou se apenas o break é suficiente
 			printf("Error allocating memory for token word_value\n");
 			return (0);
 		}
@@ -112,10 +99,10 @@ static int handle_word(t_token **tokens, char **current, t_context *ctx)
 	return (0);
 }
 
-t_token *lexer_tokenize(char *input, t_context *ctx)
+t_token	*lexer_tokenize(char *input, t_context *ctx)
 {
-	t_token *tokens;
-	char *current;
+	t_token	*tokens;
+	char	*current;
 
 	tokens = NULL;
 	current = input;
@@ -135,6 +122,5 @@ t_token *lexer_tokenize(char *input, t_context *ctx)
 				break;
 		}
 	}
-	//debug_print_tokens(tokens);
 	return (tokens);
 }

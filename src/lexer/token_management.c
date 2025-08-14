@@ -6,11 +6,10 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 22:17:08 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/14 15:28:21 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/14 15:52:05 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h> //para o printf caso não for usar RETIRAR
 #include "lexer.h"
 #include "lib_ft.h"
 
