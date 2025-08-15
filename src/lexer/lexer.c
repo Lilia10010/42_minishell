@@ -6,7 +6,7 @@
 /*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/14 15:51:50 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/15 12:56:50 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,20 @@
 
 int	has_expandable_dollar(const char *str)
 {
-	int	i;
+	int		i;
+	char	next;
 
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '$')
 		{
-			char next = str[i + 1];
-			if (next == '\0' || next == ' ' || next == '\t' ||
-				!(ft_isalnum(next) || next == '_' || next == '?'))
+			next = str[i + 1];
+			if (next == '\0' || next == ' ' || next == '\t'
+				|| !(ft_isalnum(next) || next == '_' || next == '?'))
 			{
 				i++;
-				continue;
+				continue ;
 			}
 			return (1);
 		}
@@ -41,8 +42,22 @@ int	has_expandable_dollar(const char *str)
 	return (0);
 }
 
+static int	count_word_length(char **current)
+{
+	int	len;
 
-static char *read_next_word_partial(char **current, t_context *ctx)
+	len = 0;
+	while (**current && **current != ' ' && **current != '\t'
+		&& !is_shell_operator(**current)
+		&& **current != '\'' && **current != '"')
+	{
+		(*current)++;
+		len++;
+	}
+	return (len);
+}
+
+static char	*read_next_word_partial(char **current, t_context *ctx)
 {
 	char	*start;
 	char	*word;
@@ -52,12 +67,7 @@ static char *read_next_word_partial(char **current, t_context *ctx)
 	if (**current == '\'' || **current == '"')
 		return (extract_quoted_token(current, **current, ctx));
 	start = *current;
-	len = 0;
-	while (**current && **current != ' ' && **current != '\t' && !is_shell_operator(**current) && **current != '\'' && **current != '"')
-	{
-		(*current)++;
-		len++;
-	}
+	len = count_word_length(current);
 	word = malloc(len + 1);
 	if (!word)
 		return (NULL);
@@ -66,9 +76,9 @@ static char *read_next_word_partial(char **current, t_context *ctx)
 	{
 		expanded = expand_variables(word, ctx);
 		free(word);
-		return expanded;
+		return (expanded);
 	}
-	return word;
+	return (word);
 }
 
 static int	handle_word(t_token **tokens, char **current, t_context *ctx)
@@ -77,11 +87,12 @@ static int	handle_word(t_token **tokens, char **current, t_context *ctx)
 	char	*partial;
 
 	word_value = NULL;
-	while (**current && !is_shell_operator(**current) && **current != ' ' && **current != '\t')
+	while (**current && !is_shell_operator(**current)
+		&& **current != ' ' && **current != '\t')
 	{
 		partial = read_next_word_partial(current, ctx);
 		if (!partial)
-			break;
+			break ;
 		word_value = concatenate_strings(word_value, partial);
 		free(partial);
 		if (!word_value)
@@ -110,16 +121,16 @@ t_token	*lexer_tokenize(char *input, t_context *ctx)
 	{
 		skip_spaces(&current);
 		if (!*current)
-			break;
+			break ;
 		if (is_shell_operator(*current))
 		{
 			if (!add_operator_token(&tokens, &current))
-				break;
+				break ;
 		}
 		else
 		{
 			if (!handle_word(&tokens, &current, ctx))
-				break;
+				break ;
 		}
 	}
 	return (tokens);
