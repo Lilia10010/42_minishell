@@ -15,47 +15,46 @@
 #include "parser.h"
 #include "token_types.h"
 
-int is_redirection_token(t_token_type type)
+int	is_redirection_token(t_token_type type)
 {
-    return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT ||
-            type == TOKEN_REDIRECT_OUT_APPEND || type == TOKEN_HEREDOC);
+	return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT || type == TOKEN_REDIRECT_OUT_APPEND || type == TOKEN_HEREDOC);
 }
 
-int validate_syntax(t_token *tokens)
+int	validate_syntax(t_token *tokens)
 {
-    t_token *current;
+	t_token	*current;
 
-	current = tokens;    
-    if (!current)
-        return (1);
-    if (current->type == TOKEN_PIPE)
-        return (0);
-    while (current)
-    {
-        if (current->type == TOKEN_PIPE && (!current->next || current->next->type == TOKEN_PIPE))
-                return (0);
-        if (is_redirection_token(current->type) && (!current->next || current->next->type != TOKEN_WORD))
+	current = tokens;
+	if (!current)
+		return (1);
+	if (current->type == TOKEN_PIPE)
+		return (0);
+	while (current)
+	{
+		if (current->type == TOKEN_PIPE && (!current->next || current->next->type == TOKEN_PIPE))
 			return (0);
-        current = current->next;
-    }
+		if (is_redirection_token(current->type) && (!current->next || current->next->type != TOKEN_WORD))
+			return (0);
+		current = current->next;
+	}
 	current = tokens;
 	while (current && current->next)
-		current = current->next;	
+		current = current->next;
 	if (current && is_redirection_token(current->type))
 		return (0);
-    return (1);
+	return (1);
 }
 
-static int count_valid_args(char **args)
+static int	count_valid_args(char **args)
 {
-	int count;
-	int i;
+	int	count;
+	int	i;
 
 	count = 0;
 	i = 0;
 	if (!args)
 		return (0);
-	while(args[i])
+	while (args[i])
 	{
 		if (args[i][0] != '\0')
 			count++;
@@ -63,7 +62,8 @@ static int count_valid_args(char **args)
 	}
 	return (count);
 }
-char **remove_empty_args(char **args)
+
+char	**remove_empty_args(char **args)
 {
 	int		i;
 	int		j;
@@ -74,7 +74,6 @@ char **remove_empty_args(char **args)
 	cleaned = malloc(sizeof(char *) * (count + 1));
 	if (!cleaned)
 		return (NULL);
-
 	i = 0;
 	j = 0;
 	while (args[i])
@@ -87,5 +86,5 @@ char **remove_empty_args(char **args)
 	}
 	cleaned[j] = NULL;
 	free(args);
-	return cleaned;
+	return (cleaned);
 }
