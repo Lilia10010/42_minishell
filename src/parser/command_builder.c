@@ -10,47 +10,45 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include <stdio.h>
-# include "parser.h"
+#include "parser.h"
 #include "lib_ft.h"
 #include "command_types.h"
 
-static void init_command(t_command *cmd)
+static void	init_command(t_command *cmd)
 {
 	cmd->arg_count = 0;
-    cmd->arg_capacity = 10;
-    cmd->input_file = NULL;
+	cmd->arg_capacity = 10;
+	cmd->input_file = NULL;
 	cmd->output_file_count = 0;
-    cmd->append_mode = 0;
-    cmd->heredoc_mode = 0;
-    cmd->heredoc_delimiter = NULL;
-    cmd->next = NULL;
-
+	cmd->append_mode = 0;
+	cmd->heredoc_mode = 0;
+	cmd->heredoc_delimiter = NULL;
+	cmd->next = NULL;
 }
 
-t_command *create_command(void)
+t_command	*create_command(void)
 {
-    t_command *cmd;
-    
-    cmd = (t_command *)malloc(sizeof(t_command));
-    if (!cmd)
-        return (NULL);
-    cmd->args = (char **)malloc(sizeof(char *) * 10);
-    if (!cmd->args)
-    {
-        free(cmd);
-        return (NULL);
-    }
-	 cmd->output_file = (char **)malloc(sizeof(char *) * 10);
-    if (!cmd->output_file)
-    {
-        free(cmd->args);
-        free(cmd);
-        return (NULL);
-    }
-	init_command(cmd);    
-    return (cmd);
+	t_command	*cmd;
+
+	cmd = (t_command *)malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->args = (char **)malloc(sizeof(char *) * 10);
+	if (!cmd->args)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	cmd->output_file = (char **)malloc(sizeof(char *) * 10);
+	if (!cmd->output_file)
+	{
+		free(cmd->args);
+		free(cmd);
+		return (NULL);
+	}
+	init_command(cmd);
+	return (cmd);
 }
 
 static int	expand_args_array(t_command *cmd)
@@ -77,7 +75,7 @@ static int	expand_args_array(t_command *cmd)
 
 int	add_argument(t_command *cmd, char *arg)
 {
-    char	*dup_arg;
+	char	*dup_arg;
 
 	if (!cmd || !arg)
 		return (0);
@@ -94,5 +92,5 @@ int	add_argument(t_command *cmd, char *arg)
 		return (0);
 	cmd->args[cmd->arg_count++] = dup_arg;
 	cmd->args[cmd->arg_count] = NULL;
-    return (1);
+	return (1);
 }
