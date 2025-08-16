@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external_command.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/14 13:10:15 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/15 21:16:24 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 			internal_exit(ctx, 1);
 		}
 		execve(path, cmd->args, ctx->envp);
+		free(path);
 		ft_putstr_fd("bash: comando não encontrado\n", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		internal_exit(ctx, 127);
@@ -125,9 +126,9 @@ int	execute_command_from_path(t_command *cmd, t_context *ctx)
 
 int	execute_external_command_with_redirectons(t_command *cmd, t_context *ctx)
 {
-	(void)cmd;
-	(void)ctx;
-	if (is_path_comman(cmd->args[0]))
+	// (void)cmd;
+	// (void)ctx;
+	if (ft_strchr(cmd->args[0], '/'))
 		return (execute_path_command_absolut(cmd, ctx));
 	else
 		return (execute_command_from_path(cmd, ctx));

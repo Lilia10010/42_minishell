@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:47:39 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/14 13:07:41 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/15 19:39:04 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_builtin	get_builtin_id(char *cmd)
 	return (BUILTIN_NONE);
 }
 
-int	is_path_comman(const char *cmd)
-{
-	return (ft_strchr(cmd, '/') != NULL);
-}
+// int	is_path_comman(const char *cmd)
+// {
+// 	return (ft_strchr(cmd, '/'));
+// }

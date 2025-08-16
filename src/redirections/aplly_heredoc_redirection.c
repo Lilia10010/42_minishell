@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aplly_heredoc_redirection.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 21:34:38 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/13 21:56:22 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/15 21:15:29 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,28 @@
 #include <unistd.h>
 #include <readline/readline.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
 #include "signals.h"
 #include "command_types.h"
 #include "lib_ft.h"
 #include "context_types.h"
 #include "lexer.h"
 #include "env.h"
+#include "minishell.h"
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <signal.h>
-#include <sys/wait.h>
-#include <readline/readline.h>
+// static void	internal_exit(t_context *ctx, int code)
+// {
+// 	cleanup_context(ctx);
+// 	clear_history();
+// 	rl_clear_history();
+// 	rl_free_line_state();
+// 	exit(code);
+// }
+
 
 
 static int	has_dollar(const char *str)
@@ -68,7 +76,7 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
     if (pipe(pipefd) == -1)
     {
         perror("pipe");
-        return 0;
+        return (0);
     }
     pid = fork();
     if (pid == -1)
@@ -80,7 +88,7 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
     }
     if (pid == 0)
     {
-	   signal(SIGINT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
         close(pipefd[0]);
 
         while (1)
@@ -92,7 +100,7 @@ int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
                     "warning: here-document delimited by end-of-file (wanted `%s`)\n",
                     cmd->heredoc_delimiter);
                 close(pipefd[1]);
-                exit(0);
+               exit(0);
             }
             if (ft_strcmp(line, cmd->heredoc_delimiter) == 0)
             {

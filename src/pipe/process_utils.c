@@ -39,8 +39,9 @@ static int	handle_fork(void)
 static void	handle_stderr_redirect(t_command *current, int prev_fd)
 {
 	int	dev_null;
+	(void)prev_fd;
 
-	if (current->next && prev_fd == -1)
+	if (current->next)
 	{
 		dev_null = open("/dev/null", O_WRONLY);
 		if (dev_null != -1)
