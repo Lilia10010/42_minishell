@@ -14,13 +14,13 @@
 #include "parser.h"
 #include "command_types.h"
 
-static void free_string_array(char **array, int count)
+static void	free_string_array(char **array, int count)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!array)
-		return;
+		return ;
 	while (i < count)
 	{
 		if (array[i])
@@ -30,35 +30,31 @@ static void free_string_array(char **array, int count)
 	free(array);
 }
 
-void free_command(t_command *cmd)
+void	free_command(t_command *cmd)
 {
-    if (!cmd)
-        return;
-    if (cmd->args)
-    {
+	if (!cmd)
+		return ;
+	if (cmd->args)
 		free_string_array(cmd->args, cmd->arg_count);
-    }
-    if (cmd->input_file)
-        free(cmd->input_file);
-    if (cmd->output_file)
-    {
+	if (cmd->input_file)
+		free(cmd->input_file);
+	if (cmd->output_file)
 		free_string_array(cmd->output_file, cmd->output_file_count);
-    }
 	if (cmd->heredoc_delimiter)
-        free(cmd->heredoc_delimiter);
-    free(cmd);
+		free(cmd->heredoc_delimiter);
+	free(cmd);
 }
 
-void free_commands(t_command *commands)
+void	free_commands(t_command *commands)
 {
-    t_command *current;
-    t_command *next;
+	t_command	*current;
+	t_command	*next;
 
-    current = commands;
-    while (current)
-    {
-        next = current->next;
-        free_command(current);
-        current = next;
-    }
+	current = commands;
+	while (current)
+	{
+		next = current->next;
+		free_command(current);
+		current = next;
+	}
 }

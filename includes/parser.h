@@ -25,6 +25,14 @@ typedef enum e_parser_state
 	EXPECTING_HEREDOC_DELIMITER
 }	t_parser_state;
 
+typedef struct s_parser_context
+{
+	t_parser_state	*state;
+	t_command		**current_cmd;
+	t_command		**commands;
+	t_command		**last_cmd;
+}	t_parser_context;
+
 t_command	*parse_tokens(t_token *tokens);
 int			is_redirection_token(t_token_type type);
 int			validate_syntax(t_token *tokens);
@@ -32,6 +40,10 @@ void		free_commands(t_command *commands);
 t_command	*create_command(void);
 int			add_argument(t_command *cmd, char *arg);
 char		**remove_empty_args(char **args);
+int			handle_token(t_token *token, t_parser_context *ctx);
+void		cleanup_commands(t_command *commands);
+int			handle_expecting_command(t_token *token, t_parser_context *ctx);
+int			handle_expecting_heredoc(t_token *token, t_parser_context *ctx);
 //debug
 void		debug_print_commands(t_command *commands);
 

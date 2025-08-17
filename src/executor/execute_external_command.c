@@ -96,7 +96,6 @@ int	execute_path_command_absolut(t_command *cmd, t_context *ctx)
 	}
 	if (access(cmd->args[0], X_OK) != 0)
 	{
-		ft_putstr_fd("bash: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		ft_putstr_fd(": Permissão negada\n", STDERR_FILENO);
 		ctx->exit_status = 126;
@@ -126,8 +125,6 @@ int	execute_command_from_path(t_command *cmd, t_context *ctx)
 
 int	execute_external_command_with_redirectons(t_command *cmd, t_context *ctx)
 {
-	// (void)cmd;
-	// (void)ctx;
 	if (ft_strchr(cmd->args[0], '/'))
 		return (execute_path_command_absolut(cmd, ctx));
 	else
