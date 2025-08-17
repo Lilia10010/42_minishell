@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:55:41 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/15 12:56:50 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/17 19:49:42 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,24 @@ int	has_expandable_dollar(const char *str)
 				continue ;
 			}
 			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int has_tilde_expansion(const char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '~')
+		{
+			if (str[i + 1] == '\0' || str[i + 1] == ' '
+				|| str[i + 1] == '\t' || str[i + 1] == '/')
+				return (1);
 		}
 		i++;
 	}
@@ -72,7 +90,7 @@ static char	*read_next_word_partial(char **current, t_context *ctx)
 	if (!word)
 		return (NULL);
 	ft_strlcpy(word, start, len + 1);
-	if (has_expandable_dollar(word))
+	if (has_expandable_dollar(word) || has_tilde_expansion(word))
 	{
 		expanded = expand_variables(word, ctx);
 		free(word);

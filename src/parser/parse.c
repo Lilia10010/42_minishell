@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:02:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/11 16:47:38 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/17 19:26:02 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "lib_ft.h"
 #include "parser.h"
 #include "command_types.h"
+#include "context_types.h"
 
 static int	process_tokens_loop(t_token *tokens, t_parser_context *ctx)
 {
@@ -59,13 +60,14 @@ static t_command	*build_command_list(t_token *tokens)
 	return (commands);
 }
 
-t_command	*parse_tokens(t_token *tokens)
+t_command	*parse_tokens(t_token *tokens, t_context *ctx)
 {
 	if (!tokens)
 		return (NULL);
 	if (!validate_syntax(tokens))
 	{
-		printf("Syntax error in tokens\n");
+		printf("bash: syntax error near unexpected token: `%s'\n", tokens->value);
+		ctx->exit_status = 2;
 		return (NULL);
 	}
 	return (build_command_list(tokens));

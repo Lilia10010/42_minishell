@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:57:42 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/13 18:56:17 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/17 19:49:03 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,18 @@ static void	handle_variable_expansio(char **result, const char **ptr,
 	free(var_name);
 }
 
+static void	handle_tilde_expansion(char **result, const char **ptr)
+{
+    const char	*home;
+    
+    home = get_env_value("HOME");
+    if (home)
+        append_to_result(result, home);
+    else
+        append_to_result(result, "~");
+    (*ptr)++; 
+}
+
 char	*expand_variables(const char *input, t_context *ctx)
 {
 	char		*result;
@@ -117,6 +129,10 @@ char	*expand_variables(const char *input, t_context *ctx)
 		{
 			ptr++;
 			handle_variable_expansio(&result, &ptr, ctx);
+		}
+		else if (*ptr == '~')
+		{
+			handle_tilde_expansion(&result, &ptr);			
 		}
 		else
 		{

@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/15 21:16:24 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:51:47 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 		}
 		execve(path, cmd->args, ctx->envp);
 		free(path);
-		ft_putstr_fd("bash: comando não encontrado\n", STDERR_FILENO);
+		ft_putstr_fd("bash: command not found\n", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		internal_exit(ctx, 127);
 	}
@@ -81,7 +81,7 @@ int	execute_path_command_absolut(t_command *cmd, t_context *ctx)
 
 	if (stat(cmd->args[0], &sb) == -1)
 	{
-		ft_putstr_fd("bash: comando não encontrado\n", STDERR_FILENO);
+		ft_putstr_fd("bash: command not found\n", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		ctx->exit_status = 127;
 		return (127);
@@ -90,7 +90,7 @@ int	execute_path_command_absolut(t_command *cmd, t_context *ctx)
 	{
 		ft_putstr_fd("bash: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		ft_putstr_fd(": É um diretório\n", STDERR_FILENO);
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 		ctx->exit_status = 126;
 		return (126);
 	}
@@ -114,7 +114,7 @@ int	execute_command_from_path(t_command *cmd, t_context *ctx)
 	{
 		ft_putstr_fd("bash: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		ft_putstr_fd(": comando não encontrado\n", STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 		ctx->exit_status = 127;
 		return (1);
 	}
