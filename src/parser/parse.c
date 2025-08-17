@@ -55,11 +55,11 @@ static int	handle_redirection(t_token *token, t_command *cmd)
 	t_token	*target;
 
 	target = token->next;
-	if (!cmd)
+/* 	if (!cmd)
 	{
 		printf("Syntax error: redirection without command\n");
 		return (-1);
-	}
+	} */
 	if (!target || target->type != TOKEN_WORD)
 	{
 		printf("Syntax error: redirection without target\n");
@@ -114,7 +114,14 @@ static int	handle_token(t_token *token, t_parser_context *ctx)
 	if (token->type == TOKEN_WORD)
 		consumed = handle_word_token(token, ctx);
 	else if (is_redirection_token(token->type))
-		consumed = handle_redirection(token, *ctx->current_cmd);
+	{
+		 if (!*ctx->current_cmd)
+        {
+            if (!start_new_command(ctx->commands, ctx->current_cmd, ctx->last_cmd))
+                return (-1);
+        }
+        consumed = handle_redirection(token, *ctx->current_cmd);
+	}
 	else if (token->type == TOKEN_PIPE)
 		consumed = handle_pipe_token(*ctx->current_cmd, ctx->state);
 	else if (token->type == TOKEN_HEREDOC)

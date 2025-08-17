@@ -25,7 +25,7 @@ static void set_input_file(t_command *cmd, char *target)
 	cmd->heredoc_mode = 0;//ára desatovar o mode heredoc
 }
 
-static int expand_output_file_array(t_command *cmd)
+/* static int expand_output_file_array(t_command *cmd)
 {
 	char **new_array;
 	int new_capacity;
@@ -44,36 +44,34 @@ static int expand_output_file_array(t_command *cmd)
 	free(cmd->output_file);
 	cmd->output_file = new_array;
 	return (1);
-}
+} */
 
 static void set_output_file(t_command *cmd, char *target, int append_mode)
 {
-	char *dup_target;
+	char **temp;
 
 	if (!cmd || !target)
 		return;
 
 	// Expande se necessário
-	if (cmd->output_file_count % 10 == 0)
+	if (cmd->output_file_count)
 	{
-		if (!expand_output_file_array(cmd))
-		{
-			perror("Error: expanding output file array");
-			return;
-		}
+		temp = (char **)malloc(sizeof(char *) * 1);
+		if (!temp)
+			return ;
+		temp[0] = ft_strdup(target);
+		cmd->output_file = temp;
+		cmd->output_file_count = 1;
 	}
-
-	// Duplica o nome do arquivo
-	dup_target = ft_strdup(target);
-	if (!dup_target)
+	else
 	{
-		perror("Error duplicating output filename");
-		return;
+		temp = (char **)realloc(cmd->output_file, sizeof(char *) * (cmd->output_file_count + 1));
+		if (!temp)
+			return ;
+		temp[cmd->output_file_count] = ft_strdup(target);
+		cmd->output_file = temp;
+		cmd->output_file_count++;
 	}
-
-	cmd->output_file[cmd->output_file_count++] = dup_target;
-	cmd->output_file[cmd->output_file_count] = NULL; // garante NULL termination
-
 	cmd->append_mode = append_mode; // 0 = truncate (>), 1 = append (>>)
 }
 
