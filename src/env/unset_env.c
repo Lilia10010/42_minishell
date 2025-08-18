@@ -6,7 +6,7 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:36:38 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/17 22:03:06 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 08:37:23 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,33 +95,33 @@ int	 set_env_var(char **envp, char *var)
 	{
 		free(envp[index]);
 		envp[index] = ft_strdup(var);
-		if (!envp[index]);
+		if (!envp[index])
 			return (1);
 	}
 	else
 	{
-		if (new_envp_var(envp, var) != 0);
+		if (new_envp_var(envp, var) != 0)
 			return (1);
 	}
 	return (0);
 }
 
-int	unset_envp_var(t_context *ctx, char *key)
+int	unset_envp_var(char **envp, char *key)
 {
 	int		index;
 	int		env_size;
 	char	**new_envp;
 	char	**old_envp;
 
-	index = get_envp_index(key, ctx->envp);
+	index = get_envp_index(key, envp);
 	if (index == -1)
 		return (0);
-	env_size = count_envp_vars(ctx->envp);
-		new_envp = recreate_envp(ctx->envp, env_size, index);
+	env_size = count_envp_vars(envp);
+		new_envp = recreate_envp(envp, env_size, index);
 	if (!new_envp)
 		return (0);
-	old_envp = ctx->envp;
-	ctx->envp = new_envp;
+	old_envp = envp;
+	envp = new_envp;
 	free_cpy_envp(old_envp);
 	return (0);
 }

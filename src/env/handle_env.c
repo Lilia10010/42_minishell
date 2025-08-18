@@ -6,7 +6,7 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:47:35 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/17 16:52:23 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 08:31:38 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-const char	*get_env_value(const char *key, char **envp)
+char	*get_env_value(const char *key, char **envp)
 {
 	int		i;
 	size_t	key_len;
@@ -45,7 +45,7 @@ int	find_var(char **envp, char *name)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncpm(envp[i], name, lenght_var) == 0 
+		if (ft_strncmp(envp[i], name, lenght_var) == 0 
 			&& envp[i][lenght_var] == '=')
 			return (i);
 		i++;

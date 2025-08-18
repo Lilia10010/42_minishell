@@ -6,7 +6,7 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 21:58:39 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/17 22:16:05 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 08:42:32 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	export_format(char *env_var)
 	}
 }
 
-static int	compare_vars(char *s1, char s2)
+static int	compare_vars(char *s1, char *s2)
 {
 	int	lenght1;
 	int	lenght2;
@@ -86,7 +86,7 @@ static char	**cpy_envp_sort(char **envp)
 	int		count;
 	int		i;
 
-	count = count_env_vars(envp);
+	count = count_envp_vars(envp);
 	env_copy = malloc(sizeof(char *) * (count + 1));
 	if (!env_copy)
 		return (NULL);
@@ -96,7 +96,7 @@ static char	**cpy_envp_sort(char **envp)
 		env_copy[i] = ft_strdup(envp[i]);
 		if (!env_copy[i])
 		{
-			free_cpy_env(env_copy);
+			free_cpy_envp(env_copy);
 			return (NULL);
 		}
 		i++;
