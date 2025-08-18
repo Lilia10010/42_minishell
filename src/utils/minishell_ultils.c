@@ -10,24 +10,62 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include "utils.h"
 #include "context_types.h"
 #include "lexer.h"
 #include "parser.h"
+#include "lib_ft.h"
 
 void	init_context(t_context *ctx, char **envp)
 {
-	ctx->envp = envp;
+	size_t	count;
+	size_t	i;
+
+	if (!ctx)
+		return ;
 	ctx->exit_status = 0;
 	ctx->should_exit = 0;
 	ctx->tokens = NULL;
 	ctx->commands = NULL;
+	count = 0;
+	while (envp && envp[count])
+		count++;
+	ctx->envp = malloc(sizeof(char *) * (count + 1));
+	if (!ctx->envp)
+	{
+		printf("Error: Failed to allocate memory for ctx->envp\n");
+		ctx->envp = NULL;
+		return ;
+	}
+	else
+	{
+		i = 0;
+		while (i < count)
+		{
+			ctx->envp[i] = ft_strdup(envp[i]);
+			if (!ctx->envp[i])
+			{
+				printf("Error: Failed to duplicate envp[%zu]: %s\n", i, envp[i]);
+				while (i-- > 0)
+					free(ctx->envp[i]);
+				free(ctx->envp);
+				ctx->envp = NULL;
+				break;
+			}
+			i++;
+		}
+		if (ctx->envp)
+			ctx->envp[count] = NULL;
+	}
 }
 
 void	cleanup_context(t_context *ctx)
 {
+	if (!ctx)
+		return ;
 	if (ctx->tokens)
 	{
 		free_tokens(ctx->tokens);
@@ -37,5 +75,23 @@ void	cleanup_context(t_context *ctx)
 	{
 		free_commands(ctx->commands);
 		ctx->commands = NULL;
+	}
+}
+void	cleanup_context_envp(t_context *ctx)
+{
+	size_t	i;
+
+	i = 0;
+	if (!ctx)
+		return ;
+	if (ctx->envp)
+	{
+		while (ctx->envp[i])
+		{
+			free(ctx->envp[i]);
+			i++;
+		}
+		free(ctx->envp);
+		ctx->envp = NULL;
 	}
 }

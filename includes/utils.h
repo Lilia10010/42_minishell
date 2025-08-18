@@ -18,5 +18,6 @@ typedef struct s_context	t_context;
 void	ft_free_split(char **split);
 void	init_context(t_context *ctx, char **envp);
 void	cleanup_context(t_context *ctx);
+void	cleanup_context_envp(t_context *ctx);
 
 #endif
