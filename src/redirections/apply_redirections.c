@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/17 21:40:33 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/17 23:28:49 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,8 @@ static int	open_and_redirect_last_file(t_command *cmd, int flags)
 
 static int	aplly_output_redirection(t_command *cmd)
 {
-	int	fd;
 	int	flags;
-	int	i;
 
-	i = 0;
 	if (!cmd->output_file)
 		return (1);
 	if (cmd->append_mode)

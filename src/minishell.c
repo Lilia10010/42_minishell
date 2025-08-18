@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/17 19:10:37 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/18 00:23:12 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,35 +25,37 @@
 #include "signals.h"
 #include "lib_ft.h"
 
-void	init_context(t_context *ctx, char **envp)
-{
-	ctx->envp = envp;
-	ctx->exit_status = 0;
-	ctx->should_exit = 0;
-	ctx->tokens = NULL;
-	ctx->commands = NULL;
-}
-
-void	cleanup_context(t_context *ctx)
-{
-	if (ctx->tokens)
-	{
-		free_tokens(ctx->tokens);
-		ctx->tokens = NULL;
-	}
-	if (ctx->commands)
-	{
-		free_commands(ctx->commands);
-		ctx->commands = NULL;
-	}
-}
-
 static void	handle_signal_in_loop(t_context *ctx)
 {
 	if (g_signal_received == SIGINT)
 	{
 		ctx->exit_status = 130;
 		g_signal_received = 0;
+	}
+}
+
+static int	handle_signal_after_readline(t_context *ctx)
+{
+	if (g_signal_received)
+	{
+		cleanup_context(ctx);
+		ctx->exit_status = g_signal_received + 128;
+		g_signal_received = 0;
+		return (1);
+	}
+	return (0);
+}
+
+static void	process_input(t_context *ctx, char *input)
+{
+	if (*input)
+		add_history(input);
+	ctx->tokens = lexer_tokenize(input, ctx);
+	if (ctx->tokens)
+	{
+		ctx->commands = parse_tokens(ctx->tokens, ctx);
+		if (ctx->commands)
+			execute_command(ctx->commands, ctx);
 	}
 }
 
@@ -72,22 +74,14 @@ static void	shell_loop(t_context *ctx)
 			ctx->should_exit = 1;
 			break ;
 		}
-		if (g_signal_received)
+		if (handle_signal_after_readline(ctx))
 		{
-			cleanup_context(ctx);
-			ctx->exit_status = g_signal_received + 128;
-			g_signal_received = 0;
+			free(input);
 			continue ;
 		}
 		if (*input)
 			add_history(input);
-		ctx->tokens = lexer_tokenize(input, ctx);
-		if (ctx->tokens)
-		{
-			ctx->commands = parse_tokens(ctx->tokens, ctx);
-			if (ctx->commands)
-				execute_command(ctx->commands, ctx);
-		}
+		process_input(ctx, input);
 		free(input);
 	}
 }
