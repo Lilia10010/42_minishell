@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_types.h                                    :+:      :+:    :+:   */
+/*   save_or_restore_original_fds.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/31 00:29:31 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/17 23:17:16 by lpaula-n         ###   ########.fr       */
+/*   Created: 2025/08/17 21:39:13 by lpaula-n          #+#    #+#             */
+/*   Updated: 2025/08/17 21:41:00 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_TYPES_H
-# define COMMAND_TYPES_H
+#include <unistd.h>
+#include "redirection.h"
 
-typedef struct s_command
+void	save_original_fds(int *fd_stdin, int *fd_stdout)
 {
-	char				**args;
-	int					arg_count;
-	int					arg_capacity;
-	char				*input_file;
-	char				**output_file;
-	int					output_file_count;
-	int					append_mode;
-	int					heredoc_mode;
-	char				*heredoc_delimiter;
-	struct s_command	*next;
-}	t_command;
+	*fd_stdin = dup(STDIN_FILENO);
+	*fd_stdout = dup(STDOUT_FILENO);
+}
 
-#endif
+void	restore_original_fds(int fd_stdin, int fd_stdout)
+{
+	if (fd_stdin != -1)
+	{
+		dup2(fd_stdin, STDIN_FILENO);
+		close(fd_stdin);
+	}
+	if (fd_stdout != -1)
+	{
+		dup2(fd_stdout, STDOUT_FILENO);
+		close(fd_stdout);
+	}
+}

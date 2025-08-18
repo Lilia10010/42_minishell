@@ -21,7 +21,6 @@ typedef struct s_context
 	char		**envp;
 	int			exit_status;
 	int			should_exit;
-	int			redisplay;
 	t_token		*tokens;
 	t_command	*commands;
 }	t_context;

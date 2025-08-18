@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 23:42:48 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/10 23:43:08 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/17 22:26:56 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	ft_free_split(char **split)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!split)
-		return  ;
+		return ;
 	while (split[i])
 	{
 		free(split[i]);
