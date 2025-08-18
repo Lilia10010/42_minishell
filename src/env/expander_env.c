@@ -19,6 +19,24 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
+static const char *get_env_value2(const char *key, t_context *ctx)
+{
+	size_t	i;
+	size_t	key_len;
+
+	if (!key || !ctx || !ctx->envp)
+		return (NULL);
+	key_len = ft_strlen(key);
+	i = 0;
+	while (ctx->envp[i])
+	{
+		if (ft_strncmp(ctx->envp[i], key, key_len) == 0 && ctx->envp[i][key_len] == '=')
+			return (ctx->envp[i] + key_len + 1);
+		i++;
+	}
+	return (NULL);
+}
+
 static char	*extract_var_name(const char **ptr)
 {
 	const char	*start;
@@ -27,7 +45,7 @@ static char	*extract_var_name(const char **ptr)
 
 	start = *ptr;
 	len = 0;
-	while (**ptr && (ft_isalnum(**ptr) || **ptr == '-'))
+	while (**ptr && (ft_isalnum(**ptr) || **ptr == '-'))//ou _ 
 	{
 		(*ptr)++;
 		len++;
@@ -80,7 +98,7 @@ static void	handle_variable_expansio(char **result, const char **ptr,
 	var_name = extract_var_name(ptr);
 	if (!var_name)
 		return ;
-	value = get_env_value(var_name, ctx->envp);
+	value = get_env_value2(var_name, ctx);
 	if (value)
 		append_to_result(result, value);
 	free(var_name);
@@ -90,7 +108,7 @@ static void	handle_tilde_expansion(char **result, const char **ptr, t_context *c
 {
     const char	*home;
     
-	home = get_env_value("HOME", ctx->envp);
+	home = get_env_value2("HOME", ctx);
     if (home)
         append_to_result(result, home);
     else
@@ -98,13 +116,38 @@ static void	handle_tilde_expansion(char **result, const char **ptr, t_context *c
     (*ptr)++; 
 }
 
+/* static void debug_envp(char **envp)
+{
+    int i = 0;
+
+    if (!envp)
+    {
+        printf("ctx->envp is NULL\n");
+        return;
+    }
+
+    printf("Environment Variables (ctx->envp):\n");
+    while (envp[i])
+    {
+        printf("[%d]: %s\n", i, envp[i]);
+        i++;
+    }
+    printf("Total variables: %d\n", i);
+} */
+
 char	*expand_variables(const char *input, t_context *ctx)
 {
 	char		*result;
 	const char	*ptr;
 	char		temp[2];
 
+//	debug_envp(ctx->envp);
+
+	if (!input)
+		return (NULL);
 	result = ft_strdup("");
+	if (!result)
+		return (NULL);
 	ptr = input;
 	while (*ptr)
 	{

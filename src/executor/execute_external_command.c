@@ -25,10 +25,12 @@
 #include "lib_ft.h"
 #include "signals.h"
 #include "minishell.h"
+#include "utils.h"
 
 static void	internal_exit(t_context *ctx, int code)
 {
 	cleanup_context(ctx);
+	cleanup_context_envp(ctx);
 	clear_history();
 	rl_clear_history();
 	rl_free_line_state();

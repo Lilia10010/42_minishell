@@ -24,6 +24,7 @@
 #include "prompt_defs.h"
 #include "signals.h"
 #include "lib_ft.h"
+#include "utils.h"
 
 static void	handle_signal_in_loop(t_context *ctx)
 {
@@ -96,6 +97,7 @@ int	main(int argc, char **argv, char **envp)
 	setup_signals();
 	shell_loop(&ctx);
 	cleanup_context(&ctx);
+	cleanup_context_envp(&ctx);
 	clear_history();
 	return (ctx.exit_status);
 }
