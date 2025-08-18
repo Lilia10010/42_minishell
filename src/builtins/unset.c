@@ -6,11 +6,12 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:12:25 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/17 18:37:49 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 08:25:56 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include "env.h"
 #include "builtin.h"
 #include "lib_ft.h"
 #include "context_types.h"

@@ -6,16 +6,13 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 21:05:39 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/17 22:00:52 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 08:29:19 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-
 #include "env.h"
+#include "builtin.h"
 #include "lib_ft.h"
 #include "context_types.h"
 
@@ -33,9 +30,9 @@ static int	valid_identifier(char *var)
 	i = 0;
 	if (!valid_char(var[0],1))
 		return (0);
-	while (var[i] && var[i] != "=")
+	while (var[i] && var[i] != '=')
 	{
-		if (valid_char(var[i], 0));
+		if (valid_char(var[i], 0))
 			return (0);
 		i++;
 	}
@@ -56,7 +53,7 @@ static int	process_arg(char *arg, char **envp)
 		export_error(arg);
 		return (1);
 	}
-	if (ft_strchr(arg, '='));
+	if (ft_strchr(arg, '='))
 		return (set_env_var(envp, arg));
 	return (0);
 }

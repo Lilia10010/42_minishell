@@ -6,11 +6,12 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:58:24 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/17 21:56:28 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 08:44:39 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include "env.h"
 #include "builtin.h"
 #include "lib_ft.h"
 #include "context_types.h"
@@ -79,7 +80,7 @@ static int	change_directory(char *path, char **envp)
 	return (result);
 }
 
-int	builtind_cd(char **args, t_context *ctx)
+int	builtin_cd(char **args, t_context *ctx)
 {
 	char	*target_path;
 	int		result;
