@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   apply_redirections.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/12 16:55:02 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/17 21:40:33 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@
 #include "executor.h"
 #include "lib_ft.h"
 
-static int aplly_input_redirection(t_command *cmd)
+static int	aplly_input_redirection(t_command *cmd)
 {
-	(void)cmd;
-	int fd;
+	int	fd;
 
 	if (!cmd->input_file)
 		return (1);
@@ -42,43 +41,52 @@ static int aplly_input_redirection(t_command *cmd)
 	return (1);
 }
 
-static int aplly_output_redirection(t_command *cmd)
+static int	open_and_redirect_last_file(t_command *cmd, int flags)
+{
+	int	i;
+	int	fd;
+
+	i = 0;
+	while (i < cmd->output_file_count)
+	{
+		fd = open(cmd->output_file[i], flags, 0644);
+		if (fd == -1)
+		{
+			perror(cmd->output_file[i]);
+			return (0);
+		}
+		if (i == cmd->output_file_count - 1)
+		{
+			if (dup2(fd, STDOUT_FILENO) == -1)
+			{
+				perror("ERROR: aplly output redirection dup2");
+				close(fd);
+				return (0);
+			}
+		}
+		close(fd);
+		i++;
+	}
+	return (1);
+}
+
+static int	aplly_output_redirection(t_command *cmd)
 {
 	int	fd;
 	int	flags;
+	int	i;
 
-	int i = 0;
+	i = 0;
 	if (!cmd->output_file)
 		return (1);
 	if (cmd->append_mode)
 		flags = O_WRONLY | O_CREAT | O_APPEND;
 	else
 		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	while (i < cmd->output_file_count)
-    {
-        fd = open(cmd->output_file[i], flags, 0644);
-        if (fd == -1)
-        {
-            perror(cmd->output_file[i]);
-            return (0);
-        }
-        // Apenas o último arquivo recebe o redirecionamento
-        if (i == cmd->output_file_count - 1)
-        {
-            if (dup2(fd, STDOUT_FILENO) == -1)
-            {
-                perror("ERROR: aplly output redirection dup2");
-                close(fd);
-                return (0);
-            }
-        }
-        close(fd);
-		i++;
-    }
-	return (1);
+	return (open_and_redirect_last_file(cmd, flags));
 }
 
-int aplly_redirection(t_command *cmd)
+int	aplly_redirection(t_command *cmd)
 {
 	if (!cmd)
 		return (1);
@@ -92,7 +100,7 @@ int aplly_redirection(t_command *cmd)
 	if (cmd->input_file)
 	{
 		if (!aplly_input_redirection(cmd))
-		return (0);
+			return (0);
 	}
 	if (cmd->output_file)
 	{
@@ -101,31 +109,3 @@ int aplly_redirection(t_command *cmd)
 	}
 	return (1);
 }
-
-void save_original_fds(int *fd_stdin, int *fd_stdout)
-{
-	*fd_stdin = dup(STDIN_FILENO);
-	*fd_stdout = dup(STDOUT_FILENO);
-}
-
-void restore_original_fds(int fd_stdin, int fd_stdout)
-{
-	if (fd_stdin != -1)
-	{
-		dup2(fd_stdin, STDIN_FILENO);
-		close(fd_stdin);
-	}
-	if (fd_stdout != -1)
-	{
-		dup2(fd_stdout, STDOUT_FILENO);
-		close(fd_stdout);
-	}
-}
-
-
-
-
-
-
-
-//ver a questão do save e reste * &
