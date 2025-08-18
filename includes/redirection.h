@@ -18,8 +18,13 @@ typedef struct s_token		t_token;
 typedef struct s_command	t_command;
 typedef enum e_builtin		t_builtin;
 
-int	set_redirection(t_command *cmd, t_token *token, char *target);
-int	execute_single_command(t_command *cmd, t_context *ctx);
-int	aplly_heredoc_redirection(t_command *cmd);
+int		set_redirection(t_command *cmd, t_token *token, char *target);
+int		execute_single_command(t_command *cmd, t_context *ctx);
+int		aplly_heredoc_redirection(t_command *cmd, t_context *ctx);
+void	internal_exit_heredoc(t_context *ctx, int code);
+int		validate_heredoc_params(t_command *cmd);
+int		create_pipe(int pipefd[2]);
+void	handle_message_end_of_file(char *delimiter);
+char	*process_line_expansion(char *line, t_context *ctx);
 
 #endif

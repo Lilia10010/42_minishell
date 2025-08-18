@@ -19,7 +19,7 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-static const char *get_env_value2(const char *key, t_context *ctx)
+char *get_env_value2(const char *key, t_context *ctx)
 {
 	size_t	i;
 	size_t	key_len;

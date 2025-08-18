@@ -21,6 +21,7 @@ void	free_cpy_envp(char **envp);
 int		get_envp_index(char *key, char **envp);
 char	**create_new_env_var(char **old_envp, char *var, int size, int i);
 char	*get_env_value(const char *key, char **envp);
+char	*get_env_value2(const char *key, t_context *ctx);
 int		find_var(char **envp, char *name);
 char	*create_envp_string(char *name, char *value);
 int		set_env(char **envp, char *name_var, char *value);

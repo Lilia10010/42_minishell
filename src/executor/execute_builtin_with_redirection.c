@@ -20,7 +20,7 @@ int	execute_builtin_with_redirection(t_command *cmd, t_context *ctx)
 	int	result;
 
 	save_original_fds(&original_stdin, &original_stdout);
-	if (!aplly_redirection(cmd))
+	if (!aplly_redirection(cmd, ctx))
 	{
 		restore_original_fds(original_stdin, original_stdout);
 		ctx->exit_status = 1;

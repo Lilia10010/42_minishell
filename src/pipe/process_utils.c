@@ -59,7 +59,7 @@ static void	execute_child_process(t_command *current, t_context *ctx)
 	int	builtin_id;
 	int	exit_code;
 
-	if (!aplly_redirection(current))
+	if (!aplly_redirection(current, ctx))
 		internal_exit(ctx, 1);
 	builtin_id = get_builtin_id(current->args[0]);
 	if (builtin_id != BUILTIN_NONE)

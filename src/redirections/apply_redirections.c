@@ -83,13 +83,13 @@ static int	aplly_output_redirection(t_command *cmd)
 	return (open_and_redirect_last_file(cmd, flags));
 }
 
-int	aplly_redirection(t_command *cmd)
+int	aplly_redirection(t_command *cmd, t_context *ctx)
 {
 	if (!cmd)
 		return (1);
 	if (cmd->heredoc_mode)
 	{
-		if (!aplly_heredoc_redirection(cmd))
+		if (!aplly_heredoc_redirection(cmd, ctx))
 		{
 			return (0);
 		}

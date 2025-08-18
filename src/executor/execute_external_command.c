@@ -52,12 +52,14 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 	if (pid == 0)
 	{
 		setup_signals_child();
-		if (!aplly_redirection(cmd))
+		if (!aplly_redirection(cmd, ctx))
 		{
+			free(path);
 			if (cmd->heredoc_mode)
 				internal_exit(ctx, 0);
 			internal_exit(ctx, 1);
 		}
+		
 		execve(path, cmd->args, ctx->envp);
 		free(path);
 		ft_putstr_fd("bash: command not found\n", STDERR_FILENO);
@@ -111,7 +113,7 @@ int	execute_command_from_path(t_command *cmd, t_context *ctx)
 	char	*path;
 	int		result;
 
-	path = find_executable_in_path(cmd->args[0]);
+	path = find_executable_in_path(cmd->args[0], ctx);
 	if (!path)
 	{
 		ft_putstr_fd("bash: ", STDERR_FILENO);

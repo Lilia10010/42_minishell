@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include "executor.h"
 #include "lib_ft.h"
+#include "env.h"
 
 static char	*join_path(const char *dir, const char *cmd)
 {
@@ -28,17 +29,18 @@ static char	*join_path(const char *dir, const char *cmd)
 	free(temp);
 	return (full);
 }
-
-char	*find_executable_in_path(const char *cmd)
+char	*find_executable_in_path(char *cmd, t_context *ctx)
 {
 	char	*path_env;
 	char	**paths;
 	char	*full;
 	int		i;
+	char	*result;
 
+	result = NULL;
 	if (!cmd || !*cmd)
 		return (NULL);
-	path_env = getenv("PATH");
+	path_env = get_env_value2("PATH", ctx);
 	if (!path_env)
 		return (NULL);
 	paths = ft_split(path_env, ':');
@@ -49,10 +51,14 @@ char	*find_executable_in_path(const char *cmd)
 	{
 		full = join_path(paths[i], cmd);
 		if (full && access(full, X_OK) == 0)
-			return (ft_free_split(paths), full);
+		{
+
+			result = full;
+			break ;
+		}
 		free(full);
 		i++;
 	}
 	ft_free_split(paths);
-	return (NULL);
+	return (result);
 }

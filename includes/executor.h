@@ -22,12 +22,12 @@ t_builtin	get_builtin_id(char *cmd);
 int			builtin_dispatcher(t_command *cmd, t_context *ctx);
 int			execute_single_command(t_command *cmd, t_context *ctx);
 t_builtin	get_builtin_id(char *cmd);
-char		*find_executable_in_path(const char *cmd);
+char		*find_executable_in_path(char *cmd, t_context *ctx);
 int			is_path_comman(const char *cmd);
 int			execute_path_command_absolut(t_command *cmd, t_context *ctx);
 int			execute_command_from_path(t_command *cmd, t_context *ctx);
 int			validate_redirection_file(char *filename, int is_output);
-int			aplly_redirection(t_command *cmd);
+int			aplly_redirection(t_command *cmd, t_context *ctx);
 
 int			execute_external_command_with_redirectons(t_command *cmd,
 				t_context *ctx);

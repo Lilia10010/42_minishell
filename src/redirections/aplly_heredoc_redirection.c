@@ -17,125 +17,104 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 
+#include "redirection.h"
 #include "signals.h"
 #include "command_types.h"
 #include "lib_ft.h"
 #include "context_types.h"
-#include "lexer.h"
-#include "env.h"
-#include "minishell.h"
+#include "utils.h"
 
-// static void	internal_exit(t_context *ctx, int code)
-// {
-// 	cleanup_context(ctx);
-// 	clear_history();
-// 	rl_clear_history();
-// 	rl_free_line_state();
-// 	exit(code);
-// }
-
-
-
-static int	has_dollar(const char *str)
+static int	create_pipe_and_fork(int pipefd[2], pid_t *pid)
 {
-	int i = 0;
-
-	while (str[i])
+	if (pipe(pipefd) == -1)
 	{
-		if (str[i] == '$')
-		{
-			char next = str[i + 1];
-			if (next == '\0' || next == ' ' || next == '\t' ||
-				!(ft_isalnum(next) || next == '_' ))
-			{
-				i++;
-				continue;
-			}
-			return (1);
-		}
-		i++;
+		perror("pipe");
+		return (0);
 	}
-	return (0);
+	*pid = fork();
+	if (*pid == -1)
+	{
+		perror("fork");
+		close(pipefd[0]);
+		close(pipefd[1]);
+		return (0);
+	}
+	return (1);
 }
 
-int aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
+static void	handle_eof_or_delimiter(char *line,
+	t_command *cmd, int writefd, t_context *ctx)
 {
-    int     pipefd[2];
-    pid_t   pid;
-    char    *line = NULL;
-    char    *expanded_line = NULL;
+	if (!line)
+	{
+		handle_message_end_of_file(cmd->heredoc_delimiter);
+		close(writefd);
+		internal_exit_heredoc(ctx, 0);
+	}
+	if (ft_strcmp(line, cmd->heredoc_delimiter) == 0)
+	{
+		free(line);
+		close(writefd);
+		internal_exit_heredoc(ctx, 0);
+	}
+}
 
-    if (!cmd || !cmd->heredoc_delimiter)
-    {
-        fprintf(stderr, "HEREDOC ERROR: cmd ou delimiter é NULL\n");
-        return 0;
-    }
-    if (pipe(pipefd) == -1)
-    {
-        perror("pipe");
-        return (0);
-    }
-    pid = fork();
-    if (pid == -1)
-    {
-        perror("fork");
-        close(pipefd[0]);
-        close(pipefd[1]);
-        return 0;
-    }
-    if (pid == 0)
-    {
-		signal(SIGINT, SIG_DFL);
-        close(pipefd[0]);
+static void	child_heredoc_loop(int writefd, t_command *cmd, t_context *ctx)
+{
+	char	*line;
 
-        while (1)
-        {
-            line = readline("> ");
-            if (!line)
-            {
-                fprintf(stderr,
-                    "warning: here-document delimited by end-of-file (wanted `%s`)\n",
-                    cmd->heredoc_delimiter);
-                close(pipefd[1]);
-               exit(0);
-            }
-            if (ft_strcmp(line, cmd->heredoc_delimiter) == 0)
-            {
-                free(line);
-                break;
-            }
-            if (has_dollar(line))
-            {
-                expanded_line = expand_variables(line, ctx);
-                free(line);
-                line = expanded_line;
-            }
-            dprintf(pipefd[1], "%s\n", line);
-            free(line);
-        }
+	signal(SIGINT, SIG_DFL);
+	while (1)
+	{
+		line = readline("> ");
+		handle_eof_or_delimiter(line, cmd, writefd, ctx);
+		line = process_line_expansion(line, ctx);
+		dprintf(writefd, "%s\n", line);
+		free(line);
+	}
+}
 
-        close(pipefd[1]);
-        exit(0);
-    }
-    close(pipefd[1]);
-    if (dup2(pipefd[0], STDIN_FILENO) == -1)
-    {
-        perror("dup2");
-        close(pipefd[0]);
-        return 0;
-    }
-    close(pipefd[0]);
+static int	parent_setup_and_wait(int readfd, int writefd,
+	pid_t pid, t_context *ctx)
+{
+	int	status;
 
-    int status;
-    waitpid(pid, &status, 0);
-    if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-    {
-        ctx->exit_status = 130;
-        g_signal_received = -1;
-        return 0;
-    }
-    return (1);
+	(void)writefd;
+	close(writefd);
+	if (dup2(readfd, STDIN_FILENO) == -1)
+	{
+		perror("dup2");
+		close(readfd);
+		return (0);
+	}
+	close(readfd);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		ctx->exit_status = 130;
+		g_signal_received = -1;
+		return (0);
+	}
+	return (1);
+}
+
+int	aplly_heredoc_redirection(t_command *cmd, t_context *ctx)
+{
+	int		pipefd[2];
+	pid_t	pid;
+
+	if (!cmd || !cmd->heredoc_delimiter)
+	{
+		fprintf(stderr, "HEREDOC ERROR: cmd ou delimiter é NULL\n");
+		return (0);
+	}
+	if (!create_pipe_and_fork(pipefd, &pid))
+		return (0);
+	if (pid == 0)
+	{
+		close(pipefd[0]);
+		child_heredoc_loop(pipefd[1], cmd, ctx);
+	}
+	return (parent_setup_and_wait(pipefd[0], pipefd[1], pid, ctx));
 }
