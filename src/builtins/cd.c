@@ -3,48 +3,96 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:58:24 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/01 23:19:53 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/18 08:44:39 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include "env.h"
 #include "builtin.h"
 #include "lib_ft.h"
 #include "context_types.h"
 
-static char	*get_pwd(char **envp, char *s)
+static void	cd_error(char *path)
 {
-	int	i;
-	//char *home;
+	ft_putstr_fd("minishell: cd ", 2);
+	ft_putstr_fd(path, 2);
+	ft_putstr_fd(": no such file or directory\n", 2);
+}
 
-	if (!envp || !*envp)
-		return (NULL);
-	i = 0;
-	while (envp[i])
+static char	*get_target_path(char **args, char **envp)
+{
+	char	*home_path;
+
+	if (!args[1])
 	{
-		if (ft_strncmp(envp[i], s, ft_strlen(s)) == 0)
-			return ((ft_strchr(envp[i], '=') + 1));
-		i++;
+		home_path = get_env_value("HOME", envp);
+		if (!home_path)
+		{
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+			return (NULL);
+		}
+		return (ft_strdup(home_path));
 	}
-	return (NULL);
+	return (ft_strdup(args[1]));
+}
+
+static int	update_path_var(char **envp, char *old_path)
+{
+	char	*new_path;
+
+	new_path = getcwd(NULL, 0);
+	if (!new_path)
+		return (1);
+	if (set_env(envp, "OLDPWD", old_path) != 0)
+	{
+		free(new_path);
+		return (1);
+	}
+	if (set_env(envp, "PWD", new_path) != 0)
+	{
+		free(new_path);
+		return (1);
+	}
+	free(new_path);
+	return (0);
+}
+
+static int	change_directory(char *path, char **envp)
+{
+	char	*old_path;
+	int		result;
+
+	old_path = getcwd(NULL, 0);
+	if (!old_path)
+		return (1);
+	if (chdir(path) != 0)
+	{
+		cd_error(path);
+		free(old_path);
+		return (1);
+	}
+	result = update_path_var(envp, old_path);
+	free(old_path);
+	return (result);
 }
 
 int	builtin_cd(char **args, t_context *ctx)
 {
-	char *caminho;
+	char	*target_path;
+	int		result;
 
-	if (!args[1] || (ft_strncmp(args[1], "~", 1) == 0))
-		caminho = get_pwd(ctx->envp, "HOME");
-	else
-		caminho = args[1];
-	if (!caminho)
+	target_path = get_target_path(args, ctx->envp);
+	if (!target_path)
 	{
-		ft_putstr_fd("Minishell: cd: HOME not set\n", STDERR_FILENO);
 		ctx->exit_status = 1;
 		return (1);
 	}
-	return (0);
+	result = change_directory(target_path, ctx->envp);
+	free(target_path);
+	ctx->exit_status = result;
+	return (result);
 }

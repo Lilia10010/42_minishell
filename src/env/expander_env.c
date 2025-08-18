@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:57:42 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/17 19:49:03 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/16 12:21:27 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,6 @@
 #include "env.h"
 #include "lib_ft.h"
 #include "context_types.h"
-
-static const char	*get_env_value(const char *key)
-{
-	int		i;
-	size_t	key_len;
-
-	key_len = ft_strlen(key);
-	i = 0;
-	while (__environ[i])
-	{
-		if (strncmp(__environ[i], key, key_len) == 0
-			&& __environ[i][key_len] == '=')
-			return (__environ[i] + key_len + 1);
-		i++;
-	}
-	return (NULL);
-}
 
 static char	*extract_var_name(const char **ptr)
 {
@@ -97,17 +80,17 @@ static void	handle_variable_expansio(char **result, const char **ptr,
 	var_name = extract_var_name(ptr);
 	if (!var_name)
 		return ;
-	value = get_env_value(var_name);
+	value = get_env_value(var_name, ctx->envp);
 	if (value)
 		append_to_result(result, value);
 	free(var_name);
 }
 
-static void	handle_tilde_expansion(char **result, const char **ptr)
+static void	handle_tilde_expansion(char **result, const char **ptr, t_context *ctx)
 {
     const char	*home;
     
-    home = get_env_value("HOME");
+	home = get_env_value("HOME", ctx->envp);
     if (home)
         append_to_result(result, home);
     else
@@ -132,7 +115,7 @@ char	*expand_variables(const char *input, t_context *ctx)
 		}
 		else if (*ptr == '~')
 		{
-			handle_tilde_expansion(&result, &ptr);			
+			handle_tilde_expansion(&result, &ptr, ctx);			
 		}
 		else
 		{
