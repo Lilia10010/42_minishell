@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_executable_in_path.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:47:45 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/14 13:09:27 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/19 10:46:56 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*find_executable_in_path(char *cmd, t_context *ctx)
 	result = NULL;
 	if (!cmd || !*cmd)
 		return (NULL);
-	path_env = get_env_value2("PATH", ctx);
+	path_env = get_env_value("PATH", ctx);
 	if (!path_env)
 		return (NULL);
 	paths = ft_split(path_env, ':');
