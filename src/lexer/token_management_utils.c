@@ -53,7 +53,7 @@ char	*extract_quoted_token(char **input, char quote_char, t_context *ctx)
 		return (handle_double_quote_expansion(raw, ctx));
 }
 
-static int	create_and_add_token(t_token **tokens,
+int	create_and_add_token(t_token **tokens,
 	t_token_type type, char *value)
 {
 	t_token	*token;
@@ -91,24 +91,13 @@ int	add_operator_token(t_token **tokens, char **current)
 {
 	if (**current == '|')
 	{
-		TRY_ADD(TOKEN_PIPE, "|");
+		if (!try_add_token(tokens, TOKEN_PIPE, "|"))
+			return (0);
 		(*current)++;
 		return (1);
 	}
 	else if (**current == '>')
-	{
-		if (*(*current + 1) == '>')
-		{
-			TRY_ADD(TOKEN_REDIRECT_OUT_APPEND, ">>");
-			(*current) += 2;
-		}
-		else
-		{
-			TRY_ADD(TOKEN_REDIRECT_OUT, ">")
-			(*current)++;
-		}
-		return (1);
-	}
+		return (handle_redirect_out_operator(tokens, current));
 	else if (**current == '<')
 		return (handle_redirect_in_operators(tokens, current));
 	return (0);

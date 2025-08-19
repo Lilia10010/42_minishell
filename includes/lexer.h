@@ -15,8 +15,6 @@
 
 # include "token_types.h"
 
-#define TRY_ADD(tok, str) if (!create_and_add_token(tokens, tok, str)) return (0);
-
 typedef struct s_token		t_token;
 typedef struct s_context	t_context;
 
@@ -25,14 +23,16 @@ t_token		*create_token(t_token_type type, char *value);
 int			add_token(t_token **head, t_token *new_token);
 void		free_tokens(t_token *tokens);
 void		free_token(t_token *token);
-
 char		*concatenate_strings(char *str1, char *str2);
-//void		debug_print_tokens(t_token *tokens);
 void		skip_spaces(char **input);
 int			is_shell_operator(char c);
 char		*extract_quoted_token(char **input, char quote_char,
 				t_context *ctx);
 int			add_operator_token(t_token **tokens, char **current);
 int			has_expandable_dollar(const char *str);
+int			try_add_token(t_token **tokens, t_token_type type, char *value);
+int			handle_redirect_out_operator(t_token **tokens, char **current);
+int			create_and_add_token(t_token **tokens,
+				t_token_type type, char *value);
 
 #endif
