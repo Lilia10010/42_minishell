@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 18:35:32 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/19 10:21:00 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/19 15:38:43 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,9 @@
 
 int	builtin_pwd(char **args, t_context *ctx)
 {
+	(void)args;
 	char	*pwd;
 
-	if (args[1])
-	{
-		ft_putstr_fd("minishell: pwd: too many arguments\n", 2);
-		return (1);
-	}
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
