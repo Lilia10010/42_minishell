@@ -6,7 +6,7 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 21:05:39 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/18 08:29:19 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 21:18:03 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ static int	valid_identifier(char *var)
 	int	i;
 	
 	i = 0;
-	if (!valid_char(var[0],1))
+	if (!valid_char(var[0], 1))
 		return (0);
 	while (var[i] && var[i] != '=')
 	{
-		if (valid_char(var[i], 0))
+		if (!valid_char(var[i], 0))
 			return (0);
 		i++;
 	}
@@ -46,7 +46,7 @@ static void	export_error(char *var)
 	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 
-static int	process_arg(char *arg, char **envp)
+static int	process_arg(char *arg, t_context *ctx)
 {
 	if (!valid_identifier(arg))
 	{
@@ -54,7 +54,7 @@ static int	process_arg(char *arg, char **envp)
 		return (1);
 	}
 	if (ft_strchr(arg, '='))
-		return (set_env_var(envp, arg));
+		return (set_env_var(ctx, arg));
 	return (0);
 }
 
@@ -68,9 +68,10 @@ int	builtin_export(char **args, t_context *ctx)
 		return(0);
 	}
 	i = 1;
+	ctx->exit_status = 0;
 	while (args[i])
 	{
-		if (process_arg(args[i], ctx->envp) != 0)
+		if (process_arg(args[i], ctx) != 0)
 			ctx->exit_status = 1;
 		i++;
 	}

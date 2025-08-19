@@ -6,7 +6,7 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:47:35 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/18 08:31:38 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 20:27:18 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-char	*get_env_value(const char *key, char **envp)
+char	*get_env_value(const char *key, t_context *ctx)
 {
 	int		i;
 	size_t	key_len;
 
 	key_len = ft_strlen(key);
 	i = 0;
-	while (envp[i])
+	while (ctx->envp[i])
 	{
-		if (ft_strncmp(envp[i], key, key_len) == 0
-			&& envp[i][key_len] == '=')
-			return (envp[i] + key_len + 1);
+		if (ft_strncmp(ctx->envp[i], key, key_len) == 0
+			&& ctx->envp[i][key_len] == '=')
+			return (ctx->envp[i] + key_len + 1);
 		i++;
 	}
 	return (NULL);

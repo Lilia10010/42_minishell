@@ -6,7 +6,7 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:12:25 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/18 08:25:56 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 21:31:09 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static int	check_unset(char *var)
 		return (0);
 	while (var[i])
 	{
-		if (ft_isalnum(var[i]) && var[i] != '_')
+		if (!ft_isalnum(var[i]) && var[i] != '_')
 			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 int	builtin_unset(char **args, t_context *ctx)
@@ -37,6 +37,7 @@ int	builtin_unset(char **args, t_context *ctx)
 	int	i;
 
 	i = 1;
+	ctx->exit_status = 0;
 	while (args[i])
 	{
 		if (!check_unset(args[i]))
@@ -48,7 +49,7 @@ int	builtin_unset(char **args, t_context *ctx)
 		}
 		else
 		{
-			if (unset_envp_var(ctx->envp, args[i]) != 0)
+			if (unset_envp_var(ctx, args[i]) != 0)
 				ctx->exit_status = 1;
 		}
 		i++;
