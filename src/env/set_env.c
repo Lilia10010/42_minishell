@@ -6,7 +6,7 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 12:11:47 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/18 08:37:08 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/18 21:50:52 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ static int	update_var(char **envp, int index, char *name, char *value)
 	return (0);
 }
 
-static int	add_new_var(char **envp, char *name, char *value)
+static int	add_new_var(char ***envp, char *name, char *value)
 {
 	char	**old_envp;
 	char	**new_envp;
 	int		count;
 
-	count = count_envp_vars(envp);
-	new_envp = create_envp(envp, count);
+	count = count_envp_vars(*envp);
+	new_envp = create_envp(*envp, count);
 	if (!new_envp)
 		return (-1);
 	new_envp[count] = create_envp_string(name, value); 
@@ -67,20 +67,20 @@ static int	add_new_var(char **envp, char *name, char *value)
 		free_cpy_envp(new_envp);
 		return (-1);
 	}
-	old_envp = envp;
-	envp = new_envp;
+	old_envp = *envp;
+	*envp = new_envp;
 	free_cpy_envp(old_envp);
 	return (0);
 }
 
-int	set_env(char **envp, char *name_var, char *value)
+int	set_env(char ***envp, char *name_var, char *value)
 {
 	int	check_var;
 	
-	if (check_envp_params(envp, name_var) == -1)
+	if (check_envp_params(*envp, name_var) == -1)
 		return (-1);
-	check_var = find_var(envp, name_var);
+	check_var = find_var(*envp, name_var);
 	if (check_var != -1)
-		return (update_var(envp, check_var, name_var, value));
+		return (update_var(*envp, check_var, name_var, value));
 	return(add_new_var(envp, name_var, value));
 }
