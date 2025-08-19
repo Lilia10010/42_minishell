@@ -6,13 +6,18 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:47:39 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/15 19:39:04 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/19 12:30:17 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdio.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 
 #include "executor.h"
 #include "builtin.h"
 #include "lib_ft.h"
+#include "utils.h"
 
 t_builtin	get_builtin_id(char *cmd)
 {
@@ -35,7 +40,12 @@ t_builtin	get_builtin_id(char *cmd)
 	return (BUILTIN_NONE);
 }
 
-// int	is_path_comman(const char *cmd)
-// {
-// 	return (ft_strchr(cmd, '/'));
-// }
+void	internal_exit_executor(t_context *ctx, int code)
+{
+	cleanup_context(ctx);
+	cleanup_context_envp(ctx);
+	clear_history();
+	rl_clear_history();
+	rl_free_line_state();
+	exit(code);
+}

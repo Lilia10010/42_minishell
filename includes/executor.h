@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:50:11 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/14 14:47:07 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/19 12:27:18 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int			execute_external_command_with_redirectons(t_command *cmd,
 int			execute_builtin_with_redirection(t_command *cmd, t_context *ctx);
 void		restore_original_fds(int fd_stdin, int fd_stdout);
 void		save_original_fds(int *fd_stdin, int *fd_stdout);
+void		internal_exit_executor(t_context *ctx, int code);
 
 void		ft_free_split(char **split);
 #endif

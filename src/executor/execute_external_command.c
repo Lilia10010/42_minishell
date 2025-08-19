@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/17 23:59:58 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/19 12:29:54 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-#include <readline/history.h>
-#include <readline/readline.h>
 
 #include "command_types.h"
 #include "context_types.h"
@@ -25,16 +23,22 @@
 #include "lib_ft.h"
 #include "signals.h"
 #include "minishell.h"
-#include "utils.h"
 
-static void	internal_exit(t_context *ctx, int code)
+static void	execute_child_process(t_command *cmd, t_context *ctx, char *path)
 {
-	cleanup_context(ctx);
-	cleanup_context_envp(ctx);
-	clear_history();
-	rl_clear_history();
-	rl_free_line_state();
-	exit(code);
+	setup_signals_child();
+	if (!aplly_redirection(cmd, ctx))
+	{
+		free(path);
+		if (cmd->heredoc_mode)
+			internal_exit_executor(ctx, 0);
+		internal_exit_executor(ctx, 1);
+	}
+	execve(path, cmd->args, ctx->envp);
+	free(path);
+	ft_putstr_fd("bash: command not found\n", STDERR_FILENO);
+	ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+	internal_exit_executor(ctx, 127);
 }
 
 static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
@@ -50,22 +54,7 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 		return (1);
 	}
 	if (pid == 0)
-	{
-		setup_signals_child();
-		if (!aplly_redirection(cmd, ctx))
-		{
-			free(path);
-			if (cmd->heredoc_mode)
-				internal_exit(ctx, 0);
-			internal_exit(ctx, 1);
-		}
-		
-		execve(path, cmd->args, ctx->envp);
-		free(path);
-		ft_putstr_fd("bash: command not found\n", STDERR_FILENO);
-		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		internal_exit(ctx, 127);
-	}
+		execute_child_process(cmd, ctx, path);
 	setup_signals_ignore();
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
