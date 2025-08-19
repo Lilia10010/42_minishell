@@ -5,7 +5,7 @@
 NAME := minishell
 
 #flags
-CC		:= gcc
+CC		:= cc
 CFLAGS	:= -Wall -Wextra -Werror
 RM		:= rm -f
 

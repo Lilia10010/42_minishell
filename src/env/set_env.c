@@ -19,7 +19,7 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-static char  **create_envp(char **envp , int count)
+static char	**create_envp(char **envp, int count)
 {
 	char	**new_envp;
 	int		i;
@@ -61,7 +61,7 @@ static int	add_new_var(char ***envp, char *name, char *value)
 	new_envp = create_envp(*envp, count);
 	if (!new_envp)
 		return (-1);
-	new_envp[count] = create_envp_string(name, value); 
+	new_envp[count] = create_envp_string(name, value);
 	if (!new_envp[count])
 	{
 		free_cpy_envp(new_envp);
@@ -76,11 +76,11 @@ static int	add_new_var(char ***envp, char *name, char *value)
 int	set_env(char ***envp, char *name_var, char *value)
 {
 	int	check_var;
-	
+
 	if (check_envp_params(*envp, name_var) == -1)
 		return (-1);
 	check_var = find_var(*envp, name_var);
 	if (check_var != -1)
 		return (update_var(*envp, check_var, name_var, value));
-	return(add_new_var(envp, name_var, value));
+	return (add_new_var(envp, name_var, value));
 }

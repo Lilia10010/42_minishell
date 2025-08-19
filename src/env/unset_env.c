@@ -22,7 +22,7 @@
 int	count_envp_vars(char **envp)
 {
 	int	size;
-	
+
 	size = 0;
 	if (!envp)
 		return (0);
@@ -79,7 +79,7 @@ static int	new_envp_var(t_context *ctx, char *var)
 	return (0);
 }
 
-int	 set_env_var(t_context *ctx, char *var)
+int	set_env_var(t_context *ctx, char *var)
 {
 	int		key_lenght;
 	char	*key;

@@ -40,12 +40,12 @@ int	find_var(char **envp, char *name)
 {
 	int	lenght_var;
 	int	i;
-	
+
 	lenght_var = ft_strlen(name);
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], name, lenght_var) == 0 
+		if (ft_strncmp(envp[i], name, lenght_var) == 0
 			&& envp[i][lenght_var] == '=')
 			return (i);
 		i++;
@@ -57,7 +57,7 @@ char	*create_envp_string(char *name, char *value)
 {
 	char	*temp;
 	char	*result;
-	
+
 	temp = ft_strjoin(name, "=");
 	if (!temp)
 		return (NULL);

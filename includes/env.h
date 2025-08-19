@@ -28,5 +28,7 @@ int		set_env_var(t_context *ctx, char *var);
 int		count_envp_vars(char **envp);
 void	sorted_envp(char **envp);
 int		unset_envp_var(t_context *ctx, char *key);
+void	append_char(char **result, char c);
+char	*extract_var_name(const char **ptr);
 
 #endif

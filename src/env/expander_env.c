@@ -19,40 +19,6 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-static char	*extract_var_name(const char **ptr)
-{
-	const char	*start;
-	int			len;
-	char		*var_name;
-
-	start = *ptr;
-	len = 0;
-	while (**ptr && (ft_isalnum(**ptr) || **ptr == '-'))
-	{
-		(*ptr)++;
-		len++;
-	}
-	if (len == 0)
-		return (NULL);
-	var_name = malloc(len + 1);
-	if (!var_name)
-		return (NULL);
-	ft_strlcpy(var_name, start, len + 1);
-	return (var_name);
-}
-
-static void	append_char(char **result, char c)
-{
-	char	temp[2];
-	char	*old;
-
-	temp[0] = c;
-	temp[1] = '\0';
-	old = *result;
-	*result = ft_strjoin(*result, temp);
-	free(old);
-}
-
 static void	append_to_result(char **result, const char *to_append)
 {
 	char	*old;
@@ -100,11 +66,19 @@ static void	handle_tilde_expansion(char **result, const char **ptr,
 	(*ptr)++;
 }
 
+static void	handle_char(char c, char **result)
+{
+	char	temp[2];
+
+	temp[0] = c;
+	temp[1] = '\0';
+	append_char(result, *temp);
+}
+
 char	*expand_variables(const char *input, t_context *ctx)
 {
 	char		*result;
 	const char	*ptr;
-	char		temp[2];
 
 	if (!input)
 		return (NULL);
@@ -115,16 +89,14 @@ char	*expand_variables(const char *input, t_context *ctx)
 	while (*ptr)
 	{
 		if (*ptr == '$')
+		{
+			ptr++;
 			handle_variable_expansio(&result, &ptr, ctx);
+		}
 		else if (*ptr == '~')
 			handle_tilde_expansion(&result, &ptr, ctx);
 		else
-		{
-			temp[0] = *ptr;
-			temp[1] = '\0';
-			append_char(&result, *temp);
-			ptr++;
-		}
+			handle_char(*ptr++, &result);
 	}
 	return (result);
 }
