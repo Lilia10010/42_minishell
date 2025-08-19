@@ -8,6 +8,7 @@ int	try_add_token(t_token **tokens, t_token_type type, char *value)
 		return (0);
 	return (1);
 }
+
 int	handle_redirect_out_operator(t_token **tokens, char **current)
 {
 	if (*(*current + 1) == '>')
