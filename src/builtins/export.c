@@ -6,7 +6,7 @@
 /*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 21:05:39 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/18 21:18:03 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/19 10:20:33 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-static int	valid_char(char c,  int first)
+static int	valid_char(char c, int first)
 {
 	if (first)
 		return (ft_isalpha(c) || c == '_');
@@ -26,7 +26,7 @@ static int	valid_char(char c,  int first)
 static int	valid_identifier(char *var)
 {
 	int	i;
-	
+
 	i = 0;
 	if (!valid_char(var[0], 1))
 		return (0);
@@ -65,7 +65,7 @@ int	builtin_export(char **args, t_context *ctx)
 	if (!args[1])
 	{
 		sorted_envp(ctx->envp);
-		return(0);
+		return (0);
 	}
 	i = 1;
 	ctx->exit_status = 0;
@@ -75,6 +75,5 @@ int	builtin_export(char **args, t_context *ctx)
 			ctx->exit_status = 1;
 		i++;
 	}
-	return(ctx->exit_status);
+	return (ctx->exit_status);
 }
-
