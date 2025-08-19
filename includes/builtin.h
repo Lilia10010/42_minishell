@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:08:44 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/30 23:56:16 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:10:45 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTINS_H
-# define BUILTINS_H
+#ifndef BUILTIN_H
+# define BUILTIN_H
 
 # include "builtin_types.h"
 
@@ -30,7 +30,7 @@ int	builtin_pwd(char **args, t_context *ctx);
 int	builtin_env(char **args, t_context *ctx);
 int	builtin_exit(char **args, t_context *ctx);
 int	builtin_cd(char **args, t_context *ctx);
-int builtin_unset(char **args, t_context *ctx);
-int builtin_export(char **args, t_context *ctx);
+int	builtin_unset(char **args, t_context *ctx);
+int	builtin_export(char **args, t_context *ctx);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/02 14:42:21 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/18 00:23:12 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,103 +14,107 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <unistd.h>
 
 #include "minishell.h"
 #include "lexer.h"
 #include "parser.h"
 #include "executor.h"
 #include "context_types.h"
+#include "prompt_defs.h"
+#include "signals.h"
+#include "lib_ft.h"
+#include "utils.h"
 
-# include "lib_ft.h"
-
-void init_context(t_context *ctx, char **envp)
+static void	handle_signal_in_loop(t_context *ctx)
 {
-	ctx->envp = envp;
-	ctx->exit_status = 0;
-	ctx->should_exit = 0;
-	ctx->tokens = NULL;
-	ctx->commands = NULL;
+	if (g_signal_received == SIGINT)
+	{
+		ctx->exit_status = 130;
+		g_signal_received = 0;
+	}
 }
 
-// serve para limpar dados da interação anterior
-void cleanup_context(t_context *ctx)
+static int	handle_signal_after_readline(t_context *ctx)
 {
+	if (g_signal_received)
+	{
+		cleanup_context(ctx);
+		ctx->exit_status = g_signal_received + 128;
+		g_signal_received = 0;
+		return (1);
+	}
+	return (0);
+}
+
+static void	process_input(t_context *ctx, char *input)
+{
+	if (*input)
+		add_history(input);
+	ctx->tokens = lexer_tokenize(input, ctx);
 	if (ctx->tokens)
 	{
-		free_tokens(ctx->tokens);
-		ctx->tokens = NULL;
-	}
-	if (ctx->commands)
-	{
-		free_commands(ctx->commands);
-		ctx->commands = NULL;
+		ctx->commands = parse_tokens(ctx->tokens, ctx);
+		if (ctx->commands)
+			execute_command(ctx->commands, ctx);
 	}
 }
 
-void shell_loop(t_context *ctx)
+static void	shell_loop(t_context *ctx)
 {
-	char *input;
+	char	*input;
 
 	while (!ctx->should_exit)
 	{
 		cleanup_context(ctx);
-		input = readline(MATRIX_PROMPT);
-		if (!input) // algum comando de scape
+		handle_signal_in_loop(ctx);
+		input = readline(MINI_PROMPT);
+		if (!input)
 		{
-			printf("exit\n"); // não pode ter o \n aqui
+			ft_putstr_fd("\n", STDOUT_FILENO);
 			ctx->should_exit = 1;
-			break;
+			break ;
 		}
-
-		//expanded_input = expand_variables(input, ctx);
-		// começa o processamento do input
-		ctx->tokens = lexer_tokenize(input, ctx);
-		if (ctx->tokens)
+		if (handle_signal_after_readline(ctx))
 		{
-			ctx->commands = parse_tokens(ctx->tokens);
-			if (ctx->commands)
-			{
-				//debug_print_commands(ctx->commands);
-				execute_command(ctx->commands, ctx);
-			}
+			free(input);
+			continue ;
 		}
-		//free(expanded_input);
+		if (*input)
+			add_history(input);
+		process_input(ctx, input);
 		free(input);
 	}
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	t_context ctx;
+	t_context	ctx;
+
 	(void)argc;
 	(void)argv;
-	// printf("\n███████████████████████\n");
-	// printf("█       MINIHELL      █\n");
-	// printf("███████████████████████\n\n");
-
 	init_context(&ctx, envp);
+	setup_signals();
 	shell_loop(&ctx);
 	cleanup_context(&ctx);
-
+	cleanup_context_envp(&ctx);
+	clear_history();
 	return (ctx.exit_status);
 }
 
 // readline – leitura do input do usuário
-// lexer – quebra o input em tokens (respeitando aspas, escapes...) Lília
-// parser – converte tokens em comandos (t_command) Lília
-// comando externo – executa com fork + execve 
+// lexer – quebra o input em tokens (respeitando aspas, escapes...)
+// parser – converte tokens em comandos (t_command)
+// comando externo – executa com fork + execve
 // echo lilia""11111111 remover aspas
 // expansão de variáveis – substitui $VAR, $?, etc.
-
-
-// em execução: 
-//
-// sinais
 // redirecionamento (<, >, >>, <<)
 // pipes –(|) conexão entre processos com pipe(), fork(), dup2()
-// histórico de comandos – add_history(input) Mel
-// builtins – echo, cd, pwd, exit, export, unset, env Mel
-
-
 // heredoc – processa redirecionamentos << antes da execução
+// sinais
+// histórico de comandos – add_history(input)
+//
+// em execução:
+//
+// builtins – echo, cd, pwd, exit, export, unset, env Mel
 // norma

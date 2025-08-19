@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:10:22 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:41:29 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/17 23:28:49 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 #include "redirection.h"
 #include "command_types.h"
 #include "executor.h"
+#include "lib_ft.h"
 
-static int aplly_input_redirection(t_command *cmd)
+static int	aplly_input_redirection(t_command *cmd)
 {
-	(void)cmd;
-	int fd;
+	int	fd;
 
 	if (!cmd->input_file)
 		return (1);
@@ -41,9 +41,37 @@ static int aplly_input_redirection(t_command *cmd)
 	return (1);
 }
 
-static int aplly_output_redirection(t_command *cmd)
+static int	open_and_redirect_last_file(t_command *cmd, int flags)
 {
+	int	i;
 	int	fd;
+
+	i = 0;
+	while (i < cmd->output_file_count)
+	{
+		fd = open(cmd->output_file[i], flags, 0644);
+		if (fd == -1)
+		{
+			perror(cmd->output_file[i]);
+			return (0);
+		}
+		if (i == cmd->output_file_count - 1)
+		{
+			if (dup2(fd, STDOUT_FILENO) == -1)
+			{
+				perror("ERROR: aplly output redirection dup2");
+				close(fd);
+				return (0);
+			}
+		}
+		close(fd);
+		i++;
+	}
+	return (1);
+}
+
+static int	aplly_output_redirection(t_command *cmd)
+{
 	int	flags;
 
 	if (!cmd->output_file)
@@ -52,35 +80,24 @@ static int aplly_output_redirection(t_command *cmd)
 		flags = O_WRONLY | O_CREAT | O_APPEND;
 	else
 		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	fd = open(cmd->output_file, flags, 0644);
-	if (fd == -1)
-	{
-		perror(cmd->output_file);
-		return (0);
-	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		printf("ERROR: apply output redirect");
-		close(fd);
-		return (0);
-	}
-	close(fd);
-	return (1);
+	return (open_and_redirect_last_file(cmd, flags));
 }
 
-int aplly_redirection(t_command *cmd)
+int	aplly_redirection(t_command *cmd, t_context *ctx)
 {
 	if (!cmd)
 		return (1);
 	if (cmd->heredoc_mode)
 	{
-		if (!aplly_heredoc_redirection(cmd))
+		if (!aplly_heredoc_redirection(cmd, ctx))
+		{
 			return (0);
+		}
 	}
 	if (cmd->input_file)
 	{
 		if (!aplly_input_redirection(cmd))
-		return (0);
+			return (0);
 	}
 	if (cmd->output_file)
 	{
@@ -89,31 +106,3 @@ int aplly_redirection(t_command *cmd)
 	}
 	return (1);
 }
-
-void save_original_fds(int *fd_stdin, int *fd_stdout)
-{
-	*fd_stdin = dup(STDIN_FILENO);
-	*fd_stdout = dup(STDOUT_FILENO);
-}
-
-void restore_original_fds(int fd_stdin, int fd_stdout)
-{
-	if (fd_stdin != -1)
-	{
-		dup2(fd_stdin, STDIN_FILENO);
-		close(fd_stdin);
-	}
-	if (fd_stdout != -1)
-	{
-		dup2(fd_stdout, STDOUT_FILENO);
-		close(fd_stdout);
-	}
-}
-
-
-
-
-
-
-
-//ver a questão do save e reste * &

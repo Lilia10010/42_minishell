@@ -3,42 +3,79 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 20:16:50 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/31 00:01:14 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/19 10:05:51 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+
 #include "builtin.h"
 #include "lib_ft.h"
 #include "context_types.h"
+#include "minishell.h"
 
-
-static int	check_digit(char *arg)
+static void	close_all_fds(void)
 {
+	int	fd;
+
+	fd = 3;
+	while (fd < 1024)
+	{
+		close(fd);
+		fd++;
+	}
+}
+
+static void	exit_error(char *arg)
+{
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	ft_putstr_fd("Minishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+}
+
+static void	internal_exit(t_context *ctx, int code)
+{
+	cleanup_context(ctx);
+	clear_history();
+	rl_clear_history();
+	rl_free_line_state();
+	close_all_fds();
+	exit(code);
+}
+
+static int	is_numeric(char *arg)
+{
+	int	i;
+
 	if (!arg || !*arg)
 		return (0);
-	while (*arg)
+	i = 0;
+	if (arg[i] == '+' || arg[i] == '-')
+		i++;
+	while (arg[i])
 	{
-		if (!ft_isdigit(*arg))
+		if (!ft_isdigit(arg[i]))
 			return (0);
-		arg++;
+		i++;
 	}
 	return (1);
 }
 
 int	builtin_exit(char **args, t_context *ctx)
 {
-	int	exit_code = 0;
-
 	if (!args[1])
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		exit(ctx->exit_status);
+		internal_exit(ctx, ctx->exit_status);
 	}
-
 	if (args[2])
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
@@ -46,19 +83,13 @@ int	builtin_exit(char **args, t_context *ctx)
 		ctx->exit_status = 1;
 		return (1);
 	}
-
-	if (!check_digit(args[1]))
+	if (!is_numeric(args[1]))
 	{
-		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		ft_putstr_fd("Minishell: exit: ", STDERR_FILENO);
-		ft_putstr_fd(args[1], STDERR_FILENO);
-		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-		exit(2); // mesmo comportamento que seu exemplo funcional
+		exit_error(args[1]);
+		internal_exit(ctx, 255);
 	}
-
-	exit_code = ft_atoi(args[1]) % 256;
-	ctx->exit_status = exit_code;
-
+	ctx->exit_status = (unsigned char)ft_atoll(args[1]);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
-	exit(exit_code);
+	internal_exit(ctx, ctx->exit_status);
+	return (0);
 }

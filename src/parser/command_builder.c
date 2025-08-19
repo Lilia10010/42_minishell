@@ -3,44 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   command_builder.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 18:56:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:33:41 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/11 13:37:00 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include <stdio.h>
-# include "parser.h"
+#include "parser.h"
 #include "lib_ft.h"
 #include "command_types.h"
 
-t_command *create_command(void)
+static void	init_command(t_command *cmd)
 {
-    t_command *cmd;
-    
-    cmd = (t_command *)malloc(sizeof(t_command));
-    if (!cmd)
-        return (NULL);
-    
-    cmd->args = (char **)malloc(sizeof(char *) * 10); // Capacidade inicial
-    if (!cmd->args)
-    {
-        free(cmd);
-        return (NULL);
-    }
-    
-    cmd->arg_count = 0;
-    cmd->arg_capacity = 10;
-    cmd->input_file = NULL;
-    cmd->output_file = NULL;
-    cmd->append_mode = 0;
-    cmd->heredoc_mode = 0;
-    cmd->heredoc_delimiter = NULL;
-    cmd->next = NULL;
-    
-    return (cmd);
+	cmd->arg_count = 0;
+	cmd->arg_capacity = 10;
+	cmd->input_file = NULL;
+	cmd->output_file_count = 0;
+	cmd->append_mode = 0;
+	cmd->heredoc_mode = 0;
+	cmd->heredoc_delimiter = NULL;
+	cmd->next = NULL;
+}
+
+t_command	*create_command(void)
+{
+	t_command	*cmd;
+
+	cmd = (t_command *)malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->args = (char **)malloc(sizeof(char *) * 10);
+	if (!cmd->args)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	cmd->output_file = (char **)malloc(sizeof(char *) * 10);
+	if (!cmd->output_file)
+	{
+		free(cmd->args);
+		free(cmd);
+		return (NULL);
+	}
+	init_command(cmd);
+	return (cmd);
 }
 
 static int	expand_args_array(t_command *cmd)
@@ -67,7 +75,7 @@ static int	expand_args_array(t_command *cmd)
 
 int	add_argument(t_command *cmd, char *arg)
 {
-    char	*dup_arg;
+	char	*dup_arg;
 
 	if (!cmd || !arg)
 		return (0);
@@ -84,5 +92,5 @@ int	add_argument(t_command *cmd, char *arg)
 		return (0);
 	cmd->args[cmd->arg_count++] = dup_arg;
 	cmd->args[cmd->arg_count] = NULL;
-    return (1);
+	return (1);
 }

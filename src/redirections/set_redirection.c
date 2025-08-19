@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:39:21 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:43:33 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/17 20:53:50 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,61 @@
 #include "lib_ft.h"
 #include "token_types.h"
 
-
-static void set_input_file(t_command *cmd, char *target)
+static void	set_input_file(t_command *cmd, char *target)
 {
 	if (cmd->input_file)
 		free(cmd->input_file);
 	cmd->input_file = ft_strdup(target);
-	cmd->heredoc_mode = 0;//ára desatovar o mode heredoc
+	cmd->heredoc_mode = 0;
 }
 
-static void set_output_file(t_command *cmd, char *target, int append)
-{	
-	if (cmd->output_file)
-		free(cmd->output_file);
-	cmd->output_file = ft_strdup(target);
-	cmd->append_mode = append;//0 para >, 1 para >>
+static int	expand_output_file_array(t_command *cmd)
+{
+	char	**new_array;
+	int		new_capacity;
+	int		i;
+
+	new_capacity = cmd->output_file_count + 10;
+	new_array = (char **)malloc(sizeof(char *) * new_capacity);
+	if (!new_array)
+		return (0);
+	i = 0;
+	while (i < cmd->output_file_count)
+	{
+		new_array[i] = cmd->output_file[i];
+		i++;
+	}
+	free(cmd->output_file);
+	cmd->output_file = new_array;
+	return (1);
 }
 
-static void set_heredoc(t_command *cmd, char *target)
+static void	set_output_file(t_command *cmd, char *target, int append_mode)
+{
+	char	*dup_target;
+
+	if (!cmd || !target)
+		return ;
+	if (cmd->output_file_count % 10 == 0)
+	{
+		if (!expand_output_file_array(cmd))
+		{
+			perror("Error: expanding output file array");
+			return ;
+		}
+	}
+	dup_target = ft_strdup(target);
+	if (!dup_target)
+	{
+		perror("Error duplicating output filename");
+		return ;
+	}
+	cmd->output_file[cmd->output_file_count++] = dup_target;
+	cmd->output_file[cmd->output_file_count] = NULL;
+	cmd->append_mode = append_mode;
+}
+
+static void	set_heredoc(t_command *cmd, char *target)
 {
 	if (cmd->heredoc_delimiter)
 		free(cmd->heredoc_delimiter);
@@ -46,7 +83,7 @@ static void set_heredoc(t_command *cmd, char *target)
 		cmd->input_file = NULL;
 	}
 }
-//parametros: comando - token - e o alvo arquivo de destino ou delimitador
+
 int	set_redirection(t_command *cmd, t_token *token, char *target)
 {
 	if (!cmd || !token || !target)

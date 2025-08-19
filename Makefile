@@ -5,7 +5,7 @@
 NAME := minishell
 
 #flags
-CC		:= gcc
+CC		:= cc
 CFLAGS	:= -Wall -Wextra -Werror
 RM		:= rm -f
 
@@ -57,7 +57,6 @@ re: fclean all
 val: suppression_file.supp all
 	@valgrind -q --suppressions=suppression_file.supp \
 				--leak-check=full \
-				--show-leak-kinds=all \
 				--track-origins=yes \
 				--track-fds=yes \
 				--trace-children=yes \
@@ -74,5 +73,8 @@ suppression_file.supp:
 
 .PHONY: all clean fclean re
 
-#valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --track-fds=yes --show-reachable=yes  ./minishell
-#make && valgrind --leak-check=full --suppressions=suppression_file.sup --track-fds=yes -q ./minishell
+#valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --track-fds=yes --show-reachable=yes  ./minishell --show-leak-kinds=all \
+
+#valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --track-fds=yes --show-reachable=yes -q --suppressions=suppression_file.supp  -v ./minishell 
+
+#valgrind --leak-check=full --show-leak-kinds=all --gen-suppressions=all ./minishell (sugestao de supressao)

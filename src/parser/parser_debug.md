@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_debug.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:01:21 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:34:02 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:07:51 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,12 @@ void debug_print_commands(t_command *commands)
         if (current->input_file)
             printf("  Input: %s\n", current->input_file);
         if (current->output_file)
-            printf("  Output: %s (%s)\n", current->output_file, 
-                   current->append_mode ? "append" : "overwrite");
+{
+    printf("  Output: ");
+    for (int j = 0; current->output_file[j]; j++)
+        printf("%s ", current->output_file[j]);
+    printf("(%s)\n", current->append_mode ? "append" : "overwrite");
+}
         if (current->heredoc_mode && current->heredoc_delimiter)
             printf("  Heredoc delimiter: %s\n", current->heredoc_delimiter);
         

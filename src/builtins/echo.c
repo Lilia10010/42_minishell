@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 18:35:20 by meandrad          #+#    #+#             */
-/*   Updated: 2025/07/31 00:01:49 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/19 10:19:38 by meandrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	valid_flag(char *arg)
 	int	i;
 
 	i = 1;
-	if(!ft_strncmp(arg, "-n", 2))
+	if (!ft_strncmp(arg, "-n", 2))
 	{
 		while (arg[i])
 		{
@@ -48,12 +48,12 @@ static void	echo_args(char **args, int start)
 		i++;
 	}
 }
+
 int	builtin_echo(char **args, t_context *ctx)
 {
 	int	i;
 	int	check_line;
 
-	//verificar se isso aqui é realmente necessário
 	if (!args || !*args)
 		return (1);
 	i = 1;
@@ -67,5 +67,5 @@ int	builtin_echo(char **args, t_context *ctx)
 	if (check_line)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	ctx->exit_status = 0;
-	return(0);
+	return (0);
 }

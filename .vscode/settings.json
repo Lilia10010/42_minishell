@@ -5,6 +5,7 @@
   "editor.insertSpaces": false,
   "editor.tabSize": 4,
   "editor.detectIndentation": false,
+  "editor.renderWhitespace": "all",
   "files.associations": {
 	"signals.h": "c",
 	"parser.h": "c",
@@ -14,6 +15,15 @@
 	"builtins.h": "c",
 	"struct_iovec.h": "c",
 	"fcntl.h": "c",
-	"redirection.h": "c"
+	"redirection.h": "c",
+	"string": "c",
+	"streambuf": "c",
+	"functional": "c",
+	"utils.h": "c",
+	"context_types.h": "c",
+	"unistd.h": "c",
+	"builtin.h": "c",
+	"builtin_types.h": "c",
+	"signal.h": "c"
 }
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_dispatcher.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:29:26 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/07/31 00:37:48 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:58:38 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static int	call_builtin(t_builtin id, t_command *cmd, t_context *ctx)
 
 int	builtin_dispatcher(t_command *cmd, t_context *ctx)
 {
-	t_builtin id;
+	t_builtin	id;
 
-	if(!cmd || !cmd->args || !cmd->args[0])
+	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
 	id = get_builtin_id(cmd->args[0]);
 	return (call_builtin(id, cmd, ctx));
