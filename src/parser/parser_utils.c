@@ -17,7 +17,8 @@
 
 int	is_redirection_token(t_token_type type)
 {
-	return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT || type == TOKEN_REDIRECT_OUT_APPEND || type == TOKEN_HEREDOC);
+	return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT
+		|| type == TOKEN_REDIRECT_OUT_APPEND || type == TOKEN_HEREDOC);
 }
 
 int	validate_syntax(t_token *tokens)
@@ -31,9 +32,11 @@ int	validate_syntax(t_token *tokens)
 		return (0);
 	while (current)
 	{
-		if (current->type == TOKEN_PIPE && (!current->next || current->next->type == TOKEN_PIPE))
+		if (current->type == TOKEN_PIPE
+			&& (!current->next || current->next->type == TOKEN_PIPE))
 			return (0);
-		if (is_redirection_token(current->type) && (!current->next || current->next->type != TOKEN_WORD))
+		if (is_redirection_token(current->type)
+			&& (!current->next || current->next->type != TOKEN_WORD))
 			return (0);
 		current = current->next;
 	}

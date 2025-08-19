@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include "lib_ft.h"
 
 void	skip_spaces(char **input)
 {
@@ -21,4 +22,28 @@ void	skip_spaces(char **input)
 int	is_shell_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
+}
+
+int	has_expandable_dollar(const char *str)
+{
+	int		i;
+	char	next;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			next = str[i + 1];
+			if (next == '\0' || next == ' ' || next == '\t'
+				|| !(ft_isalnum(next) || next == '_' || next == '?'))
+			{
+				i++;
+				continue ;
+			}
+			return (1);
+		}
+		i++;
+	}
+	return (0);
 }

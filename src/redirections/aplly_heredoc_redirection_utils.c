@@ -23,7 +23,6 @@
 #include "env.h"
 #include "minishell.h"
 
-
 char	*process_line_expansion(char *line, t_context *ctx)
 {
 	char	*expanded;

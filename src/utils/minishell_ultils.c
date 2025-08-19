@@ -19,10 +19,42 @@
 #include "parser.h"
 #include "lib_ft.h"
 
+static size_t	count_envp_entries(char **envp)
+{
+	size_t	count;
+
+	count = 0;
+	while (envp && envp[count])
+		count++;
+	return (count);
+}
+
+static int	copy_envp_entries(t_context *ctx, char **envp, size_t count)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < count)
+	{
+		ctx->envp[i] = ft_strdup(envp[i]);
+		if (!ctx->envp[i])
+		{
+			printf("Error: Failed to duplicate envp[%zu]: %s\n", i, envp[i]);
+			while (i-- > 0)
+				free(envp[i]);
+			free(envp);
+			ctx->envp = NULL;
+			return (0);
+		}
+		i++;
+	}
+	ctx->envp[count] = NULL;
+	return (1);
+}
+
 void	init_context(t_context *ctx, char **envp)
 {
 	size_t	count;
-	size_t	i;
 
 	if (!ctx)
 		return ;
@@ -30,9 +62,7 @@ void	init_context(t_context *ctx, char **envp)
 	ctx->should_exit = 0;
 	ctx->tokens = NULL;
 	ctx->commands = NULL;
-	count = 0;
-	while (envp && envp[count])
-		count++;
+	count = count_envp_entries(envp);
 	ctx->envp = malloc(sizeof(char *) * (count + 1));
 	if (!ctx->envp)
 	{
@@ -40,26 +70,7 @@ void	init_context(t_context *ctx, char **envp)
 		ctx->envp = NULL;
 		return ;
 	}
-	else
-	{
-		i = 0;
-		while (i < count)
-		{
-			ctx->envp[i] = ft_strdup(envp[i]);
-			if (!ctx->envp[i])
-			{
-				printf("Error: Failed to duplicate envp[%zu]: %s\n", i, envp[i]);
-				while (i-- > 0)
-					free(ctx->envp[i]);
-				free(ctx->envp);
-				ctx->envp = NULL;
-				break;
-			}
-			i++;
-		}
-		if (ctx->envp)
-			ctx->envp[count] = NULL;
-	}
+	copy_envp_entries(ctx, envp, count);
 }
 
 void	cleanup_context(t_context *ctx)
@@ -77,6 +88,7 @@ void	cleanup_context(t_context *ctx)
 		ctx->commands = NULL;
 	}
 }
+
 void	cleanup_context_envp(t_context *ctx)
 {
 	size_t	i;

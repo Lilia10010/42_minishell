@@ -18,31 +18,7 @@
 #include "lib_ft.h"
 #include "context_types.h"
 
-int	has_expandable_dollar(const char *str)
-{
-	int		i;
-	char	next;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-		{
-			next = str[i + 1];
-			if (next == '\0' || next == ' ' || next == '\t'
-				|| !(ft_isalnum(next) || next == '_' || next == '?'))
-			{
-				i++;
-				continue ;
-			}
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int has_tilde_expansion(const char *str)
+int	has_tilde_expansion(const char *str)
 {
 	int		i;
 

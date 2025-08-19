@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "lib_ft.h"
 #include "parser.h"
@@ -66,7 +67,10 @@ t_command	*parse_tokens(t_token *tokens, t_context *ctx)
 		return (NULL);
 	if (!validate_syntax(tokens))
 	{
-		printf("bash: syntax error near unexpected token: `%s'\n", tokens->value);
+		ft_putstr_fd("bash: syntax error near unexpected token: ",
+			STDERR_FILENO);
+		ft_putstr_fd(tokens->value, STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
 		ctx->exit_status = 2;
 		return (NULL);
 	}

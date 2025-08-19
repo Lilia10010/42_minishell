@@ -38,10 +38,9 @@ static int	handle_fork(void)
 	return (pid);
 }
 
-static void	handle_stderr_redirect(t_command *current, int prev_fd)
+static void	handle_stderr_redirect(t_command *current)
 {
 	int	dev_null;
-	(void)prev_fd;
 
 	if (current->next)
 	{
@@ -90,7 +89,7 @@ int	process_single_command(t_command *current, t_context *ctx,
 		setup_signals_child();
 		setup_child_input(*prev_fd);
 		setup_child_output(current, pipe_fd);
-		handle_stderr_redirect(current, *prev_fd);
+		handle_stderr_redirect(current);
 		execute_child_process(current, ctx);
 	}
 	cleanup_parent_fds(*prev_fd, current, pipe_fd);
