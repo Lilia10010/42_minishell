@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 23:06:14 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/14 15:14:34 by microbiana       ###   ########.fr       */
+/*   Updated: 2025/08/20 16:40:57 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ static void	wait_for_children(int last_pid, t_context *ctx)
 	waited_pid = wait(&status);
 	while (waited_pid > 0)
 	{
+		if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
+			write(STDOUT_FILENO, "\n", 1);
 		handle_wait_status(status, waited_pid, last_pid, ctx);
 		waited_pid = wait(&status);
 	}

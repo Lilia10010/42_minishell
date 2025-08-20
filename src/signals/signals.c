@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 22:10:10 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/20 15:13:43 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/20 19:46:57 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ volatile sig_atomic_t	g_signal_received = 0;
 void	handle_sigint(int sig)
 {
 	g_signal_received = sig;
+	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();

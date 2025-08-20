@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 18:35:32 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/19 15:38:43 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/20 20:05:25 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 int	builtin_pwd(char **args, t_context *ctx)
 {
-	(void)args;
 	char	*pwd;
 
+	(void)args;
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{

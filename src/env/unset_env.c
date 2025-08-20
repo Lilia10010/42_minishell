@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:36:38 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/18 21:38:50 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/20 20:07:23 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	**recreate_envp(char **old_envp, int size, int skip_index)
 	{
 		if (i != skip_index)
 		{
-			new_envp[i] = ft_strdup(old_envp[i]);
+			new_envp[j] = ft_strdup(old_envp[i]);
 			if (!new_envp[j])
 			{
 				while (j > 0)
