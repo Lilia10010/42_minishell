@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:08:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/20 19:47:08 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/20 20:06:56 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 	pid = fork();
 	if (pid < 0)
 	{
-		ft_putstr_fd("", STDERR_FILENO);
 		ctx->exit_status = 1;
 		return (1);
 	}
@@ -63,13 +62,9 @@ static int	execute_external_command(t_command *cmd, t_context *ctx, char *path)
 	{
 		ctx->exit_status = 128 + WTERMSIG(status);
 		if (WTERMSIG(status) == SIGQUIT)
-		{
 			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-		}
 		else
-		{
 			write(STDOUT_FILENO, "\n", 1);
-		}
 	}
 	restore_signals();
 	return (ctx->exit_status);
