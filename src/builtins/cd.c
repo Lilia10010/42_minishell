@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:58:24 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/18 21:47:45 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/19 15:38:18 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,12 @@ int	builtin_cd(char **args, t_context *ctx)
 	char	*target_path;
 	int		result;
 
+	if (args[1] && args[2])
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		ctx->exit_status = 1;
+		return (1);
+	}
 	target_path = get_target_path(args, ctx);
 	if (!target_path)
 	{

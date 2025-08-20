@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meandrad <meandrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 20:16:50 by meandrad          #+#    #+#             */
-/*   Updated: 2025/08/19 10:05:51 by meandrad         ###   ########.fr       */
+/*   Updated: 2025/08/19 15:32:11 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	builtin_exit(char **args, t_context *ctx)
 	if (!is_numeric(args[1]))
 	{
 		exit_error(args[1]);
-		internal_exit(ctx, 255);
+		internal_exit(ctx, 2);
 	}
 	ctx->exit_status = (unsigned char)ft_atoll(args[1]);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);

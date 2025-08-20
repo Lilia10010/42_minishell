@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 20:37:37 by lpaula-n          #+#    #+#             */
-/*   Updated: 2025/08/18 00:23:12 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2025/08/20 15:23:40 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ static int	handle_signal_after_readline(t_context *ctx)
 
 static void	process_input(t_context *ctx, char *input)
 {
-	if (*input)
-		add_history(input);
 	ctx->tokens = lexer_tokenize(input, ctx);
 	if (ctx->tokens)
 	{
@@ -75,13 +73,13 @@ static void	shell_loop(t_context *ctx)
 			ctx->should_exit = 1;
 			break ;
 		}
+		if (*input)
+			add_history(input);
 		if (handle_signal_after_readline(ctx))
 		{
 			free(input);
 			continue ;
 		}
-		if (*input)
-			add_history(input);
 		process_input(ctx, input);
 		free(input);
 	}
