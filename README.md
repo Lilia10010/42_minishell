@@ -141,27 +141,3 @@ minishell$ cat file.txt > output.txt
 minishell$ export PATH="/usr/bin:$PATH"
 minishell$ exit
 ```
-
-
----
-
-## 🎯 Status do Projeto
-
-### ✅ Implementado
-- [x] Lexer básico
-- [x] Parser de comandos simples  
-- [x] Executor de builtins
-- [x] Builtin `echo`
-
-### 🚧 Em Desenvolvimento
-- [ ] Pipes
-- [ ] Redirecionamentos
-- [ ] Comandos externos com execve()
-- [ ] Variáveis de ambiente
-- [ ] Tratamento de sinais
-
-### 📋 Próximos Passos
-- [ ] Histórico de comandos
-- [ ] Autocompletar
-- [ ] Wildcards (`*`, `?`)
-- [ ] Job control
